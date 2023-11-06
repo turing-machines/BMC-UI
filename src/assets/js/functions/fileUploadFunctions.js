@@ -18,7 +18,6 @@ function get_status(type) {
         $.ajax({
             url: request_status,
             type: 'GET',
-            timeout: 5000,
             dataType: "json",
             success: function (data) {
                 if ("Error" in data) {
@@ -80,14 +79,14 @@ function multipart_transfer(handle, form_data, progressBar) {
 
 const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 
-async function wait_for_done(type) {
+async function wait_for_state(type, need_state) {
     let state = await get_status(type);
-    while (!("Done" in state)) {
+    while (!(need_state in state)) {
         await sleep(1000);
         console.log(state);
         state = await get_status(type);
     }
-    console.log(state);
+    return state;
 }
 
 async function upload_multipart_action(form, update_label, progressBarGroup, type) {
@@ -118,14 +117,21 @@ async function upload_multipart_action(form, update_label, progressBarGroup, typ
             return multipart_transfer(handle, formData, progressBar);
         }).then(function () {
             update_label.text("verify checksum, and finalizing upgrade..");
-            return wait_for_done(type);
+            return wait_for_state(type, "Done");
         }).then(function () {
             update_label.text("Upgrade completed successful!");
         }).catch(function (err) {
+            try {
+                console.log("komaam");
+                let error = wait_for_state(type, "Error");
+            } catch (error) {
+                update_label.text("Upgrade failed: " + error["Error"]);
+            }
+
             update_label.text("Upgrade failed: " + err);
         });
     });
 }
 
 
-export {get_request_handle, get_status, multipart_transfer, sleep, wait_for_done, upload_multipart_action}
+export {get_request_handle, get_status, multipart_transfer, sleep, wait_for_state, upload_multipart_action}

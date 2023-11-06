@@ -21,7 +21,7 @@ fileInput.on('change', function () {
 const update_label = form.find('.update-text')
 const progressBarGroup = form.find('.progress-bar-group')
 
-upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "firmware").then((r) => {
+upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash").then((r) => {
 
 });
 
