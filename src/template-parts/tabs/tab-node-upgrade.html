@@ -1,0 +1,56 @@
+<div data-tab="Flash Node" id="node-upgrade-tab" class="tabs-body__item force-tab-style ">
+    <form id="node-upgrade-form" class="form ">
+    
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Select an image-file that will be
+                    uploaded and written to the node.
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="select-item">
+                <label for="node-upgrade-picker" class="col-form-label">USB mode:</label>
+                <select data-parsley-errors-container="[data-errors=node-upgrade-picker]" id="node-upgrade-picker" class="selectpicker" data-style="btn-outline-primary" required>
+                    <option selected disabled>Nothing Selected</option>
+                    <option value="0">Node 1</option>
+                    <option value="1">Node 2</option>
+                    <option value="2">Node 3</option>
+                    <option value="3">Node 4</option>
+                </select>
+            </div>
+            <div data-errors="node-upgrade-picker" class="errors"></div>
+        </div>
+    
+    
+        <div class="form-group row">
+            <label for="node-upgrade-file-id" class="input-wrap input-type-file-wrap active">
+                <span class="label">File:</span>
+                <input type="text" class="file-upload-input" value="Select a File">
+                <input type="file" name="file" id="node-upgrade-file-id" class="form-control" readonly>
+            </label>
+        </div>
+    
+        <div class="form-group">
+            <button disabled type="submit" class="btn btn btn-turing-small-red">
+                <span class="caption">
+                     Upgrade Node
+                </span>
+            </button>
+        </div>
+    
+    
+        <div id="node-progress-group" class="progress-bar-group form-group row">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="update-text"></div>
+        </div>
+  
+      
+    </form>
+    
+    
+</div>

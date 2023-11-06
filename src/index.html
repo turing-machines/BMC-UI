@@ -1,0 +1,46 @@
+@@include('./template-parts/head.html',{
+
+})
+
+
+<body>
+<div>
+    <div class="app-wrapper">
+        <div class="tabs-wrapper">
+            
+            <div class="tabs-header">
+                <ul class="tabs-header__list">
+                    <li data-tab="USB" class="tabs-header__list-item">USB</li>
+                    <li data-tab="Power" class="tabs-header__list-item">Power</li>
+                    <li data-tab="Node Info" class="tabs-header__list-item">Node Info</li>
+                    <li data-tab="SD Card" class="tabs-header__list-item">SD Card</li>
+                    <li data-tab="Other" class="tabs-header__list-item">Other</li>
+                    <li data-tab="Firmware Upgrade" class="tabs-header__list-item large">Firmware Upgrade</li>
+                    <li data-tab="Flash Node" class="tabs-header__list-item">Flash Node</li>
+                </ul>
+            </div>
+            
+            <div class="tabs-body">
+                @@include('./template-parts/tabs/tab-usb.html',{ })
+                
+                @@include('./template-parts/tabs/tab-power.html',{ })
+                
+                @@include('./template-parts/tabs/tab-node-info.html',{ })
+                
+                @@include('./template-parts/tabs/tab-sd-card.html',{ })
+                
+                @@include('./template-parts/tabs/tab-other.html',{ })
+                
+                @@include('./template-parts/tabs/tab-firmware-upgrade.html',{ })
+                
+                @@include('./template-parts/tabs/tab-node-upgrade.html',{ })
+            </div>
+        
+        
+        </div>
+    </div>
+</div>
+
+@@include('./template-parts/footer.html',{
+
+})

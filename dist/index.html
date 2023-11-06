@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en-US" class="configure">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <meta http-equiv="Expires" content="0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <meta http-equiv="Cache" content="no-cache">
+    
+    <title>Turing Pi config</title>
+    
+    <link href="assets/css/app.css" rel="stylesheet" type="text/css"/>
+    
+</head>
+
+
+<body>
+<div>
+    <div class="app-wrapper">
+        <div class="tabs-wrapper">
+            
+            <div class="tabs-header">
+                <ul class="tabs-header__list">
+                    <li data-tab="USB" class="tabs-header__list-item">USB</li>
+                    <li data-tab="Power" class="tabs-header__list-item">Power</li>
+                    <li data-tab="Node Info" class="tabs-header__list-item">Node Info</li>
+                    <li data-tab="SD Card" class="tabs-header__list-item">SD Card</li>
+                    <li data-tab="Other" class="tabs-header__list-item">Other</li>
+                    <li data-tab="Firmware Upgrade" class="tabs-header__list-item large">Firmware Upgrade</li>
+                    <li data-tab="Flash Node" class="tabs-header__list-item">Flash Node</li>
+                </ul>
+            </div>
+            
+            <div class="tabs-body">
+                <div data-tab="USB" class="tabs-body__item ">
+    
+    <form class="form" id="form-usb">
+        <div class="form-group row">
+            <div class="select-item">
+                <label for="usbMode" class="col-form-label">USB mode:</label>
+                <select data-parsley-errors-container="[data-errors=usbMode]" id="usbMode" class="selectpicker" data-style="btn-outline-primary" required>
+                    <option selected disabled>Nothing Selected</option>
+                    <option value="0">Host</option>
+                    <option value="1">Device</option>
+                </select>
+            </div>
+            <div data-errors="usbMode" class="errors"></div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="select-item">
+                <label for="usbNode" class="col-form-label">Connected node:</label>
+                <select data-parsley-errors-container="[data-errors=usbNode]" id="usbNode" class="selectpicker" data-style="btn-outline-primary" required>
+                    <option selected disabled>Nothing Selected</option>
+                    <option value="0">Node 1</option>
+                    <option value="1">Node 2</option>
+                    <option value="2">Node 3</option>
+                    <option value="3">Node 4</option>
+                </select>
+            </div>
+            <div data-errors="usbNode" class="errors"></div>
+        </div>
+        
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-yellow">
+                <span class="caption">Submit</span>
+            </button>
+        </div>
+    </form>
+
+
+</div>
+
+                
+                <div data-tab="Power" class="tabs-body__item ">
+    <form class="form" id="form-power">
+        
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Control the power supply of connected nodes
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="checkbox-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="node1Power" data-color="#008000" data-size="small"/>
+                </div>
+                <label for="node1Power" class="label">Node 1:</label>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="checkbox-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="node2Power" data-color="#008000" data-size="small"/>
+                </div>
+                <label for="node2Power" class="label">Node 2:</label>
+                
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="checkbox-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="node3Power" data-color="#008000" data-size="small"/>
+                </div>
+                <label for="node3Power" class="label">Node 3:</label>
+                
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="checkbox-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="node4Power" data-color="#008000" data-size="small"/>
+                </div>
+                <label for="node4Power" class="label">Node 4:</label>
+                
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-yellow">
+                <span class="caption">Submit</span>
+            </button>
+        </div>
+    
+    </form>
+</div>
+                
+                <div data-tab="Node Info" class="tabs-body__item">
+    <div id="nodetype" class="form">
+        
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Get the type of connected nodes via serial
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="node1type" class="label">Node 1:</label>
+                <input type="text" id="node1type" class="form-control" disabled>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="node2type" class="label">Node 2:</label>
+                <input type="text" id="node2type" class="form-control" disabled>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="node3type" class="label">Node 3:</label>
+                <input type="text" id="node3type" class="form-control" disabled>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="node4type" class="label">Node 4:</label>
+                <input type="text" id="node4type" class="form-control" disabled>
+            </div>
+        </div>
+    
+    </div>
+</div>
+
+                
+                <div data-tab="SD Card" class="tabs-body__item">
+    <div id="sd-card" class="form">
+        
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Get the type of connected nodes via serial
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="sdTotal" class="label">Total:</label>
+                <input type="text" id="sdTotal" class="form-control" disabled>
+                <div class="prefix-label">B</div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="sdUse" class="label">Used:</label>
+                <input type="text" id="sdUse" class="form-control" disabled>
+                <div class="prefix-label">B</div>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="input-wrap active">
+                <label for="sdFree" class="label">Free:</label>
+                <input type="text" id="sdFree" class="form-control" disabled>
+                <div class="prefix-label">B</div>
+            </div>
+        </div>
+        
+     
+    
+    </div>
+</div>
+
+
+                
+                <div data-tab="Other" class="tabs-body__item ">
+    <form class="form" id="form-other">
+        
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-red">
+                <span class="caption">Reset network</span>
+            </button>
+        </div>
+        
+        <div class="form-group row">
+            <div class="table-specification">
+                <div class="row">
+                    <div class="col">Daemon version:</div>
+                    <div id="otherVer" class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col">Build time:</div>
+                    <div id="otherBuildtime" class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col">IP address:</div>
+                    <div id="otherIp" class="col"></div>
+                </div>
+                <div class="row">
+                    <div class="col">MAC address:</div>
+                    <div id="otherMac" class="col"></div>
+                </div>
+            </div>
+        
+        </div>
+    
+    </form>
+</div>
+
+                
+                <div data-tab="Firmware Upgrade" id="firmware-upgrade-tab" class="tabs-body__item ">
+    <form class="form" id="firmware-upgrade-form">
+        
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    BMC firmware upgrade
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <label for="firmware-upgrade-file-id" class="input-wrap input-type-file-wrap active">
+                <span class="label">File:</span>
+                <input type="text" class="file-upload-input" value="Select a File">
+                <input type="file" name="file" id="firmware-upgrade-file-id" class="form-control" readonly>
+            </label>
+        </div>
+        
+        <div class="form-group">
+            <button disabled type="submit" class="btn btn btn-turing-small-red">
+                <span class="caption">
+                     Upgrade BMC
+                </span>
+            </button>
+        </div>
+        
+        <div id="firmware-progress-group" class="progress-bar-group form-group row">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="update-text"></div>
+        </div>
+    
+    </form>
+</div>
+
+                
+                <div data-tab="Flash Node" id="node-upgrade-tab" class="tabs-body__item force-tab-style ">
+    <form id="node-upgrade-form" class="form ">
+    
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Select an image-file that will be
+                    uploaded and written to the node.
+                </p>
+            </div>
+        </div>
+        
+        <div class="form-group row">
+            <div class="select-item">
+                <label for="node-upgrade-picker" class="col-form-label">USB mode:</label>
+                <select data-parsley-errors-container="[data-errors=node-upgrade-picker]" id="node-upgrade-picker" class="selectpicker" data-style="btn-outline-primary" required>
+                    <option selected disabled>Nothing Selected</option>
+                    <option value="0">Node 1</option>
+                    <option value="1">Node 2</option>
+                    <option value="2">Node 3</option>
+                    <option value="3">Node 4</option>
+                </select>
+            </div>
+            <div data-errors="node-upgrade-picker" class="errors"></div>
+        </div>
+    
+    
+        <div class="form-group row">
+            <label for="node-upgrade-file-id" class="input-wrap input-type-file-wrap active">
+                <span class="label">File:</span>
+                <input type="text" class="file-upload-input" value="Select a File">
+                <input type="file" name="file" id="node-upgrade-file-id" class="form-control" readonly>
+            </label>
+        </div>
+    
+        <div class="form-group">
+            <button disabled type="submit" class="btn btn btn-turing-small-red">
+                <span class="caption">
+                     Upgrade Node
+                </span>
+            </button>
+        </div>
+    
+    
+        <div id="node-progress-group" class="progress-bar-group form-group row">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar" style="width: 0%;"></div>
+            </div>
+            <div class="update-text"></div>
+        </div>
+  
+      
+    </form>
+    
+    
+</div>
+
+            </div>
+        
+        
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="assets/js/app.js"></script>
+
+</body>
+
+</html>

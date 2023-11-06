@@ -1,0 +1,27 @@
+@font-face {
+  font-family: 'Inter';
+  src: url('../../fonts/Inter-ExtraLight.eot');
+  src: local('Inter ExtraLight'), local('Inter-ExtraLight'),
+  url('../../fonts/Inter-ExtraLight.eot?#iefix') format('embedded-opentype'),
+  url('../../fonts/Inter-ExtraLight.woff2') format('woff2'),
+  url('../../fonts/Inter-ExtraLight.woff') format('woff'),
+  url('../../fonts/Inter-ExtraLight.ttf') format('truetype'),
+  url('../../fonts/Inter-ExtraLight.svg#Inter-ExtraLight') format('svg');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../../fonts/Inter-Bold.eot');
+  src: local('Inter Bold'), local('Inter-Bold'),
+  url('../../fonts/Inter-Bold.eot?#iefix') format('embedded-opentype'),
+  url('../../fonts/Inter-Bold.woff2') format('woff2'),
+  url('../../fonts/Inter-Bold.woff') format('woff'),
+  url('../../fonts/Inter-Bold.ttf') format('truetype'),
+  url('../../fonts/Inter-Bold.svg#Inter-Bold') format('svg');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
