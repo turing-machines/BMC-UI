@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20231106145612" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20231106154835" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -78,7 +78,7 @@
                 
                 <div data-tab="Power" class="tabs-body__item ">
     <form class="form" id="form-power">
-        
+
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -86,54 +86,71 @@
                 </p>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node1Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node1Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node1Power" class="label">Node 1:</label>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node2Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node2Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node2Power" class="label">Node 2:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node3Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node3Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node3Power" class="label">Node 3:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node4Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node4Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node4Power" class="label">Node 4:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <button type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">Submit</span>
             </button>
         </div>
-    
+
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Reboot BMC (all nodes will go off until rebooted)
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button id="reboot-btn" class="btn btn btn-turing-small-red">
+                <span class="caption">
+                    Reboot
+                </span>
+            </button>
+        </div>
+
     </form>
 </div>
+
                 
                 <div data-tab="Node Info" class="tabs-body__item">
     <div id="nodetype" class="form">
@@ -357,7 +374,7 @@
     </div>
 </div>
 
-<script type="text/javascript" src="assets/js/app.js?_v=20231106145612"></script>
+<script type="text/javascript" src="assets/js/app.js?_v=20231106154835"></script>
 
 </body>
 

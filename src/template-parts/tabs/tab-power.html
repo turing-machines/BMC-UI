@@ -1,6 +1,6 @@
 <div data-tab="Power" class="tabs-body__item ">
     <form class="form" id="form-power">
-        
+
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -8,51 +8,67 @@
                 </p>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node1Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node1Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node1Power" class="label">Node 1:</label>
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node2Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node2Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node2Power" class="label">Node 2:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node3Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node3Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node3Power" class="label">Node 3:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <div class="checkbox-row">
                 <div class="checkbox-item">
-                    <input type="checkbox" id="node4Power" data-color="#008000" data-size="small"/>
+                    <input type="checkbox" id="node4Power" data-color="#008000" data-size="small" />
                 </div>
                 <label for="node4Power" class="label">Node 4:</label>
-                
+
             </div>
         </div>
-        
+
         <div class="form-group row">
             <button type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">Submit</span>
             </button>
         </div>
-    
+
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Reboot BMC (all nodes will go off until rebooted)
+                </p>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <button id="reboot-btn" class="btn btn btn-turing-small-red">
+                <span class="caption">
+                    Reboot
+                </span>
+            </button>
+        </div>
+
     </form>
 </div>

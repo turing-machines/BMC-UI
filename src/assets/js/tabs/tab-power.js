@@ -52,3 +52,17 @@ $("#form-power").submit(function (e) {
     })
 
 });
+
+$("#reboot-btn").click(function() {
+    $.get('/api/bmc?opt=set&type=reboot', function(data) {
+        setTimeout(() => {
+            // want to show this text in the toast
+            SetSessionNotification("Restarting BMC..");
+        }, 300)
+    }).fail(function(err) {
+        setTimeout(() => {
+            var json = JSON.parse(err);
+            SetSessionNotification(json);
+        }, 300)
+    });
+});
