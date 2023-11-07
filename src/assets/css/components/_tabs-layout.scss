@@ -1,10 +1,43 @@
 .app-wrapper {
   min-height: 100vh;
-  padding-top: 65px;
+  padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
   padding-bottom: 125px;
   background-color: #f7f7f7;
+}
+
+
+.app-header{
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 30px;
+  .logo{
+    svg,img{
+      width: 70px;
+      min-width: 70px;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+  }
+  .app-info{
+    padding-left: 20px;
+    .app-version{
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding-left: 3px;
+      .label{
+        font-weight: bold;
+        margin-right: 6px;
+      }
+    }
+  }
 }
 
 .tabs-wrapper {

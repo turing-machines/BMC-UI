@@ -1,6 +1,7 @@
-import {SetSessionNotification} from "../functions/notifications.js";
+import {SetSessionNotification, showToastNotification} from "../functions/notifications.js";
 
 import {bool2int} from "../functions/functions.js";
+import {rebootBMC} from "../functions/reboot.js";
 
 $("#form-power").parsley();
 
@@ -53,16 +54,4 @@ $("#form-power").submit(function (e) {
 
 });
 
-$("#reboot-btn").click(function() {
-    $.get('/api/bmc?opt=set&type=reboot', function(data) {
-        setTimeout(() => {
-            // want to show this text in the toast
-            SetSessionNotification("Restarting BMC..");
-        }, 300)
-    }).fail(function(err) {
-        setTimeout(() => {
-            var json = JSON.parse(err);
-            SetSessionNotification(json);
-        }, 300)
-    });
-});
+

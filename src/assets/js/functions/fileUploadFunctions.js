@@ -54,7 +54,7 @@ function multipart_transfer(handle, form_data, progressBar) {
                     if (e.lengthComputable) {
 
                         setTimeout(() => {
-                            const percentComplete = (e.loaded / e.total) * 100;
+                            const percentComplete = Number((e.loaded / e.total) * 100).toFixed(0);
 
 
                             // Width of progressbar
@@ -89,46 +89,57 @@ async function wait_for_state(type, need_state) {
     return state;
 }
 
-async function upload_multipart_action(form, update_label, progressBarGroup, type) {
-    const progressBar = progressBarGroup.find('.progress-bar')
+function upload_multipart_action(form, update_label, progressBarGroup, type) {
+    return new Promise((resolve, reject) => {
+        const progressBar = progressBarGroup.find('.progress-bar');
 
-    $(form).on("submit", function (event) {
-        event.preventDefault();
+        $(form).on("submit", function (event) {
+            event.preventDefault();
 
-        progressBarGroup.addClass('active')
+            progressBarGroup.addClass('active');
 
-        var request_transfer;
+            var request_transfer;
 
-        var file = $(form).find('input[type=file]')[0].files[0];
+            var file = $(form).find('input[type=file]')[0].files[0];
 
-        if (type === "flash") {
-            var node = $("#node-upgrade-picker").val();
-            request_transfer = '/api/bmc?opt=set&type=flash&file=' + file.name + '&length=' + file.size + '&node=' + node;
-        } else if (type === "firmware") {
-            request_transfer = '/api/bmc?opt=set&type=firmware&file=' + file.name + '&length=' + file.size
-        } else {
-            alert(type + " is not a option");
-        }
-
-        get_request_handle(request_transfer).then(function (handle) {
-            var formData = new FormData();
-            formData.append('file', file);
-            update_label.text("Transfering..");
-            return multipart_transfer(handle, formData, progressBar);
-        }).then(function () {
-            update_label.text("verify checksum, and finalizing upgrade..");
-            return wait_for_state(type, "Done");
-        }).then(function () {
-            update_label.text("Upgrade completed successful!");
-        }).catch(function (err) {
-            try {
-                console.log("komaam");
-                let error = wait_for_state(type, "Error");
-            } catch (error) {
-                update_label.text("Upgrade failed: " + error["Error"]);
+            if (type === "flash") {
+                var node = $("#node-upgrade-picker").val();
+                request_transfer = '/api/bmc?opt=set&type=flash&file=' + file.name + '&length=' + file.size + '&node=' + node;
+            } else if (type === "firmware") {
+                request_transfer = '/api/bmc?opt=set&type=firmware&file=' + file.name + '&length=' + file.size;
+            } else {
+                progressBarGroup.removeClass('active');
+                reject(new Error(type + " is not an option"));
+                return;
             }
 
-            update_label.text("Upgrade failed: " + err);
+            get_request_handle(request_transfer)
+                .then(function (handle) {
+                    var formData = new FormData();
+                    formData.append('file', file);
+                    update_label.text("Transferring...");
+                    return multipart_transfer(handle, formData, progressBar);
+                })
+                .then(function () {
+                    update_label.text("Verifying checksum and finalizing upgrade...");
+                    return wait_for_state(type, "Done");
+                })
+                .then(function () {
+                    update_label.text("Upgrade completed successfully!");
+                    progressBar.addClass('loaded');
+                    resolve(); // Resolve the promise when all steps are completed.
+                })
+                .catch(function (err) {
+                    try {
+                        let error = wait_for_state(type, "Error");
+                        update_label.text("Upgrade failed: " + error["Error"]);
+                    } catch (error) {
+                        update_label.text("Upgrade failed: " + err);
+                    }
+
+                    progressBar.addClass('loaded');
+                    reject(err); // Reject the promise in case of any errors.
+                });
         });
     });
 }

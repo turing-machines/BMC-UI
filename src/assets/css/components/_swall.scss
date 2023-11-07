@@ -1,0 +1,10 @@
+.swal-button--loading~.swal-button__loader{
+  display: none !important;
+}
+
+.swal-button--cancel:focus {
+  box-shadow:none!important;
+}
+.swal-button:focus{
+  box-shadow:none!important;
+}

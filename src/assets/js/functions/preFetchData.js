@@ -72,7 +72,7 @@ function FillDataOnOtherTab(json) {
         var ip = json[index][0].ip;
         var mac = json[index][0].mac;
 
-        $("#otherVer").text(version);
+        $("#otherVer,.daemon-version").text(version);
         $("#otherBuildtime").text(buildtime);
         $("#otherIp").text(ip);
         $("#otherMac").text(mac);

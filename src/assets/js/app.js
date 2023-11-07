@@ -2,6 +2,7 @@ import 'parsleyjs/dist/parsley.min.js';
 
 import {showNotifications} from "./functions/notifications.js";
 import {preFetchTabsData} from "./functions/preFetchData.js";
+import swal from "sweetalert";
 
 window.$ = window.jQuery = jQuery;
 ("use strict");
@@ -14,6 +15,8 @@ jQuery(() => {
     import('./components/tabs.js')
 
     import('./components/form-elements.js')
+
+    import('./functions/reboot.js')
 
 
     // Tabs
@@ -30,5 +33,10 @@ jQuery(() => {
 
     // Prefetch All Data from Server
     preFetchTabsData();
+
+
+
+
+
 
 });

@@ -543,7 +543,7 @@
     color: #fff;
     font-size: 13px;
     line-height: 20px;
-    transition: width 2s linear;
+    transition: width 0.2s linear;
     
     @mixin progress-bar-variant($color) {
       background-color: $color;
@@ -566,6 +566,10 @@
     @include gradient-striped;
     @include progress-bar-variant(var(--color-green));
     animation: progress-bar-stripes 0.5s linear infinite;
+    
+    &.loaded{
+      animation: unset;
+    }
   }
   
   .update-text {

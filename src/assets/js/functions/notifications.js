@@ -22,6 +22,21 @@ function SetSessionNotification(json) {
 function showNotifications() {
     if (sessionStorage.getItem('Notification') === "ok") {
 
+        showToastNotification('Success', 'success')
+
+    } else if (sessionStorage.getItem('Notification') === "err") {
+
+        showToastNotification('Error', 'error')
+
+    }
+
+    sessionStorage.removeItem('Notification');
+}
+
+function showToastNotification(text, status = 'success') {
+    if (status == 'success') {
+
+
         Toastify({
             text: `
             <span class="icon">
@@ -31,7 +46,7 @@ function showNotifications() {
 
             </span>
             <div class="caption">
-                Success
+                ${text}
             </div>
             `,
             duration: 1500,
@@ -43,7 +58,9 @@ function showNotifications() {
             escapeMarkup: false
         }).showToast();
 
-    } else if (sessionStorage.getItem('Notification') === "err") {
+
+    } else {
+
 
         Toastify({
             text: `
@@ -54,7 +71,7 @@ function showNotifications() {
 
             </span>
             <div class="caption">
-                Error
+                ${text}
             </div>
             `,
             duration: 3000,
@@ -67,8 +84,9 @@ function showNotifications() {
         }).showToast();
 
     }
-
-    sessionStorage.removeItem('Notification');
 }
 
-export {showNotifications, SetSessionNotification}
+
+export {showNotifications, showToastNotification, SetSessionNotification}
+
+

@@ -39,6 +39,7 @@
     "jquery": "^3.6.0",
     "parsleyjs": "^2.9.2",
     "selectric": "^1.13.0",
+    "sweetalert": "^2.1.2",
     "switchery": "^0.0.2",
     "toastify-js": "^1.12.0"
   },
