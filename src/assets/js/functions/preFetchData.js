@@ -69,11 +69,13 @@ function FillDataOnOtherTab(json) {
     $.each(json, function (index, item) {
         var version = json[index][0].version;
         var buildtime = json[index][0].buildtime;
+        var buildver = json[index][0].build_version;
         var ip = json[index][0].ip;
         var mac = json[index][0].mac;
 
         $("#otherVer,.daemon-version").text(version);
         $("#otherBuildtime").text(buildtime);
+        $("#otherBuildVer").text(buildver);
         $("#otherIp").text(ip);
         $("#otherMac").text(mac);
     });
