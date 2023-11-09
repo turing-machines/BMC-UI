@@ -6,6 +6,11 @@ import {preFetchTabsData} from "./functions/preFetchData.js";
 window.$ = window.jQuery = jQuery;
 ("use strict");
 
+
+
+
+
+
 jQuery(() => {
 
     // Show Notification on page loading

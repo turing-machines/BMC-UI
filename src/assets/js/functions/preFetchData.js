@@ -21,6 +21,7 @@ function preFetchSpecificTabData(ltype) {
         url = '/api/bmc?opt=get&type=info';
     } else return;
 
+
     $.ajax({
         url: url,
         type: 'GET',
@@ -57,10 +58,10 @@ function FillDataOnInfoTab(json) {
     }
 
     function progress_bar_template(total, free) {
-        let used = total-free;
-        let used_human = humanize.filesize(total-free);
+        let used = total - free;
+        let used_human = humanize.filesize(total - free);
         let total_human = humanize.filesize(total);
-        let used_percentage = humanize.numberFormat((used*100)/total);
+        let used_percentage = humanize.numberFormat((used * 100) / total);
         return `<div class="progress-bar-group form-group active">
             <div class="progress-bar-wrap">
                 <div class="progress-bar loaded" style="width: ${used_percentage}%;">${used_human} / ${total_human}</div>
@@ -81,17 +82,17 @@ function FillDataOnInfoTab(json) {
 }
 
 function FillDataOnAboutTab(json) {
-        var version = json.version;
-        var buildtime = json.buildtime;
-        var buildver = json.build_version;
-        var api = json.api;
-        var buildroot = json.buildroot;
+    var version = json.version;
+    var buildtime = json.buildtime;
+    var buildver = json.build_version;
+    var api = json.api;
+    var buildroot = json.buildroot;
 
-        $("#aboutVer,.daemon-version").text(version);
-        $("#aboutBuildtime").text(buildtime);
-        $("#aboutBuildVer").text(buildver);
-        $("#aboutApi").text(api);
-        $("#aboutBuildroot").text(buildroot);
+    $("#aboutVer,.daemon-version").text(version);
+    $("#aboutBuildtime").text(buildtime);
+    $("#aboutBuildVer").text(buildver);
+    $("#aboutApi").text(api);
+    $("#aboutBuildroot").text(buildroot);
 }
 
 function FillDataOnPowerTab(json) {
@@ -107,17 +108,10 @@ function FillDataOnPowerTab(json) {
         var node3 = json[index][0].node3;
         var node4 = json[index][0].node4;
 
-        var element1 = $('#node1Power');
-        page_changeSwitchery(element1, oth2bool(node1));
-
-        var element2 = $('#node2Power');
-        page_changeSwitchery(element2, oth2bool(node2));
-
-        var element3 = $('#node3Power');
-        page_changeSwitchery(element3, oth2bool(node3));
-
-        var element4 = $('#node4Power');
-        page_changeSwitchery(element4, oth2bool(node4));
+        var element1 = $('#node1Power').prop('checked', oth2bool(node1))
+        var element2 = $('#node2Power').prop('checked', oth2bool(node2))
+        var element3 = $('#node3Power').prop('checked', oth2bool(node3))
+        var element4 = $('#node4Power').prop('checked', oth2bool(node4))
     });
 }
 
@@ -126,8 +120,8 @@ function FillDataOnUSBTab(json) {
         var mode = json[index][0].mode;
         var node = json[index][0].node;
 
-        $('#usbMode').val(mode);
-        $('#usbNode').val(node);
+        $('#usbMode').val(mode).selectric('update');
+        $('#usbNode').val(node).selectric('update');
 
     });
 }
