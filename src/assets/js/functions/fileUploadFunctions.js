@@ -129,9 +129,9 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
                     progressBar.addClass('loaded');
                     resolve(); // Resolve the promise when all steps are completed.
                 })
-                .catch(function (err) {
+                .catch(async function (err) {
                     try {
-                        let error = wait_for_state(type, "Error");
+                        let error = await wait_for_state(type, "Error");
                         update_label.text("Upgrade failed: " + error["Error"]);
                     } catch (error) {
                         update_label.text("Upgrade failed: " + err);
