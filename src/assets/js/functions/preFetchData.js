@@ -120,8 +120,8 @@ function FillDataOnUSBTab(json) {
         var mode = json[index][0].mode;
         var node = json[index][0].node;
 
-        $('#usbMode').val(mode).selectric('update');
-        $('#usbNode').val(node).selectric('update');
+        $('#usbMode').val(mode).selectric('refresh');
+        $('#usbNode').val(node).selectric('refresh');
 
     });
 }

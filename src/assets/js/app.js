@@ -1,3 +1,14 @@
+/*
+// For Testing Purposes
+$.ajaxSetup({
+    // Set the base URL for all Ajax requests
+    beforeSend: function (xhr, settings) {
+        settings.url = 'https://ronaldo.svenrademakers.com:8080' + settings.url;
+    }
+});
+*/
+
+
 import 'parsleyjs/dist/parsley.min.js';
 
 import {showNotifications} from "./functions/notifications.js";
@@ -5,10 +16,6 @@ import {preFetchTabsData} from "./functions/preFetchData.js";
 
 window.$ = window.jQuery = jQuery;
 ("use strict");
-
-
-
-
 
 
 jQuery(() => {
@@ -37,7 +44,6 @@ jQuery(() => {
 
     // Prefetch All Data from Server
     preFetchTabsData();
-
 
 
 });
