@@ -23,7 +23,7 @@ jQuery(() => {
 
     import('./tabs/tab-power.js')
 
-    import('./tabs/tab-about.js')
+    import('./tabs/tab-info.js')
 
     import('./tabs/tab-firmware-upgrade.js')
 

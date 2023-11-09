@@ -1,10 +1,11 @@
 import {oth2bool} from "./functions.js";
+import {humanize} from "humanize";
 
 function preFetchTabsData() {
     preFetchSpecificTabData('usb');
-    preFetchSpecificTabData('sdcard');
     preFetchSpecificTabData('power');
     preFetchSpecificTabData('about');
+    preFetchSpecificTabData('info');
 }
 
 function preFetchSpecificTabData(ltype) {
@@ -12,12 +13,12 @@ function preFetchSpecificTabData(ltype) {
 
     if (ltype === 'usb') {
         url = '/api/bmc?opt=get&type=usb';
-    } else if (ltype === 'sdcard') {
-        url = '/api/bmc?opt=get&type=sdcard';
     } else if (ltype === 'power') {
         url = '/api/bmc?opt=get&type=power';
     } else if (ltype === 'about') {
         url = '/api/bmc?opt=get&type=about';
+    } else if (ltype === 'info') {
+        url = '/api/bmc?opt=get&type=info';
     } else return;
 
     $.ajax({
@@ -36,11 +37,10 @@ function preFetchSpecificTabData(ltype) {
 
             if (ltype === 'usb') {
                 FillDataOnUSBTab(json);
-            } else if (ltype === 'sdcard') {
-                FillDataOnSDCardTab(json);
             } else if (ltype === 'about') {
-                console.log(json);
                 FillDataOnAboutTab(json.result);
+            } else if (ltype === 'info') {
+                FillDataOnInfoTab(json.result);
             } else if (ltype === 'power') {
                 FillDataOnPowerTab(json);
             }
@@ -48,21 +48,39 @@ function preFetchSpecificTabData(ltype) {
     })
 }
 
+function FillDataOnInfoTab(json) {
+    function row_template(label, item) {
+        return `<div class="row">
+                    <div class="col">${label}</div>
+                    <div class="col">${item}</div>
+                </div>`;
+    }
 
-function FillDataOnSDCardTab(json) {
-    $.each(json, function (index, item) {
-        var total = json[index][0].total;
-        var use = json[index][0].use;
-        var free = json[index][0].free;
+    function progress_bar_template(total, free) {
+        let used = total-free;
+        let used_human = humanize.filesize(total-free);
+        let total_human = humanize.filesize(total);
+        let used_percentage = humanize.numberFormat((used*100)/total);
+        return `<div class="progress-bar-group form-group active">
+            <div class="progress-bar-wrap">
+                <div class="progress-bar loaded" style="width: ${used_percentage}%;">${used_human} / ${total_human}</div>
+            </div>
+        </div>`;
+    }
 
-        $("#sdTotal").val(total);
-        $("#sdUse").val(use);
-        $("#sdFree").val(free);
+    $.each(json.ip, function (index, item) {
+        $("#tableNetworkInfo").append(row_template(item.device, ""));
+        $("#tableNetworkInfo").append(row_template("ip", item.ip));
+        $("#tableNetworkInfo").append(row_template("mac", item.mac));
+    });
+
+    $.each(json.storage, function (index, item) {
+        let progress_bar = progress_bar_template(item.total_bytes, item.bytes_free);
+        $("#tableStorageInfo").append(row_template(item.name, progress_bar));
     });
 }
 
 function FillDataOnAboutTab(json) {
-    console.log(json);
         var version = json.version;
         var buildtime = json.buildtime;
         var buildver = json.build_version;

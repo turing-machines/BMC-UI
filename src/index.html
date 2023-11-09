@@ -41,9 +41,9 @@
 
                 <div class="tabs-header">
                     <ul class="tabs-header__list">
+                        <li data-tab="Info" class="tabs-header__list-item">Info</li>
                         <li data-tab="USB" class="tabs-header__list-item">USB</li>
                         <li data-tab="Power" class="tabs-header__list-item">Power</li>
-                        <li data-tab="SD Card" class="tabs-header__list-item">SD Card</li>
                         <li data-tab="Firmware Upgrade" class="tabs-header__list-item large">Firmware Upgrade</li>
                         <li data-tab="Flash Node" class="tabs-header__list-item">Flash Node</li>
                         <li data-tab="About" class="tabs-header__list-item">About</li>
@@ -55,9 +55,9 @@
 
                     @@include('./template-parts/tabs/tab-power.html',{ })
 
-                    @@include('./template-parts/tabs/tab-sd-card.html',{ })
-
                     @@include('./template-parts/tabs/tab-about.html',{ })
+
+                    @@include('./template-parts/tabs/tab-info.html',{ })
 
                     @@include('./template-parts/tabs/tab-firmware-upgrade.html',{ })
 

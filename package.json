@@ -36,6 +36,7 @@
   "dependencies": {
     "bootstrap-select": "^1.13.18",
     "get-scrollbar-width": "^1.0.5",
+    "humanize": "^0.0.9",
     "jquery": "^3.6.0",
     "parsleyjs": "^2.9.2",
     "selectric": "^1.13.0",

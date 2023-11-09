@@ -27,7 +27,7 @@ function setActiveTab(index) {
 if (localStorage.getItem('current-tab')) {
     setActiveTab(localStorage.getItem('current-tab'))
 } else {
-    setActiveTab('USB')
+    setActiveTab('Info')
 }
 
 

@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20231109101441" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20231109132807" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -56,9 +56,9 @@
 
                 <div class="tabs-header">
                     <ul class="tabs-header__list">
+                        <li data-tab="Info" class="tabs-header__list-item">Info</li>
                         <li data-tab="USB" class="tabs-header__list-item">USB</li>
                         <li data-tab="Power" class="tabs-header__list-item">Power</li>
-                        <li data-tab="SD Card" class="tabs-header__list-item">SD Card</li>
                         <li data-tab="Firmware Upgrade" class="tabs-header__list-item large">Firmware Upgrade</li>
                         <li data-tab="Flash Node" class="tabs-header__list-item">Flash Node</li>
                         <li data-tab="About" class="tabs-header__list-item">About</li>
@@ -165,7 +165,7 @@
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    Reboot BMC (all nodes will go off until rebooted)
+                    Reboot BMC (all nodes be powered off until rebooted)
                 </p>
             </div>
         </div>
@@ -180,46 +180,6 @@
 
     </form>
 </div>
-
-
-                    <div data-tab="SD Card" class="tabs-body__item">
-    <div id="sd-card" class="form">
-
-        <div class="form-group row">
-            <div class="text-content">
-                <p>
-                    Get the microSD card filesystem statistics
-                </p>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="input-wrap active">
-                <label for="sdTotal" class="label">Total:</label>
-                <input type="text" id="sdTotal" class="form-control" disabled>
-                <div class="prefix-label">B</div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="input-wrap active">
-                <label for="sdUse" class="label">Used:</label>
-                <input type="text" id="sdUse" class="form-control" disabled>
-                <div class="prefix-label">B</div>
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <div class="input-wrap active">
-                <label for="sdFree" class="label">Free:</label>
-                <input type="text" id="sdFree" class="form-control" disabled>
-                <div class="prefix-label">B</div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
 
 
                     <div data-tab="About" class="tabs-body__item ">
@@ -250,6 +210,39 @@
 
         </div>
 
+    </form>
+</div>
+
+
+                    <div data-tab="Info" class="tabs-body__item ">
+    <form class="form" id="form-info">
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    User Storage
+                </p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div id="tableStorageInfo" class="table-specification">
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Network interfaces
+                </p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div id="tableNetworkInfo" class="table-specification">
+            </div>
+        </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-red">
+                <span class="caption">Reset network</span>
+            </button>
+        </div>
     </form>
 </div>
 
@@ -359,7 +352,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20231109101441"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20231109132807"></script>
 
 </body>
 
