@@ -127,27 +127,6 @@
     }
   }
   
-  @media (max-width: 420px) {
-    padding-left: 11px;
-    padding-right: 11px;
-    height: 28px;
-    min-width: unset;
-    
-    .icon {
-      min-width: 12px;
-      width: 12px;
-      margin-right: 4px;
-      
-      svg {
-        min-width: 12px;
-      }
-    }
-    
-    &,
-    .caption {
-      font-size: 11px;
-    }
-  }
 }
 
 @mixin btn-turing-small-white {
@@ -226,27 +205,6 @@
     }
   }
   
-  @media (max-width: 420px) {
-    padding-left: 11px;
-    padding-right: 11px;
-    height: 28px;
-    min-width: unset;
-    
-    .icon {
-      min-width: 12px;
-      width: 12px;
-      margin-right: 4px;
-      
-      svg {
-        min-width: 12px;
-      }
-    }
-    
-    &,
-    .caption {
-      font-size: 11px;
-    }
-  }
   
 }
 
@@ -337,27 +295,6 @@
   }
   
   
-  @media (max-width: 420px) {
-    padding-left: 11px;
-    padding-right: 11px;
-    height: 28px;
-    min-width: unset;
-    
-    .icon {
-      min-width: 12px;
-      width: 12px;
-      margin-right: 4px;
-      
-      svg {
-        min-width: 12px;
-      }
-    }
-    
-    &,
-    .caption {
-      font-size: 11px;
-    }
-  }
   
 }
 
@@ -447,28 +384,6 @@
           }
         }
       }
-    }
-  }
-  
-  @media (max-width: 420px) {
-    padding-left: 11px;
-    padding-right: 11px;
-    height: 28px;
-    min-width: unset;
-    
-    .icon {
-      min-width: 12px;
-      width: 12px;
-      margin-right: 4px;
-      
-      svg {
-        min-width: 12px;
-      }
-    }
-    
-    &,
-    .caption {
-      font-size: 11px;
     }
   }
   

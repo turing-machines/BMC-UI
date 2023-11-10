@@ -1,5 +1,6 @@
 import {oth2bool} from "./functions.js";
 import {humanize} from "humanize";
+import {setSelectOptionByLabel} from "../components/form-elements.js";
 
 function preFetchTabsData() {
     preFetchSpecificTabData('usb');
@@ -120,8 +121,8 @@ function FillDataOnUSBTab(json) {
         var mode = json[index][0].mode;
         var node = json[index][0].node;
 
-        $('#usbMode').val(mode).selectric('refresh');
-        $('#usbNode').val(node).selectric('refresh');
+        setSelectOptionByLabel($('#usbMode'), mode)
+        setSelectOptionByLabel($('#usbNode'), node)
 
     });
 }

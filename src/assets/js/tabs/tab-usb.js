@@ -25,20 +25,20 @@ $("#form-usb").on('submit', function (e) {
         },
         error: function (uStr) {
             console.log("ajax post error");
-            setTimeout(()=>{
+            setTimeout(() => {
                 SetSessionNotification("urlerr");
-            },300)
+            }, 300)
         },
         success: function (uStr) {
             var json = JSON.parse(uStr);
-            setTimeout(()=>{
+            setTimeout(() => {
                 SetSessionNotification(json);
-            },300)
+            }, 300)
         },
         complete: function () {
-            setTimeout(()=>{
+            setTimeout(() => {
                 btn.removeClass('loading')
-            },300)
+            }, 300)
         }
     })
 

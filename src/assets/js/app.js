@@ -45,5 +45,4 @@ jQuery(() => {
     // Prefetch All Data from Server
     preFetchTabsData();
 
-
 });

@@ -1,6 +1,21 @@
 import 'selectric/src/jquery.selectric.js'
 
 
+// Function is selecting option by label ( not by value )
+function setSelectOptionByLabel($select, label) {
+    $select.find('option').each(function () {
+        if ($(this).text().trim() === label.trim()) {
+
+            const val = $(this).val();
+
+            // Trigger the selection of the matching option
+            $select.val(val).selectric('refresh')
+            return false; // Stop the loop once the option is found
+        }
+    });
+}
+
+
 // Select
 {
     const selects = $('select')
@@ -24,7 +39,6 @@ import 'selectric/src/jquery.selectric.js'
         });
 
     })
-
 }
 
 // Input
@@ -215,3 +229,6 @@ import 'selectric/src/jquery.selectric.js'
     $('input[type=file]').customFile();
 
 }
+
+
+export {setSelectOptionByLabel}
