@@ -7,20 +7,16 @@ $("#form-info").submit(function (e) {
 
     const form = $(this)
     const btn = form.find('button[type=submit]')
-
+    btn.addClass('loading');
     var url = '/api/bmc?opt=set&type=network&cmd=reset';
 
     $.ajax({
         url: url,
         type: 'GET',
         dataType: 'text',
-        timeout: 5000,
         cache: false,
-        async: false,
-        beforeSend: function () {
-            btn.addClass('loading')
-        },
         error: function (uStr) {
+            console.log(uStr);
             setTimeout(() => {
                 SetSessionNotification("urlerr");
             }, 300)

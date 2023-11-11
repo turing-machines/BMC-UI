@@ -1,3 +1,5 @@
+import {showToastNotification} from "./notifications.js";
+
 function get_request_handle(request_url) {
     return new Promise(function (resolve) {
         $.ajax({
@@ -93,54 +95,56 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
     return new Promise((resolve, reject) => {
         const progressBar = progressBarGroup.find('.progress-bar');
 
-        $(form).on("submit", function (event) {
-            event.preventDefault();
+        event.preventDefault();
 
-            progressBarGroup.addClass('active');
+        progressBarGroup.addClass('active');
 
-            var request_transfer;
+        var request_transfer;
+        var label;
+        var file = $(form).find('input[type=file]')[0].files[0];
 
-            var file = $(form).find('input[type=file]')[0].files[0];
+        if (type === "flash") {
+            var node = $("#node-upgrade-picker").val();
+            request_transfer = '/api/bmc?opt=set&type=flash&file=' + file.name + '&length=' + file.size + '&node=' + node;
+            label = "install";
+        } else if (type === "firmware") {
+            request_transfer = '/api/bmc?opt=set&type=firmware&file=' + file.name + '&length=' + file.size;
+            label = "upgrade";
+        } else {
+            progressBarGroup.removeClass('active');
+            reject(new Error(type + " is not an option"));
+            return;
+        }
 
-            if (type === "flash") {
-                var node = $("#node-upgrade-picker").val();
-                request_transfer = '/api/bmc?opt=set&type=flash&file=' + file.name + '&length=' + file.size + '&node=' + node;
-            } else if (type === "firmware") {
-                request_transfer = '/api/bmc?opt=set&type=firmware&file=' + file.name + '&length=' + file.size;
-            } else {
-                progressBarGroup.removeClass('active');
-                reject(new Error(type + " is not an option"));
-                return;
-            }
+        get_request_handle(request_transfer)
+            .then(function (handle) {
+                var formData = new FormData();
+                formData.append('file', file);
+                update_label.text("Transferring...");
+                return multipart_transfer(handle, formData, progressBar);
+            })
+            .then(function () {
+                update_label.text("Verifying checksum and finalizing "+ label + "...");
+                return wait_for_state(type, "Done");
+            })
+            .then(function () {
+                update_label.text(label+ " completed successfully!");
+                showToastNotification(label + ' completed successfully!', 'success')
+                progressBar.addClass('loaded');
+                resolve(); // Resolve the promise when all steps are completed.
+            })
+            .catch(async function (err) {
+                try {
+                    let error = await wait_for_state(type, "Error");
+                    update_label.text(label + error["Error"]);
+                } catch (error) {
+                    update_label.text(label+ ' failed: ' + err);
+                }
+                showToastNotification(label + ' failed!', 'error');
 
-            get_request_handle(request_transfer)
-                .then(function (handle) {
-                    var formData = new FormData();
-                    formData.append('file', file);
-                    update_label.text("Transferring...");
-                    return multipart_transfer(handle, formData, progressBar);
-                })
-                .then(function () {
-                    update_label.text("Verifying checksum and finalizing upgrade...");
-                    return wait_for_state(type, "Done");
-                })
-                .then(function () {
-                    update_label.text("Upgrade completed successfully!");
-                    progressBar.addClass('loaded');
-                    resolve(); // Resolve the promise when all steps are completed.
-                })
-                .catch(async function (err) {
-                    try {
-                        let error = await wait_for_state(type, "Error");
-                        update_label.text("Upgrade failed: " + error["Error"]);
-                    } catch (error) {
-                        update_label.text("Upgrade failed: " + err);
-                    }
-
-                    progressBar.addClass('loaded');
-                    reject(err); // Reject the promise in case of any errors.
-                });
-        });
+                progressBar.addClass('loaded');
+                reject(err); // Reject the promise in case of any errors.
+            });
     });
 }
 

@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20231111084245" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20231111132723" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -57,8 +57,8 @@
                 <div class="tabs-header">
                     <ul class="tabs-header__list">
                         <li data-tab="Info" class="tabs-header__list-item">Info</li>
-                        <li data-tab="USB" class="tabs-header__list-item">USB</li>
                         <li data-tab="Power" class="tabs-header__list-item">Power</li>
+                        <li data-tab="USB" class="tabs-header__list-item">USB</li>
                         <li data-tab="Firmware Upgrade" class="tabs-header__list-item large">Firmware Upgrade</li>
                         <li data-tab="Flash Node" class="tabs-header__list-item">Flash Node</li>
                         <li data-tab="About" class="tabs-header__list-item">About</li>
@@ -67,12 +67,20 @@
 
                 <div class="tabs-body">
                     <div data-tab="USB" class="tabs-body__item ">
-    
+
     <form class="form" id="form-usb">
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    USB route:
+                </p>
+            </div>
+        </div>
         <div class="form-group row">
             <div class="select-item">
                 <label for="usbMode" class="col-form-label">USB mode:</label>
-                <select data-parsley-errors-container="[data-errors=usbMode]" id="usbMode" class="selectpicker" data-style="btn-outline-primary" required>
+                <select data-parsley-errors-container="[data-errors=usbMode]" id="usbMode" class="selectpicker"
+                    data-style="btn-outline-primary" required>
                     <option selected disabled>Nothing Selected</option>
                     <option value="0">Host</option>
                     <option value="1">Device</option>
@@ -80,11 +88,12 @@
             </div>
             <div data-errors="usbMode" class="errors"></div>
         </div>
-        
+
         <div class="form-group row">
             <div class="select-item">
                 <label for="usbNode" class="col-form-label">Connected node:</label>
-                <select data-parsley-errors-container="[data-errors=usbNode]" id="usbNode" class="selectpicker" data-style="btn-outline-primary" required>
+                <select data-parsley-errors-container="[data-errors=usbNode]" id="usbNode" class="selectpicker"
+                    data-style="btn-outline-primary" required>
                     <option selected disabled>Nothing Selected</option>
                     <option value="0">Node 1</option>
                     <option value="1">Node 2</option>
@@ -94,10 +103,10 @@
             </div>
             <div data-errors="usbNode" class="errors"></div>
         </div>
-        
+
         <div class="form-group row">
             <button type="submit" class="btn btn-turing-small-yellow">
-                <span class="caption">Submit</span>
+                <span class="caption">Change</span>
             </button>
         </div>
     </form>
@@ -112,7 +121,7 @@
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    Control the power supply of connected nodes
+                    Control the power supply of connected nodes:
                 </p>
             </div>
         </div>
@@ -122,7 +131,7 @@
                 <div class="checkbox-item">
                     <input type="checkbox" id="node1Power" data-color="#008000" data-size="small" />
                 </div>
-                <label for="node1Power" class="label">Node 1:</label>
+                <label for="node1Power" class="label">Node 1</label>
             </div>
         </div>
 
@@ -131,7 +140,7 @@
                 <div class="checkbox-item">
                     <input type="checkbox" id="node2Power" data-color="#008000" data-size="small" />
                 </div>
-                <label for="node2Power" class="label">Node 2:</label>
+                <label for="node2Power" class="label">Node 2</label>
 
             </div>
         </div>
@@ -141,7 +150,7 @@
                 <div class="checkbox-item">
                     <input type="checkbox" id="node3Power" data-color="#008000" data-size="small" />
                 </div>
-                <label for="node3Power" class="label">Node 3:</label>
+                <label for="node3Power" class="label">Node 3</label>
 
             </div>
         </div>
@@ -151,27 +160,21 @@
                 <div class="checkbox-item">
                     <input type="checkbox" id="node4Power" data-color="#008000" data-size="small" />
                 </div>
-                <label for="node4Power" class="label">Node 4:</label>
+                <label for="node4Power" class="label">Node 4</label>
 
             </div>
-        </div>
-
-        <div class="form-group row">
-            <button type="submit" class="btn btn-turing-small-yellow">
-                <span class="caption">Submit</span>
-            </button>
         </div>
 
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    Reboot BMC (all nodes be powered off until rebooted)
+                    Reboot BMC:
                 </p>
             </div>
         </div>
 
         <div class="form-group">
-            <button type="button" id="reboot-btn" class="reboot-btn  btn btn-turing-small-red">
+            <button type="button" id="reboot-btn" class="btn btn-turing-small-red">
                 <span class="caption">
                     Reboot
                 </span>
@@ -239,7 +242,7 @@
             </div>
         </div>
         <div class="form-group row">
-            <button type="submit" class="btn btn-turing-small-red">
+            <button type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">Reset network</span>
             </button>
         </div>
@@ -253,14 +256,14 @@
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    BMC firmware upgrade
+                    Upgrade BMC firmware:
                 </p>
             </div>
         </div>
 
         <div class="form-group row">
             <label for="firmware-upgrade-file-id" class="input-wrap input-type-file-wrap active">
-                <span class="label">File:</span>
+                <span class="label">.tpu file:</span>
                 <input type="text" class="file-upload-input" value="Select a File">
                 <input type="file" name="file" id="firmware-upgrade-file-id" class="form-control" accept=".tpu"
                     readonly>
@@ -268,9 +271,9 @@
         </div>
 
         <div class="form-group">
-            <button disabled type="submit" class="btn btn btn-turing-small-red">
+            <button disabled type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">
-                    Upgrade BMC
+                    Upgrade
                 </span>
             </button>
         </div>
@@ -292,8 +295,7 @@
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    Select an image-file that will be
-                    uploaded and written to the node.
+                    Install an OS image on a selected node:
                 </p>
             </div>
         </div>
@@ -324,7 +326,7 @@
         </div>
 
         <div class="form-group">
-            <button disabled type="submit" class="btn btn btn-turing-small-red">
+            <button disabled type="submit" class="btn btn btn-turing-small-yellow">
                 <span class="caption">
                     Install OS
                 </span>
@@ -352,7 +354,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20231111084245"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20231111132723"></script>
 
 </body>
 

@@ -16,12 +16,53 @@ fileInput.on('change', function () {
     }
 });
 
+form.on('submit', function(event) {
+    event.preventDefault();
+    swal({
+        title: "Do you want to continue?",
+        content: {
+            element: "div",
+            attributes: {
+                innerHTML: `
+                   <p>You are about to overwrite a new image to the selected node.</p>
+                `
+            },
+        },
+        icon: "warning",
+        dangerMode: true,
+        closeOnClickOutside: false,
+        buttons: {
+            cancel: {
+                text: "Cancel",
+                value: null,
+                visible: true,
+                className: "btn btn-turing-small-dark",
+                closeModal: true,
+            },
+            confirm: {
+                text: "Continue",
+                value: true,
+                visible: true,
+                className: "continue-btn btn btn-turing-small-yellow",
+                closeModal: true,
+            }
+        },
+    }).then((confirmed) => {
+        if (!confirmed) {
+            return;
+        }
+        submitBtn.prop("disabled", true);
+        upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash")
+            .catch((error) => {
+                // Handle any errors if needed
+                console.error(error);
+                submitBtn.prop("disabled", false);
+            });
+        submitBtn.prop("disabled", false);
+    });
+});
 
 // Submit
 const update_label = form.find('.update-text')
 const progressBarGroup = form.find('.progress-bar-group')
-
-upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash").then((r) => {
-
-});
 

@@ -3,14 +3,12 @@ import {SetSessionNotification, showToastNotification} from "../functions/notifi
 import {bool2int} from "../functions/functions.js";
 import {rebootBMC} from "../functions/reboot.js";
 
+const form = $("#form-power");
+const checkbox = form.find('input[type=checkbox]');
+
 $("#form-power").parsley();
 
-$("#form-power").submit(function (e) {
-    e.preventDefault();
-
-    const form = $(this)
-    const btn = form.find('button[type=submit]')
-
+checkbox.change(function () {
     var node1 = $('#node1Power').is(':checked');
     var node2 = $('#node2Power').is(':checked');
     var node3 = $('#node3Power').is(':checked');
@@ -29,29 +27,20 @@ $("#form-power").submit(function (e) {
         dataType: 'text',
         timeout: 5000,
         cache: false,
-        async: false,
-        beforeSend: function () {
-            btn.addClass('loading')
-        },
         error: function (uStr) {
-            console.log("ajax post error");
             setTimeout(() => {
-                SetSessionNotification("urlerr");
+                showToastNotification("Could not toggle power state", 'error');
             }, 300)
         },
         success: function (uStr) {
-            var json = JSON.parse(uStr);
             setTimeout(() => {
-                SetSessionNotification(json);
-            }, 300)
-        },
-        complete: function () {
-            setTimeout(() => {
-                btn.removeClass('loading')
+                showToastNotification("Power state update successful", 'success');
             }, 300)
         }
     })
 
 });
 
-
+$("#reboot-btn").on('click', function() {
+    rebootBMC();
+});
