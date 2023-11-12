@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20231111132723" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20231112194142" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -67,7 +67,6 @@
 
                 <div class="tabs-body">
                     <div data-tab="USB" class="tabs-body__item ">
-
     <form class="form" id="form-usb">
         <div class="form-group row">
             <div class="text-content">
@@ -78,7 +77,7 @@
         </div>
         <div class="form-group row">
             <div class="select-item">
-                <label for="usbMode" class="col-form-label">USB mode:</label>
+                <label for="usbMode" class="col-form-label">USB mode</label>
                 <select data-parsley-errors-container="[data-errors=usbMode]" id="usbMode" class="selectpicker"
                     data-style="btn-outline-primary" required>
                     <option selected disabled>Nothing Selected</option>
@@ -91,7 +90,7 @@
 
         <div class="form-group row">
             <div class="select-item">
-                <label for="usbNode" class="col-form-label">Connected node:</label>
+                <label for="usbNode" class="col-form-label">Connected node</label>
                 <select data-parsley-errors-container="[data-errors=usbNode]" id="usbNode" class="selectpicker"
                     data-style="btn-outline-primary" required>
                     <option selected disabled>Nothing Selected</option>
@@ -110,8 +109,6 @@
             </button>
         </div>
     </form>
-
-
 </div>
 
 
@@ -164,21 +161,27 @@
 
             </div>
         </div>
-
         <div class="form-group row">
             <div class="text-content">
                 <p>
-                    Reboot BMC:
+                    BMC:
                 </p>
             </div>
         </div>
 
-        <div class="form-group">
-            <button type="button" id="reboot-btn" class="btn btn-turing-small-red">
-                <span class="caption">
-                    Reboot
-                </span>
-            </button>
+        <div class="form-group row">
+            <div class="form-group">
+                <button type="button" id="reboot-btn" class="btn btn-turing-small-red">
+                    <span class="caption">
+                        Reboot
+                    </span>
+                </button>
+                <div id="reload-btn" class="btn btn-turing-small-dark">
+                    <span class="caption">
+                        Reload daemon
+                    </span>
+                </div>
+            </div>
         </div>
 
     </form>
@@ -252,7 +255,6 @@
 
                     <div data-tab="Firmware Upgrade" id="firmware-upgrade-tab" class="tabs-body__item ">
     <form class="form" id="firmware-upgrade-form">
-
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -260,16 +262,14 @@
                 </p>
             </div>
         </div>
-
         <div class="form-group row">
             <label for="firmware-upgrade-file-id" class="input-wrap input-type-file-wrap active">
-                <span class="label">.tpu file:</span>
+                <span class="label">.tpu file</span>
                 <input type="text" class="file-upload-input" value="Select a File">
                 <input type="file" name="file" id="firmware-upgrade-file-id" class="form-control" accept=".tpu"
                     readonly>
             </label>
         </div>
-
         <div class="form-group">
             <button disabled type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">
@@ -277,14 +277,26 @@
                 </span>
             </button>
         </div>
-
         <div id="firmware-progress-group" class="progress-bar-group form-group row">
             <div class="progress-bar-wrap">
                 <div class="progress-bar" style="width: 0%;"></div>
             </div>
             <div class="update-text"></div>
         </div>
-
+    </form>
+    <form class="form" id="backup-form">
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    Backup BMC user data:
+                </p>
+            </div>
+        </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-yellow">
+                <span class="caption">Download as archive</span>
+            </button>
+        </div>
     </form>
 </div>
 
@@ -354,7 +366,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20231111132723"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20231112194142"></script>
 
 </body>
 

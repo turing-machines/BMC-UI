@@ -44,3 +44,32 @@ checkbox.change(function () {
 $("#reboot-btn").on('click', function() {
     rebootBMC();
 });
+
+let backoff = false;
+
+$("#reload-btn").on('click', function() {
+    const btn = $(this);
+    if (backoff) {
+        return;
+    }
+    backoff = true;
+
+    btn.addClass('loading');
+    $.get('/api/bmc?opt=set&type=reload')
+        .done(function (data) {
+            setTimeout(() => {
+                showToastNotification("BMC reloaded", 'success');
+            }, 300);
+        })
+        .fail(function (err) {
+            setTimeout(() => {
+                showToastNotification("Error", 'error');
+            }, 300);
+        })
+        .always(function() {
+            setTimeout(() => {
+            btn.removeClass('loading');
+            }, 1000);
+            backoff = false;
+        });
+});

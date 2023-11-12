@@ -1,4 +1,5 @@
 import {upload_multipart_action} from "../functions/fileUploadFunctions.js";
+import {showToastNotification} from "../functions/notifications.js";
 import {rebootBMC} from "../functions/reboot.js";
 import swal from 'sweetalert';
 
@@ -73,4 +74,50 @@ form.on("submit", function (event) {
             console.log('Firmware Upgrade Finished (Failed) ');
 
         });
+});
+
+const backupForm = $("#backup-form");
+const backupBtn = backupForm.find('button[type=submit]');
+
+
+backupForm.on('submit', function(event) {
+    event.preventDefault();
+
+    return new Promise((resolve, reject) => { 
+        backupBtn.addClass('loading');
+        $.ajax({
+            url:"/api/bmc/backup",
+            xhrFields: {
+                responseType: 'blob'
+            }
+        }).done(
+            function (data, textStatus, jqXHR) {
+                let blob = new Blob([data]);
+                console.log(jqXHR.getAllResponseHeaders());
+
+                var regex = /filename="(.+?)"$/;
+                var filename = regex.exec(jqXHR.getResponseHeader("content-disposition"))[1];
+
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename; // Specify the desired file name
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                setTimeout(() => {
+                    showToastNotification("received " + filename, 'success');
+                }, 300);
+            })
+            .fail(function (err) {
+                console.log(err);
+                setTimeout(() => {
+                    showToastNotification("Error generating backup archive", 'error');
+                    reject(err); // Reject the promise with the error
+                }, 300);
+            })
+            .always(function() {
+                backupBtn.removeClass('loading');
+            });
+    });
 });
