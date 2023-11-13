@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20231112194142" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20231113095700" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -221,7 +221,7 @@
 
 
                     <div data-tab="Info" class="tabs-body__item ">
-    <form class="form" id="form-info">
+    <form class="form" id="form-storage">
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -233,6 +233,16 @@
             <div id="tableStorageInfo" class="table-specification">
             </div>
         </div>
+        <div class="form-group row">
+            <button type="submit" class="btn btn-turing-small-yellow">
+                <span class="caption">Backup user data</span>
+            </button>
+        </div>
+        <!-- work around the 0px margin for the last form-group class in a form
+        -->
+        <div class="form-group row"></div>
+    </form>
+    <form class="form" id="form-network">
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -282,20 +292,6 @@
                 <div class="progress-bar" style="width: 0%;"></div>
             </div>
             <div class="update-text"></div>
-        </div>
-    </form>
-    <form class="form" id="backup-form">
-        <div class="form-group row">
-            <div class="text-content">
-                <p>
-                    Backup BMC user data:
-                </p>
-            </div>
-        </div>
-        <div class="form-group row">
-            <button type="submit" class="btn btn-turing-small-yellow">
-                <span class="caption">Download as archive</span>
-            </button>
         </div>
     </form>
 </div>
@@ -366,7 +362,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20231112194142"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20231113095700"></script>
 
 </body>
 

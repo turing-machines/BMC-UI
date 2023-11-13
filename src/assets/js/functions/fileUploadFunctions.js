@@ -148,5 +148,14 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
     });
 }
 
+function downloadFile(blob, filename) {
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
 
-export {get_request_handle, get_status, multipart_transfer, sleep, wait_for_state, upload_multipart_action}
+export {downloadFile, get_request_handle, get_status, multipart_transfer, sleep, wait_for_state, upload_multipart_action}
+
