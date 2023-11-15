@@ -60,22 +60,17 @@ form.on("submit", function (event) {
         if (!confirmed) {
             return;
         }
-
-
-        return upload_multipart_action("#firmware-upgrade-form", update_label, progressBarGroup, "firmware")
-            .then(() => {
-                // The entire upload process was successful.
-                console.log('Firmware Upgrade Finished');
-                submitBtn.prop("disabled", false);
-                return rebootBMC(true);
-            });
-        })
-        .catch((error) => {
-            // Handle errors here.
-            console.error(error);
-            submitBtn.prop("disabled", false);
-            console.log('Firmware Upgrade Finished (Failed) ');
-
-        });
+        return upload_multipart_action("#firmware-upgrade-form", update_label, progressBarGroup, "firmware");
+    }).then(() => {
+        // The entire upload process was successful.
+        console.log('Firmware Upgrade Finished');
+        return rebootBMC(true);
+    }).catch((error) => {
+        // Handle errors here.
+        console.error(error);
+        console.log('Firmware Upgrade Finished (Failed) ');
+    }).finally(() => {
+        submitBtn.prop("disabled", false);
+    });
 });
 

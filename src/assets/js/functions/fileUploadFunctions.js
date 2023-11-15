@@ -1,54 +1,41 @@
 import {showToastNotification} from "./notifications.js";
 
 function get_request_handle(request_url) {
-    return new Promise(function (resolve) {
+    return new Promise((resolve, reject) => {
         $.ajax({
             url: request_url,
             type: 'GET',
             timeout: 5000,
             dataType: "json",
-            success: function (data) {
-                resolve(data["handle"]);
-            }
-        });
+        }).done(data => {
+            resolve(data["handle"]);
+        }).fail(error => { reject(error);});
     });
 }
 
 function get_status(type) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         var request_status = '/api/bmc?opt=get&type=' + type;
         $.ajax({
             url: request_status,
             type: 'GET',
             dataType: "json",
-            success: function (data) {
-                if ("Error" in data) {
-                    reject(data["Error"]);
-                } else {
-                    resolve(data);
-                }
-            },
-            error: function (error) {
-                reject(error);
-            },
+        }).done(data => {
+            resolve(data);
+        }).fail(error => {
+            reject(error);
         });
     });
 }
 
 function multipart_transfer(handle, form_data, progressBar) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
         $.ajax({
             url: "/api/bmc/upload/" + handle,
             type: 'POST',
             data: form_data,
             processData: false,
             contentType: false,
-            error: function (jqXHR, textStatus, errorThrown) {
-                reject(jqXHR.responseText);
-            },
-            success: function (data) {
-                resolve(data);
-            },
             xhr: function () {
                 const xhr = new XMLHttpRequest();
                 // Add a progress callback for upload
@@ -75,6 +62,10 @@ function multipart_transfer(handle, form_data, progressBar) {
 
                 return xhr;
             }
+        }).done(data => {
+            resolve(data);
+        }).fail(error => {
+            reject(error);
         });
     });
 }
@@ -130,20 +121,19 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
             .then(function () {
                 update_label.text(label+ " completed successfully!");
                 showToastNotification(label + ' completed successfully!', 'success')
-                progressBar.addClass('loaded');
-                resolve(); // Resolve the promise when all steps are completed.
+                resolve();
             })
-            .catch(async function (err) {
+            .catch(async function (xhr, textStatus, errorThrown) {
+                let server_error = label + ' failed: ' + xhr.responseText;
                 try {
-                    let error = await wait_for_state(type, "Error");
-                    update_label.text(label + error["Error"]);
+                    server_error = label + ' failed: ' + JSON.parse(xhr.responseText)["Error"];
                 } catch (error) {
-                    update_label.text(label+ ' failed: ' + err);
                 }
                 showToastNotification(label + ' failed!', 'error');
-
+                update_label.text(server_error);
+                reject(server_error);
+            }).finally(() => {
                 progressBar.addClass('loaded');
-                reject(err); // Reject the promise in case of any errors.
             });
     });
 }

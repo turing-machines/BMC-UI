@@ -56,20 +56,14 @@ form.on('submit', function(event) {
             return;
         }
 
-        upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash")
-            .then(()=>{
-
-                submitBtn.prop("disabled", false);
-
-            })
-            .catch((error) => {
-                // Handle any errors if needed
-                console.error(error);
-                submitBtn.prop("disabled", false);
-            });
-
-
+        return upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash");
+    }).catch((error) => {
+        // Handle any errors if needed
+        console.error(error);
+    }).finally(() => {
+        submitBtn.prop("disabled", false);
     });
+
 });
 
 // Submit
