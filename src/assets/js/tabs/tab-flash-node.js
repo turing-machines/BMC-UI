@@ -18,6 +18,10 @@ fileInput.on('change', function () {
 
 form.on('submit', function(event) {
     event.preventDefault();
+
+    // Block the button
+    submitBtn.prop("disabled", true);
+
     swal({
         title: "Do you want to continue?",
         content: {
@@ -51,14 +55,20 @@ form.on('submit', function(event) {
         if (!confirmed) {
             return;
         }
-        submitBtn.prop("disabled", true);
+
         upload_multipart_action("#node-upgrade-form", update_label, progressBarGroup, "flash")
+            .then(()=>{
+
+                submitBtn.prop("disabled", false);
+
+            })
             .catch((error) => {
                 // Handle any errors if needed
                 console.error(error);
                 submitBtn.prop("disabled", false);
             });
-        submitBtn.prop("disabled", false);
+
+
     });
 });
 

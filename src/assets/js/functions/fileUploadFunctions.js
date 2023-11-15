@@ -63,7 +63,7 @@ function multipart_transfer(handle, form_data, progressBar) {
                             progressBar.css({width: `${percentComplete}%`});
 
                             // Caption of progressbar
-                            progressBar.text(`${percentComplete}%`)
+                            progressBar.siblings('.progress-bar-caption').text(`${percentComplete}%`)
 
 
                             console.log("Upload progress: " + percentComplete + "%");

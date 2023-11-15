@@ -23,6 +23,10 @@ const progressBarGroup = form.find('.progress-bar-group')
 
 form.on("submit", function (event) {
     event.preventDefault();
+
+    // Block the button
+    submitBtn.prop("disabled", true);
+
     swal({
         title: "Upgrade Firmware?",
         content: {
@@ -56,7 +60,8 @@ form.on("submit", function (event) {
         if (!confirmed) {
             return;
         }
-        submitBtn.prop("disabled", true);
+
+
         return upload_multipart_action("#firmware-upgrade-form", update_label, progressBarGroup, "firmware")
             .then(() => {
                 // The entire upload process was successful.
@@ -64,7 +69,7 @@ form.on("submit", function (event) {
                 submitBtn.prop("disabled", false);
                 return rebootBMC(true);
             });
-    })
+        })
         .catch((error) => {
             // Handle errors here.
             console.error(error);

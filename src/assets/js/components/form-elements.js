@@ -22,7 +22,9 @@ function setSelectOptionByLabel($select, label) {
     selects.each(function () {
         const select = $(this);
         const selectricSelect = select.selectric({
-            maxHeight: 375
+            maxHeight: 375,
+            disableOnMobile: false,
+            nativeOnMobile: false
         });
 
         // Prevent Open on Focus

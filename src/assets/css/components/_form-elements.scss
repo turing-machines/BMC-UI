@@ -532,7 +532,22 @@
   }
   
   .progress-bar-wrap {
-    background-color: var(--purple-900)
+    background-color: var(--purple-900);
+    position: relative;
+    .progress-bar-caption {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      z-index: 15;
+      color: #fff;
+      font-size: 13px;
+      line-height: 20px;
+    }
   }
   
   .progress-bar {
@@ -567,7 +582,7 @@
     @include progress-bar-variant(var(--color-green));
     animation: progress-bar-stripes 0.5s linear infinite;
     
-    &.loaded{
+    &.loaded {
       animation: unset;
     }
   }

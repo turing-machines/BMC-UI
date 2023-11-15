@@ -220,7 +220,6 @@ const js = () => {
         // Webpack Development
         .pipe(gulpif(isDevelopment,
             webpackStream({
-                watch: true, // Enable Webpack's watch mode
                 entry: paths.js_webpack_entry,
                 devtool: "eval-source-map",
                 mode: 'development',
@@ -415,8 +414,8 @@ const watch = () => {
 
 export {serve, reload, watch, clean, scss, js, html, files, img}
 
-const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss), html, img, gulp.parallel(watch, js, serve))
-const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss,), html, img, js)
+const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js), html, img, gulp.parallel(watch, serve))
+const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js), html, img)
 
 export {dev, build}
 export {dev as default}

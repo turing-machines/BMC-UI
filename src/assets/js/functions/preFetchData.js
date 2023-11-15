@@ -65,7 +65,8 @@ function FillDataOnInfoTab(json) {
         let used_percentage = humanize.numberFormat((used * 100) / total);
         return `<div class="progress-bar-group form-group active">
             <div class="progress-bar-wrap">
-                <div class="progress-bar loaded" style="width: ${used_percentage}%;">${used_human} / ${total_human}</div>
+                <div class="progress-bar loaded" style="width: ${used_percentage}%;"></div>
+                <div class="progress-bar-caption">${used_human} / ${total_human}</div>
             </div>
         </div>`;
     }
