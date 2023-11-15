@@ -80,6 +80,7 @@ const paths = {
             `${srcFolder}/assets/js/**/*.js`,
             `${srcFolder}/assets/js/components/*.js`,
             `${srcFolder}/assets/js/functions/*.js`,
+            `${srcFolder}/assets/js/tabs/*.js`,
         ],
         dest: `${buildFolder}/assets/js/`
     },
@@ -210,6 +211,9 @@ const js = () => {
     return gulp.src(paths.js.src)
         .pipe(plumber({
             errorHandler: function (err) {
+
+                console.error('JS Plumber Error:', err);
+
                 notify.onError({
                     title: "JS Error",
                     message: "<%= error.message %>"
