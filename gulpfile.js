@@ -80,7 +80,6 @@ const paths = {
             `${srcFolder}/assets/js/**/*.js`,
             `${srcFolder}/assets/js/components/*.js`,
             `${srcFolder}/assets/js/functions/*.js`,
-            `${srcFolder}/assets/js/tabs/*.js`,
         ],
         dest: `${buildFolder}/assets/js/`
     },
@@ -211,9 +210,6 @@ const js = () => {
     return gulp.src(paths.js.src)
         .pipe(plumber({
             errorHandler: function (err) {
-
-                console.error('JS Plumber Error:', err);
-
                 notify.onError({
                     title: "JS Error",
                     message: "<%= error.message %>"
@@ -224,6 +220,7 @@ const js = () => {
         // Webpack Development
         .pipe(gulpif(isDevelopment,
             webpackStream({
+                watch: true, // Enable Webpack's watch mode
                 entry: paths.js_webpack_entry,
                 devtool: "eval-source-map",
                 mode: 'development',
@@ -418,8 +415,8 @@ const watch = () => {
 
 export {serve, reload, watch, clean, scss, js, html, files, img}
 
-const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss, js), html, img, gulp.parallel(watch, serve))
-const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss, js), html, img)
+const dev = gulp.series(setDevelopmentEnvironment, clean, gulp.parallel(files, scss), html, img, gulp.parallel(watch, js, serve))
+const build = gulp.series(setProductionEnvironment, clean, gulp.parallel(files, scss,), html, img, js)
 
 export {dev, build}
 export {dev as default}
