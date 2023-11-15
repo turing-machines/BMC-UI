@@ -65,10 +65,6 @@ form.on("submit", function (event) {
         // The entire upload process was successful.
         console.log('Firmware Upgrade Finished');
         return rebootBMC(true);
-    }).catch((error) => {
-        // Handle errors here.
-        console.error(error);
-        console.log('Firmware Upgrade Finished (Failed) ');
     }).finally(() => {
         submitBtn.prop("disabled", false);
     });

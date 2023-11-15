@@ -46,3 +46,12 @@ jQuery(() => {
     preFetchTabsData();
 
 });
+
+function ajaxFailToast(xhr, textstatus, errorthrown) {
+    settimeout(() => {
+        let message = textstatus + ' : ' + xhr.responsetext;
+        showtoastnotification(message, 'error');
+    }, 300);
+}
+
+export {ajaxFailToast}

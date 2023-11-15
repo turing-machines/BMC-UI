@@ -9,7 +9,9 @@ function get_request_handle(request_url) {
             dataType: "json",
         }).done(data => {
             resolve(data["handle"]);
-        }).fail(error => { reject(error);});
+        }).fail(error => {
+            reject(error);
+        });
     });
 }
 
@@ -83,15 +85,15 @@ async function wait_for_state(type, need_state) {
 }
 
 function upload_multipart_action(form, update_label, progressBarGroup, type) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         const progressBar = progressBarGroup.find('.progress-bar');
 
         event.preventDefault();
 
         progressBarGroup.addClass('active');
 
-        var request_transfer;
         var label;
+        var request_transfer;
         var file = $(form).find('input[type=file]')[0].files[0];
 
         if (type === "flash") {
@@ -115,23 +117,25 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
                 return multipart_transfer(handle, formData, progressBar);
             })
             .then(function () {
-                update_label.text("Verifying checksum and finalizing "+ label + "...");
+                update_label.text("Verifying checksum and finalizing " + label + "...");
                 return wait_for_state(type, "Done");
             })
             .then(function () {
                 update_label.text(label+ " completed successfully!");
-                showToastNotification(label + ' completed successfully!', 'success')
+                showToastNotification('success', 'success');
                 resolve();
             })
             .catch(async function (xhr, textStatus, errorThrown) {
                 let server_error = label + ' failed: ' + xhr.responseText;
                 try {
-                    server_error = label + ' failed: ' + JSON.parse(xhr.responseText)["Error"];
+                    let json = JSON.parse(xhr.responseText);
+                    if (json["Error"] !== undefined) {
+                        server_error = label + ' failed: ' + json["Error"];
+                    }
                 } catch (error) {
                 }
                 showToastNotification(label + ' failed!', 'error');
                 update_label.text(server_error);
-                reject(server_error);
             }).finally(() => {
                 progressBar.addClass('loaded');
             });

@@ -1,5 +1,5 @@
 import {SetSessionNotification, showToastNotification} from "../functions/notifications.js";
-
+import {ajaxFailToast} from "../app.js"
 import {bool2int} from "../functions/functions.js";
 import {rebootBMC} from "../functions/reboot.js";
 
@@ -27,18 +27,13 @@ checkbox.change(function () {
         dataType: 'text',
         timeout: 5000,
         cache: false,
-        error: function (uStr) {
-            setTimeout(() => {
-                showToastNotification("Could not toggle power state", 'error');
-            }, 300)
-        },
-        success: function (uStr) {
-            setTimeout(() => {
-                showToastNotification("Power state update successful", 'success');
-            }, 300)
-        }
     })
-
+    .fail(ajaxFailToast)
+    .done(() => {
+        setTimeout(() => {
+            showToastNotification('success', 'success');
+        }, 300);
+    });
 });
 
 $("#reboot-btn").on('click', function() {
@@ -47,7 +42,7 @@ $("#reboot-btn").on('click', function() {
 
 let backoff = false;
 
-$("#reload-btn").on('click', function() {
+$("#reload-btn").on('click', () => {
     const btn = $(this);
     if (backoff) {
         return;
@@ -61,14 +56,10 @@ $("#reload-btn").on('click', function() {
                 showToastNotification("BMC reloaded", 'success');
             }, 300);
         })
-        .fail(function (err) {
+        .fail(ajaxFailToast)
+        .always(() => {
             setTimeout(() => {
-                showToastNotification("Error", 'error');
-            }, 300);
-        })
-        .always(function() {
-            setTimeout(() => {
-            btn.removeClass('loading');
+                btn.removeClass('loading');
             }, 1000);
             backoff = false;
         });

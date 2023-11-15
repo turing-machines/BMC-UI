@@ -1,6 +1,7 @@
 import {SetSessionNotification} from "../functions/notifications.js";
 import {showToastNotification} from "../functions/notifications.js";
 import {downloadFile} from "../functions/fileUploadFunctions.js";
+import {ajaxFailToast} from "../app.js"
 
 $("#form-network").submit(function (e) {
     e.preventDefault();
@@ -17,14 +18,11 @@ $("#form-network").submit(function (e) {
         cache: false,
     }).done((response) => {
         setTimeout(() => {
-            SetSessionNotification(json);
+            showToastNotification('success', 'success');
         }, 300);
-    }).fail((xhr, textstatus, errorthrown)  => {
-        settimeout(() => {
-            let message = textstatus + ' : ' + xhr.responsetext;
-            showtoastnotification(message, 'error');
-        }, 300);
-    }).always(() => {
+    })
+    .fail(ajaxFailToast)
+    .always(() => {
         btn.removeClass('loading')
     });
 });
@@ -53,12 +51,7 @@ backupForm.on('submit', function(event) {
                 showToastNotification("received " + filename, 'success');
             }, 300);
         })
-        .fail((xhr, textstatus, errorthrown)  => {
-            settimeout(() => {
-                let message = textstatus + ' : ' + xhr.responsetext;
-                showtoastnotification(message, 'error');
-            }, 300);
-        })
+        .fail(ajaxFailToast)
         .always(() => {
             backupBtn.removeClass('loading');
         });
