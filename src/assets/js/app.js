@@ -11,7 +11,7 @@ $.ajaxSetup({
 
 import 'parsleyjs/dist/parsley.min.js';
 
-import {showNotifications} from "./functions/notifications.js";
+import {showNotifications, showToastNotification} from "./functions/notifications.js";
 import {preFetchTabsData} from "./functions/preFetchData.js";
 
 window.$ = window.jQuery = jQuery;
@@ -47,10 +47,20 @@ jQuery(() => {
 
 });
 
-function ajaxFailToast(xhr, textstatus, errorthrown) {
-    settimeout(() => {
-        let message = textstatus + ' : ' + xhr.responsetext;
-        showtoastnotification(message, 'error');
+function ajaxFailToast(xhr, textStatus, errorThrown) {
+    setTimeout(() => {
+        let msg = xhr.responseText;
+
+        if (xhr.responseText === undefined) {
+            msg = errorThrown;
+        }
+
+        let error = textStatus;
+        if (msg.length !== 0) {
+            error += ' : ' + msg;
+        }
+
+        showToastNotification(error, 'error');
     }, 300);
 }
 
