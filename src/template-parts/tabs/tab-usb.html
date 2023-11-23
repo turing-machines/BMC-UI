@@ -15,6 +15,7 @@
                     <option selected disabled>Nothing Selected</option>
                     <option value="0">Host</option>
                     <option value="1">Device</option>
+                    <option value="2">Flash</option>
                 </select>
             </div>
             <div data-errors="usbMode" class="errors"></div>
@@ -39,6 +40,16 @@
             <button type="submit" class="btn btn-turing-small-yellow">
                 <span class="caption">Change</span>
             </button>
+        </div>
+        <div class="form-group row">
+            <div style="white-space:pre-wrap;font-size:0.9em;">USB Modes:
+                - Host - turns the USB_OTG port power on - use when you want to connect USB devices (like keyboard,
+                mouse,
+                USB drive, etc) through the USB_OTG port to supported modules
+                - Device - the default mode, turns the USB_OTG power off - use in any other case
+                - Flash - turns the module into flashing mode and sets the USB_OTG into device mode - use to flash the
+                module using USB_OTG port
+            </div>
         </div>
     </form>
 </div>
