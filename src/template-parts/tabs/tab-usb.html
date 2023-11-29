@@ -43,12 +43,17 @@
         </div>
         <div class="form-group row">
             <div style="white-space:pre-wrap;font-size:0.9em;">USB Modes:
-                - Host - turns the USB_OTG port power on - use when you want to connect USB devices (like keyboard,
-                mouse,
-                USB drive, etc) through the USB_OTG port to supported modules
-                - Device - the default mode, turns the USB_OTG power off - use in any other case
-                - Flash - turns the module into flashing mode and sets the USB_OTG into device mode - use to flash the
-                module using USB_OTG port
+                <ul>
+                    <li>
+                        <strong>Host</strong>: Allows peripherals (such as keyboards, mice, USB drives, etc.) to be connected to the selected node via the USB_OTG port;
+                    </li>
+                    <li>
+                        <strong>Device</strong>: Allows the selected node to be connected as a USB device to an external USB host via the USB_OTG port;
+                    </li>
+                    <li>
+                        <strong>Flash</strong>: Allows the selected node to be connected as a USB device to an external USB host via the USB_OTG port and also set the mode of the node to allow it to be flashed.
+                    </li>
+                </ul>
             </div>
         </div>
     </form>
