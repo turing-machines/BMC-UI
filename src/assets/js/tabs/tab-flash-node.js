@@ -1,4 +1,5 @@
 import {upload_multipart_action} from "../functions/fileUploadFunctions.js";
+import Cookies from 'js-cookie';
 
 const form = $('#node-upgrade-form')
 form.parsley();
@@ -67,3 +68,33 @@ form.on('submit', function(event) {
 const update_label = form.find('.update-text')
 const progressBarGroup = form.find('.progress-bar-group')
 
+$("#skipCrc").change(function() {
+    if($(this).is(":checked") && !Cookies.get('is_warned_on_crc_skip')) {
+        swal({
+            title: "Warning",
+            content: {
+                element: "div",
+                attributes: {
+                    innerHTML: `
+                   <p>Disabling this option will speed up the transfer, but any occurences of data corruption cannot be detected.</p>
+                   <p>Use this option only if you have alternative means to verify the integrity of the written image.</p>
+                `
+                },
+            },
+            icon: "warning",
+            dangerMode: true,
+            closeOnClickOutside: false,
+            buttons: {
+                confirm: {
+                    text: "Ok",
+                    value: true,
+                    visible: true,
+                    className: "continue-btn btn btn-turing-small-yellow",
+                    closeModal: true,
+                }
+            },
+        }).then(() => {
+            Cookies.set('is_warned_on_crc_skip', true, { expires: null });
+        });
+    }
+});

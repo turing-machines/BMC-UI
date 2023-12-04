@@ -8,6 +8,19 @@
     }
   }
   
+  .form-flex-row {
+    display:flex;
+    flex-direction: row;
+  }
+
+  label {
+      align-items: center;
+  }
+
+  .form-flex-row div.checkbox-item {
+      margin-left: 12px;
+  }
+
   // Errors Parsley.js
   .parsley-errors-list li {
     padding-left: 16px;

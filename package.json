@@ -38,6 +38,7 @@
     "get-scrollbar-width": "^1.0.5",
     "humanize": "^0.0.9",
     "jquery": "^3.6.0",
+    "js-cookie": "^3.0.5",
     "parsleyjs": "^2.9.2",
     "selectric": "^1.13.0",
     "sweetalert": "^2.1.2",

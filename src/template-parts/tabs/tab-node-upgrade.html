@@ -29,19 +29,31 @@
             <label for="node-upgrade-file-id" class="input-wrap input-type-file-wrap active">
                 <span class="label">File:</span>
                 <input type="text" class="file-upload-input" value="Select a File">
-                <input type="file" name="file" id="node-upgrade-file-id" class="form-control" accept=".img,.bin"
+                <input type="file" name="file" id="node-upgrade-file-id" class="form-control" accept=".img,.bin,.xz"
                     readonly>
             </label>
         </div>
 
-        <div class="form-group">
+        <div class="form-group row">
+            <label for="node-upgrade-sha256" class="input-wrap input-type-file-wrap active">
+                <span class="label">Sha256: (optional)</span>
+                <input type="text" class="upgrade-sha256" id="node-upgrade-sha256">
+            </label>
+        </div>
+
+        <div class="form-group form-flex-row">
             <button disabled type="submit" class="btn btn btn-turing-small-yellow">
                 <span class="caption">
                     Install OS
                 </span>
             </button>
+            <div class="checkbox-row form-flex-row">
+                <div class="checkbox-item">
+                    <input type="checkbox" id="skipCrc" data-color="#008000" data-size="small" />
+                </div>
+                <label for="skipCrc" class="label">skip crc</label>
+            </div>
         </div>
-
 
         <div id="node-progress-group" class="progress-bar-group form-group row">
             <div class="progress-bar-wrap">

@@ -99,6 +99,9 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
         if (type === "flash") {
             var node = $("#node-upgrade-picker").val();
             request_transfer = '/api/bmc?opt=set&type=flash&file=' + file.name + '&length=' + file.size + '&node=' + node;
+            if ($("#skipCrc").prop("checked")) {
+                request_transfer += "&skip_crc";
+            }
             label = "install";
         } else if (type === "firmware") {
             request_transfer = '/api/bmc?opt=set&type=firmware&file=' + file.name + '&length=' + file.size;
@@ -109,6 +112,11 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
             return;
         }
 
+        const sha256 = $(form).find(".upgrade-sha256").val();
+        if (sha256) {
+            request_transfer += '&sha256=' + sha256;
+        }
+
         get_request_handle(request_transfer)
             .then(function (handle) {
                 var formData = new FormData();
@@ -117,7 +125,7 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
                 return multipart_transfer(handle, formData, progressBar);
             })
             .then(function () {
-                update_label.text("Verifying checksum and finalizing " + label + "...");
+                update_label.text("Calculating CRC and finalizing " + label + "...");
                 return wait_for_state(type, "Done");
             })
             .then(function () {

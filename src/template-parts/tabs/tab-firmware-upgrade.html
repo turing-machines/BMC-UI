@@ -11,8 +11,14 @@
             <label for="firmware-upgrade-file-id" class="input-wrap input-type-file-wrap active">
                 <span class="label">.tpu file</span>
                 <input type="text" class="file-upload-input" value="Select a File">
-                <input type="file" name="file" id="firmware-upgrade-file-id" class="form-control" accept=".tpu"
+                <input type="file" name="file" id="firmware-upgrade-file-id" class="form-control" accept=".tpu,.tpu.xz"
                     readonly>
+            </label>
+        </div>
+        <div class="form-group row">
+            <label for="firmware-upgrade-sha256" class="input-wrap input-type-file-wrap active">
+                <span class="label">Sha256: (optional)</span>
+                <input type="text" class="upgrade-sha256" id="firmware-upgrade-sha256">
             </label>
         </div>
         <div class="form-group">
