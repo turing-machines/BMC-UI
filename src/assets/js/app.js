@@ -64,4 +64,4 @@ function ajaxFailToast(xhr, textStatus, errorThrown) {
     }, 300);
 }
 
-export {ajaxFailToast}
+export { ajaxFailToast }

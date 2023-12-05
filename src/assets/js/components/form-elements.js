@@ -134,7 +134,6 @@ function setSelectOptionByLabel($select, label) {
                 });
 
                 $file.change(function () {
-
                     var files = [], fileArr, filename;
 
                     // If multiple is supported then extract
@@ -158,28 +157,32 @@ function setSelectOptionByLabel($select, label) {
 
                 });
 
+                $(".file-upload-input").on('keydown', function () {
+                    $file.val('');
+                });
+
                 $input.on({
                     blur: function () {
                         $file.trigger('blur');
                     },
-                    keydown: function (e) {
-                        if (e.which === 13) { // Enter
-                            if (!isIE) {
-                                $file.trigger('click');
-                            }
-                        } else if (e.which === 8 || e.which === 46) { // Backspace & Del
-                            // On some browsers the value is read-only
-                            // with this trick we remove the old input and add
-                            // a clean clone with all the original events attached
-                            $file.replaceWith($file = $file.clone(true));
-                            $file.trigger('change');
-                            $input.val('');
-                        } else if (e.which === 9) { // TAB
-                            return;
-                        } else { // All other keys
-                            return false;
-                        }
-                    }
+//                   keydown: function (e) {
+//                       if (e.which === 13) { // Enter
+//                           if (!isIE) {
+//                               $file.trigger('click');
+//                           }
+//                       } else if (e.which === 8 || e.which === 46) { // Backspace & Del
+//                           // On some browsers the value is read-only
+//                           // with this trick we remove the old input and add
+//                           // a clean clone with all the original events attached
+//                           $file.replaceWith($file = $file.clone(true));
+//                           $file.trigger('change');
+//                           $input.val('');
+//                       } else if (e.which === 9) { // TAB
+//                           return;
+//                       } else { // All other keys
+//                           return false;
+//                       }
+//                   }
                 });
 
             });
