@@ -123,7 +123,7 @@ function multipart_transfer(handle, form_data, progressBar) {
 }
 
 function upload_multipart_action(form, update_label, progressBarGroup, type) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
         const progressBar = progressBarGroup.find('.progress-bar');
 
         event.preventDefault();
@@ -171,14 +171,14 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
         }
 
         let transfer = get_request_handle(url);
+        update_label.text("Transferring...");
         if (extern_transfer) {
-            transfer = transfer.then(async (handle) => {await external_transfer(progressBar, type)});
+            transfer = transfer.then((handle) => {return external_transfer(progressBar, type)});
         } else {
             transfer = transfer
                 .then(function (handle) {
                     var formData = new FormData();
                     formData.append('file', file);
-                    update_label.text("Transferring...");
                     return multipart_transfer(handle, formData, progressBar);
                 });
         }
@@ -191,11 +191,14 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
             .then(function () {
                 update_label.text(label + " completed successfully!");
                 showToastNotification('success', 'success');
+                progressBar.addClass('loaded');
+                resolve();
             })
             .catch((error) => {
-                let server_error = error.name + ' : ' + error.message;
+                let server_error = error.name + ': ' + error.message;
                 showToastNotification(label + ' failed!', 'error');
                 update_label.text(server_error);
+                reject(error);
             }).finally(() => {
                 progressBar.addClass('loaded');
             });

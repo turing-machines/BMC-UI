@@ -5,15 +5,22 @@ import swal from 'sweetalert';
 const form = $('#firmware-upgrade-form')
 
 const fileInput = form.find('input[type=file]')
+const textInput = form.find('input[type=text]')
 const submitBtn = form.find('button[type=submit]')
 
 
 // Submit Button Change
-fileInput.on('change', function () {
-    if (fileInput[0].files.length > 0) {
+textInput.on('input', function () {
+    if ($(this).val()) {
         submitBtn.prop("disabled", false);
     } else {
         submitBtn.prop("disabled", true);
+    }
+});
+
+fileInput.on('change', function () {
+    if (fileInput[0].files.length > 0) {
+        submitBtn.prop("disabled", false);
     }
 });
 
@@ -65,6 +72,8 @@ form.on("submit", function (event) {
         // The entire upload process was successful.
         console.log('Firmware Upgrade Finished');
         return rebootBMC(true);
+    }).catch((error) => {
+        console.log(error);
     }).finally(() => {
         submitBtn.prop("disabled", false);
     });
