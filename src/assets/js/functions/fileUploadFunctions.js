@@ -1,6 +1,5 @@
 import {showToastNotification} from "./notifications.js";
 
-
 function get_request_handle(request_url) {
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -24,6 +23,9 @@ function get_status(type) {
             type: 'GET',
             dataType: "json",
         }).done(data => {
+            if ("Error" in data) {
+                reject(new Error(state["Error"]));
+            }
             resolve(data);
         }).fail((xhr, textStatus, errorThrown) => {
             reject(ajax2Error(xhr, textStatus, errorThrown));
@@ -43,14 +45,6 @@ function ajax2Error(xhr, textStatus, errorThrown) {
     return error;
 }
 
-async function get_status_reject_on_error(type) {
-    let state = await get_status(type);
-    if ("Error" in state) {
-        throw new Error(state["Error"]);
-    }
-    return state;
-}
-
 const sleep = (delay) => new Promise(resolve => setTimeout(resolve, delay))
 
 async function wait_for_state(type, need_state) {
@@ -64,7 +58,7 @@ async function wait_for_state(type, need_state) {
 }
 
 async function get_transfer_progress(type) {
-    let state = await get_status_reject_on_error(type);
+    let state = await get_status(type);
     try {
         return {size: state["Transferring"].size, transfered: state["Transferring"].bytes_written};
     } catch (error) {
