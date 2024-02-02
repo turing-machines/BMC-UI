@@ -11,7 +11,7 @@ $("#form-usb").on('submit', function (e) {
     const mode = $('#usbMode').val();
     const node = $('#usbNode').val();
 
-    var url = `/api/bmc?opt=set&type=usb&mode=${mode}&node=${node}`;
+    var url = window.API_ROOT + `api/bmc?opt=set&type=usb&mode=${mode}&node=${node}`;
 
     $.ajax({
         url: url,

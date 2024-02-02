@@ -13,10 +13,10 @@
     display: block;
     content: "";
     position: absolute;
-    left: auto;
-    right: auto;
-    top: auto;
-    bottom: auto;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
     margin: auto;
     z-index: 15;
     background-image: url(../img/loader-white.svg);
@@ -26,6 +26,7 @@
     opacity: 0;
     animation: spin 1.2s linear infinite;
     @include transition;
+    pointer-events: none;
   }
   
   &.loading {
@@ -38,6 +39,10 @@
     &:before {
       opacity: 1!important;
     }
+  }
+  
+  &.disabled{
+    pointer-events: none;
   }
 }
 

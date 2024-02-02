@@ -45,50 +45,60 @@ function setSelectOptionByLabel($select, label) {
 
 // Input
 {
-    // Regular Input
-    $('body').find('.input-wrap').each(function () {
-        const input = $(this).find('input');
-        const wrap = $(this);
-        if (input.length) {
+    function initInputs() {
+        // Regular Input
+        $('body').find('.input-wrap').each(function () {
+            const input = $(this).find('input');
+            const wrap = $(this);
 
-            if (input.val().length > 0) {
-                wrap.addClass('active')
-            } else {
-                wrap.removeClass('active')
-            }
+            if (input.length && !wrap.hasClass('inited')) {
 
-            input.on('focus', function () {
-                wrap.addClass('focus')
-            })
-
-            input.on('blur', function () {
-                wrap.removeClass('focus')
                 if (input.val().length > 0) {
                     wrap.addClass('active')
                 } else {
                     wrap.removeClass('active')
                 }
-            })
 
-            wrap.addClass('inited')
+                input.on('focus', function () {
+                    wrap.addClass('focus')
+                })
 
-            const desc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value");
-            Object.defineProperty(input[0], "value", {
-                get: desc.get,
-                set: function (v) {
-
-                    if (v.length > 0) {
+                input.on('blur', function () {
+                    wrap.removeClass('focus')
+                    if (input.val().length > 0) {
                         wrap.addClass('active')
                     } else {
                         wrap.removeClass('active')
                     }
+                })
 
-                    desc.set.call(this, v);
-                }
-            });
+                wrap.addClass('inited')
 
-        }
+                const desc = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value");
+                Object.defineProperty(input[0], "value", {
+                    get: desc.get,
+                    set: function (v) {
+
+                        if (v.length > 0) {
+                            wrap.addClass('active')
+                        } else {
+                            wrap.removeClass('active')
+                        }
+
+                        desc.set.call(this, v);
+                    }
+                });
+
+            }
+        })
+    }
+
+    initInputs();
+
+    $(document).on('reinit-inputs',function (){
+        initInputs();
     })
+
 }
 
 // Input Type File
@@ -165,24 +175,24 @@ function setSelectOptionByLabel($select, label) {
                     blur: function () {
                         $file.trigger('blur');
                     },
-//                   keydown: function (e) {
-//                       if (e.which === 13) { // Enter
-//                           if (!isIE) {
-//                               $file.trigger('click');
-//                           }
-//                       } else if (e.which === 8 || e.which === 46) { // Backspace & Del
-//                           // On some browsers the value is read-only
-//                           // with this trick we remove the old input and add
-//                           // a clean clone with all the original events attached
-//                           $file.replaceWith($file = $file.clone(true));
-//                           $file.trigger('change');
-//                           $input.val('');
-//                       } else if (e.which === 9) { // TAB
-//                           return;
-//                       } else { // All other keys
-//                           return false;
-//                       }
-//                   }
+                    //                   keydown: function (e) {
+                    //                       if (e.which === 13) { // Enter
+                    //                           if (!isIE) {
+                    //                               $file.trigger('click');
+                    //                           }
+                    //                       } else if (e.which === 8 || e.which === 46) { // Backspace & Del
+                    //                           // On some browsers the value is read-only
+                    //                           // with this trick we remove the old input and add
+                    //                           // a clean clone with all the original events attached
+                    //                           $file.replaceWith($file = $file.clone(true));
+                    //                           $file.trigger('change');
+                    //                           $input.val('');
+                    //                       } else if (e.which === 9) { // TAB
+                    //                           return;
+                    //                       } else { // All other keys
+                    //                           return false;
+                    //                       }
+                    //                   }
                 });
 
             });

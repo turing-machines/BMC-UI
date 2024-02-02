@@ -9,7 +9,7 @@ $("#form-network").submit(function (e) {
     const form = $(this)
     const btn = form.find('button[type=submit]')
     btn.addClass('loading');
-    var url = '/api/bmc?opt=set&type=network&cmd=reset';
+    var url = window.API_ROOT+'api/bmc?opt=set&type=network&cmd=reset';
 
     $.ajax({
         url: url,
@@ -35,7 +35,7 @@ backupForm.on('submit', function(event) {
     backupBtn.addClass('loading');
 
     $.ajax({
-        url:"/api/bmc/backup",
+        url:window.API_ROOT+"api/bmc/backup",
         xhrFields: {
             responseType: 'blob'
         },

@@ -56,7 +56,7 @@ $(document).on('click', ".reboot-btn", function () {
     btn.addClass('loading');
 
     return new Promise((resolve, reject) => { 
-        $.get('/api/bmc?opt=set&type=reboot')
+        $.get(window.API_ROOT+'api/bmc?opt=set&type=reboot')
             .done(function (data) {
                 setTimeout(() => {
                     showToastNotification("Restarting BMC..", 'success');

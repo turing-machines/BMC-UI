@@ -47,13 +47,11 @@ const paths = {
     html: {
         src: [
             `${srcFolder}/*.html`,
-            `${srcFolder}/**/*.php`,
-            `${srcFolder}/**/*.ejs`
         ],
         watch_srs: [
-            `${srcFolder}/**/*.html`,
-            `${srcFolder}/**/*.php`,
-            `${srcFolder}/**/*.ejs`
+            `${srcFolder}/*.html`,
+            `${srcFolder}/template-parts/*.html`,
+            `${srcFolder}/template-parts/tabs/*.html`,
         ],
         dest: `${buildFolder}/`
     },
@@ -109,13 +107,16 @@ const paths = {
 }
 
 const serve = () => {
-    const proxyServer = true
+
+    // In case you running on web server
+    const proxyServer = false
     const domain = 'localhost'
+
     if (proxyServer) {
         browserSync.init({
             proxy: domain,
             notify: false,
-            port: 4001
+            port: 1998
         })
     } else {
         browserSync.init({
@@ -123,7 +124,7 @@ const serve = () => {
                 baseDir: buildFolder
             },
             notify: false,
-            port: 4001
+            port: 1998
         })
     }
 }

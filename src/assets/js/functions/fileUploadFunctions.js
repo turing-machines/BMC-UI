@@ -17,7 +17,7 @@ function get_request_handle(request_url) {
 
 function get_status(type) {
     return new Promise((resolve, reject) => {
-        var request_status = '/api/bmc?opt=get&type=' + type;
+        var request_status = window.API_ROOT+'api/bmc?opt=get&type=' + type;
         $.ajax({
             url: request_status,
             type: 'GET',
@@ -90,7 +90,7 @@ function update_progress_bar(progressBar, loaded, total) {
 function multipart_transfer(handle, form_data, progressBar) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "/api/bmc/upload/" + handle,
+            url: window.API_ROOT+"api/bmc/upload/" + handle,
             type: 'POST',
             data: form_data,
             processData: false,
@@ -127,7 +127,7 @@ function upload_multipart_action(form, update_label, progressBarGroup, type) {
         var label;
         var file = $(form).find('input[type=file]')[0].files[0];
         var text = $(form).find('input[type=text]').val();
-        var url = '/api/bmc?opt=set&type=' + type;
+        var url = window.API_ROOT+'api/bmc?opt=set&type=' + type;
 
         if (type === "flash") {
             var node = $("#node-upgrade-picker").val();

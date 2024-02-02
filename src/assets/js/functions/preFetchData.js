@@ -13,13 +13,13 @@ function preFetchSpecificTabData(ltype) {
     let url = '';
 
     if (ltype === 'usb') {
-        url = '/api/bmc?opt=get&type=usb';
+        url = window.API_ROOT + 'api/bmc?opt=get&type=usb';
     } else if (ltype === 'power') {
-        url = '/api/bmc?opt=get&type=power';
+        url = window.API_ROOT + 'api/bmc?opt=get&type=power';
     } else if (ltype === 'about') {
-        url = '/api/bmc?opt=get&type=about';
+        url = window.API_ROOT + 'api/bmc?opt=get&type=about';
     } else if (ltype === 'info') {
-        url = '/api/bmc?opt=get&type=info';
+        url = window.API_ROOT + 'api/bmc?opt=get&type=info';
     } else return;
 
 
@@ -30,7 +30,8 @@ function preFetchSpecificTabData(ltype) {
         timeout: 5000,
         cache: false,
         error: function () {
-            alert("page get error");
+            console.error('Can\'t connect to API')
+            //alert("page get error");
 
         },
         success: function (uStr) {

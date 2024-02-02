@@ -74,13 +74,14 @@ h6, .h6 {
 }
 
 
-.text-content{
+.text-content {
   a {
     color: var(--purple-500);
     text-decoration: underline;
     text-underline-offset: 2px;
     @include transition;
-    &:hover{
+    
+    &:hover {
       color: var(--purple-600);
     }
   }
@@ -108,67 +109,36 @@ h6, .h6 {
     font-family: var(--font-inter);
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
-    line-height: 1.56;
-    letter-spacing: -0.2px;
     color: var(--color-dark);
-    @media (max-width: 767px) {
-      font-size: 16px;
-    }
   }
   
   p {
     font-family: var(--font-inter);
     font-style: normal;
     font-weight: normal;
-    font-size: 18px;
-    line-height: 1.56;
-    letter-spacing: -0.2px;
     margin-bottom: 1.5em;
     color: var(--color-dark);
     
     &:last-child {
       margin-bottom: 0;
     }
-    @media (max-width: 767px) {
-      font-size: 16px;
-    }
   }
   
   ul {
-    padding-left: 25px;
+    padding-left: 20px;
     
     ul, ol {
       margin-top: 1.5em;
     }
     
     li {
-      list-style-type: none;
       font-family: var(--font-inter);
       font-style: normal;
       font-weight: normal;
-      font-size: 18px;
-      line-height: 1.56;
-      letter-spacing: -0.2px;
-      margin-bottom: 1.3em;
+      margin-bottom: 1em;
       color: var(--color-dark);
       position: relative;
-      padding-left: 15px;
-      @media (max-width: 767px) {
-        font-size: 16px;
-      }
-      &:before {
-        position: absolute;
-        left: 0;
-        top: 10px;
-        display: block;
-        content: "";
-        margin-left: -8px;
-        width: 8px;
-        height: 8px;
-        border-radius: 100%;
-        background-color: var(--color-dark);
-      }
+      list-style-type: disc;
     }
   }
   
@@ -184,15 +154,10 @@ h6, .h6 {
       font-family: var(--font-inter);
       font-style: normal;
       font-weight: normal;
-      font-size: 18px;
-      line-height: 1.56;
-      letter-spacing: -0.2px;
       margin-bottom: 1em;
       color: var(--color-dark);
       position: relative;
-      @media (max-width: 767px) {
-        font-size: 16px;
-      }
+      
     }
   }
 }

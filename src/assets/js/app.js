@@ -1,15 +1,9 @@
-/*
-// For Testing Purposes
-$.ajaxSetup({
-    // Set the base URL for all Ajax requests
-    beforeSend: function (xhr, settings) {
-        settings.url = 'https://ronaldo.svenrademakers.com:8080' + settings.url;
-    }
-});
-*/
-
+//const API_ROOT = 'https://ronaldo.svenrademakers.com:8080/'; // Testing
+const API_ROOT = '/'; // Production
+window.API_ROOT = API_ROOT;
 
 import 'parsleyjs/dist/parsley.min.js';
+
 
 import {showNotifications, showToastNotification} from "./functions/notifications.js";
 import {preFetchTabsData} from "./functions/preFetchData.js";
@@ -33,7 +27,7 @@ jQuery(() => {
     // Tabs
     import('./tabs/tab-usb.js')
 
-    import('./tabs/tab-power.js')
+    import('./tabs/tab-nodes.js')
 
     import('./tabs/tab-info.js')
 
@@ -44,6 +38,7 @@ jQuery(() => {
 
     // Prefetch All Data from Server
     preFetchTabsData();
+
 
 });
 
@@ -64,4 +59,4 @@ function ajaxFailToast(xhr, textStatus, errorThrown) {
     }, 300);
 }
 
-export { ajaxFailToast }
+export {ajaxFailToast}

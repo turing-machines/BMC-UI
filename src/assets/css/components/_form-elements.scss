@@ -9,18 +9,18 @@
   }
   
   .form-flex-row {
-    display:flex;
+    display: flex;
     flex-direction: row;
   }
-
+  
   label {
-      align-items: center;
+    align-items: center;
   }
-
+  
   .form-flex-row div.checkbox-item {
-      margin-left: 12px;
+    margin-left: 12px;
   }
-
+  
   // Errors Parsley.js
   .parsley-errors-list li {
     padding-left: 16px;
@@ -411,6 +411,175 @@
   }
 }
 
+
+// Radio
+.radio-item {
+  input {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 20px;
+    min-width: 20px;
+    height: 20px;
+    border: 2px solid var(--neutral-900, #0A0A09) !important;
+    background-color: var(--color-white);
+    position: relative;
+    border-radius: 100%;
+    padding: 0 !important;
+    margin: 0 !important;
+    transform: none !important;
+    box-shadow: none !important;
+    cursor: pointer;
+    @include transition;
+    
+    &:after {
+      display: block;
+      content: "";
+      background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgZmlsbD0ibm9uZSI+PHBhdGggZmlsbD0iIzE2MTYxNiIgc3Ryb2tlPSIjMTYxNjE2IiBzdHJva2Utd2lkdGg9Ii41IiBkPSJNNi40NDkgMTJINi40M2EuNjkuNjkgMCAwIDEtLjQ4NS0uMjE5bC0zLjc1OC00LjAxYS42OTcuNjk3IDAgMCAxIC4wMy0uOTgyLjY4OS42ODkgMCAwIDEgLjk3Ni4wM2wzLjI4IDMuNSA2LjM1Ny02LjEyNmEuNjg4LjY4OCAwIDAgMSAuOTc3LjAyLjY5Ny42OTcgMCAwIDEtLjAyLjk4MmwtNi44NjEgNi42MTJhLjY5LjY5IDAgMCAxLS40NzguMTkzWiIvPjwvc3ZnPg==);
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      margin: auto;
+      max-width: 80%;
+      max-height: 80%;
+      background-size: contain;
+      background-position: center;
+      background-repeat: no-repeat;
+      transform: none;
+      opacity: 0;
+    }
+    
+    &:checked {
+      &:after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+// On/Off Switch
+.state-indicator {
+  $green: #39b54a;
+  $off: #bdbdbd;
+  $white: #FFFFFF;
+  
+  .switch{
+    display: flex;
+  }
+  
+  .switch input {
+    position: absolute;
+    left: -99em;
+    visibility: hidden;
+  }
+  
+  .switch-label {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    outline: none;
+    user-select: none;
+    width: 84px;
+    height: 36px;
+    background: $off;
+    border-radius: 50px;
+    transition: all 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    
+    &:before, &:after {
+      position: absolute;
+      height: 36px;
+      z-index: 2;
+      transition: all 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+      font-size: 14px;
+      pointer-events: none;
+    }
+    
+    &:before {
+      padding-left: 5px;
+      content: "ON";
+      left: 0;
+      width: 52px;
+      color: $off;
+      visibility: hidden;
+      opacity: 0;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+    
+    &:after {
+      padding-right: 5px;
+      content: "OFF";
+      right: 0;
+      width: 52px;
+      color: $white;
+      visibility: visible;
+      opacity: 1;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+  }
+  
+  .switch-label .switch-btn {
+    display: inline-block;
+    z-index: 1;
+    background: $white;
+    width: 28px;
+    max-width: 28px;
+    height: 28px;
+    border-radius: 100%;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    right: auto;
+    position: absolute;
+    transition: all 175ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  }
+  
+  .switch input:checked + .switch-label {
+    background: $green;
+  }
+  
+  .switch input:checked + .switch-label:before {
+    color: $white;
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  .switch input:checked + .switch-label:after {
+    color: $green;
+    visibility: hidden;
+    opacity: 0;
+  }
+  
+  .switch input:checked + .switch-label .switch-btn {
+    width: 32px;
+    border-color: $white;
+    transform: translateX(calc(84px - 28px - 4px - 4px));
+  }
+  
+  
+  &.loading{
+    .switch-label {
+      &:before, &:after{
+        opacity: 0!important;
+      }
+      .switch-btn{
+        opacity: 0;
+      }
+    }
+  }
+}
+
+
 // Input
 .input-wrap {
   position: relative;
@@ -544,6 +713,7 @@
   .progress-bar-wrap {
     background-color: var(--purple-900);
     position: relative;
+    
     .progress-bar-caption {
       position: absolute;
       top: 0;
@@ -602,3 +772,6 @@
     display: block;
   }
 }
+
+
+
