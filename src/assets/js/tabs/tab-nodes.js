@@ -170,7 +170,9 @@ $(document).on('click', '.node-restart', function (e) {
 
     const btn = $(this);
     const nodeItem = btn.parents('.nodes-list__item')
-    const nodeID = nodeItem.attr('data-node-id')
+
+    let nodeID = nodeItem.attr('data-node-id')
+    nodeID-=1
 
     $.ajax({
         url: window.API_ROOT + `api/bmc?opt=set&type=reset&node=${nodeID}`,
@@ -188,6 +190,7 @@ $(document).on('click', '.node-restart', function (e) {
         .done(() => {
             setTimeout(() => {
 
+                nodeID+=1;
                 showToastNotification(`Node ${nodeID} has been restarted`, 'success');
 
             }, 300);
