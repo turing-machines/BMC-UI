@@ -1,41 +1,6 @@
 import {SetSessionNotification, showToastNotification} from "../functions/notifications.js";
 import {ajaxFailToast} from "../app.js"
 import {bool2int} from "../functions/functions.js";
-import {rebootBMC} from "../functions/reboot.js";
-
-// BMC
-{
-    // Reboot
-    $("#reboot-btn").on('click', function () {
-        rebootBMC();
-    });
-
-    // Reload
-    let backoff = false;
-    $("#reload-btn").on('click', () => {
-        const btn = $(this);
-        if (backoff) {
-            return;
-        }
-        backoff = true;
-
-        btn.addClass('loading');
-        $.get(window.API_ROOT + 'api/bmc?opt=set&type=reload')
-            .done(function (data) {
-                setTimeout(() => {
-                    showToastNotification("BMC reloaded", 'success');
-                }, 300);
-            })
-            .fail(ajaxFailToast)
-            .always(() => {
-                setTimeout(() => {
-                    btn.removeClass('loading');
-                }, 1000);
-                backoff = false;
-            });
-    });
-}
-
 
 // Prefetch Nodes Data
 {
@@ -63,7 +28,6 @@ import {rebootBMC} from "../functions/reboot.js";
                 const nodeId = index + 1;
                 const module_name = node.module_name
                 const name = node.name
-                const power_on_time = node.power_on_time
 
                 $('.nodes-list').append(`
                   <div data-node-id="${nodeId}" class="nodes-list__item">
@@ -72,14 +36,14 @@ import {rebootBMC} from "../functions/reboot.js";
                         <div class="state-col">
                             <div class="state-indicator btn">
                                 <div class="switch">
-                                    <input  ${power_on_time ? 'checked' : null}  data-node-id="${nodeId}" id="node-${nodeId}" type="checkbox" class="node-power">
+                                    <input data-node-id="${nodeId}" id="node-${nodeId}" type="checkbox" class="node-power" disabled>
                                     <label for="node-${nodeId}" class="switch-label">
                                         <span class="switch-btn"></span>
                                     </label>
                                 </div>
                             </div>
                             
-                            <button type="button" class="btn node-restart btn-turing-small-red" ${!power_on_time ? 'disabled' : null}>
+                            <button type="button" class="btn node-restart btn-turing-small-red" disabled >
                         <span class="caption">
                             Restart
                         </span>
@@ -215,10 +179,12 @@ $(document).on('click', '.nodes-edit', function (e) {
         // Cancel
         $('.nodes-list').removeClass('editing')
         btn.find('.caption').text('Edit')
+        $('.node-power').prop('disabled', true)
     } else {
         // Enable Editing
         $('.nodes-list').addClass('editing')
         btn.find('.caption').text('Cancel')
+        $('.node-power').prop('disabled', false)
     }
 })
 
@@ -229,6 +195,7 @@ $(document).on('click', '.nodes-save', function (e) {
     const btn = $(this);
     $('.nodes-list').removeClass('editing')
     $('.nodes-edit').find('.caption').text('Edit')
+    $('.node-power').prop('disabled', true)
 
     const node_info = {}
 

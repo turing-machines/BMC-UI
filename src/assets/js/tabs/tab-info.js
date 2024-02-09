@@ -2,6 +2,7 @@ import {SetSessionNotification} from "../functions/notifications.js";
 import {showToastNotification} from "../functions/notifications.js";
 import {downloadFile} from "../functions/fileUploadFunctions.js";
 import {ajaxFailToast} from "../app.js"
+import {rebootBMC} from "../functions/reboot.js";
 
 $("#form-network").submit(function (e) {
     e.preventDefault();
@@ -56,3 +57,36 @@ backupForm.on('submit', function(event) {
             backupBtn.removeClass('loading');
         });
 });
+
+// BMC
+{
+    // Reboot
+    $("#reboot-btn").on('click', function () {
+        rebootBMC();
+    });
+
+    // Reload
+    let backoff = false;
+    $("#reload-btn").on('click', () => {
+        const btn = $(this);
+        if (backoff) {
+            return;
+        }
+        backoff = true;
+
+        btn.addClass('loading');
+        $.get(window.API_ROOT + 'api/bmc?opt=set&type=reload')
+            .done(function (data) {
+                setTimeout(() => {
+                    showToastNotification("BMC reloaded", 'success');
+                }, 300);
+            })
+            .fail(ajaxFailToast)
+            .always(() => {
+                setTimeout(() => {
+                    btn.removeClass('loading');
+                }, 1000);
+                backoff = false;
+            });
+    });
+}

@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20240202224808" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20240209101426" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -222,8 +222,8 @@
 
 
                     <div data-tab="Nodes" class="tabs-body__item ">
-    <div class="form" >
-        
+    <div class="form">
+
         <div class="form-group row">
             <div class="text-content">
                 <p>
@@ -231,11 +231,11 @@
                 </p>
             </div>
         </div>
-        
+
         <div class="nodes-group">
-            
+
             <div class="nodes-list">
-                
+
                 <!-- Node Item Example -->
                 <!--
                    <div data-node-id="1" class="nodes-list__item">
@@ -271,54 +271,31 @@
                     </div>
                 </div>
                 -->
-                
+
                 <div class="node-list-item__skeleton skeleton-loading"></div>
                 <div class="node-list-item__skeleton skeleton-loading"></div>
                 <div class="node-list-item__skeleton skeleton-loading"></div>
                 <div class="node-list-item__skeleton skeleton-loading"></div>
-            
+
             </div>
-            
+
             <div class="nodes-group__actions">
-               <div class="actions-row skeleton-loading">
-                   <button type="button" class="nodes-edit btn btn-turing-small-dark">
+                <div class="actions-row skeleton-loading">
+                    <button type="button" class="nodes-edit btn btn-turing-small-dark">
                         <span class="caption">
                             Edit
                         </span>
-                   </button>
-    
-                   <button type="button" class="nodes-save btn btn-turing-small-yellow">
+                    </button>
+
+                    <button type="button" class="nodes-save btn btn-turing-small-yellow">
                         <span class="caption">
                             Save
                         </span>
-                   </button>
-               </div>
-            
-            </div>
-        </div>
-        
-        
-        <div class="form-group row bmc-row">
-            <div class="text-content">
-                <p>
-                    <strong>BMC:</strong>
-                </p>
-            </div>
-            <div class="form-group">
-                <button type="button" id="reboot-btn" class="btn btn-turing-small-red">
-                    <span class="caption">
-                        Reboot
-                    </span>
-                </button>
-                <div id="reload-btn" class="btn btn-turing-small-dark">
-                    <span class="caption">
-                        Reload daemon
-                    </span>
+                    </button>
                 </div>
+
             </div>
         </div>
-    
-    
     </div>
 </div>
 
@@ -370,7 +347,7 @@
         </div>
         <div class="form-group row">
             <div id="tableStorageInfo" class="table-specification">
-            
+
             </div>
         </div>
         <div class="form-group row">
@@ -399,7 +376,31 @@
                 <span class="caption">Reset network</span>
             </button>
         </div>
+        <!-- work around the 0px margin for the last form-group class in a form
+        -->
+        <div class="form-group row"></div>
     </form>
+    <div class="form">
+        <div class="form-group row">
+            <div class="text-content">
+                <p>
+                    BMC
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="button" id="reboot-btn" class="btn btn-turing-small-red">
+                <span class="caption">
+                    Reboot
+                </span>
+            </button>
+            <div id="reload-btn" class="btn btn-turing-small-dark">
+                <span class="caption">
+                    Reload daemon
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
 
                     
@@ -522,7 +523,7 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20240202224808"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20240209101426"></script>
 
 </body>
 
