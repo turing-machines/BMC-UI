@@ -13,7 +13,7 @@
     
     <title>Turing Pi config</title>
     
-    <link href="assets/css/app.css?_v=20240318110122" rel="stylesheet" type="text/css"/>
+    <link href="assets/css/app.css?_v=20240325110053" rel="stylesheet" type="text/css"/>
     
 </head>
 
@@ -46,7 +46,11 @@
                 <div class="app-info">
                     <h1 class="h3 app-title">Turing PI</h1>
                     <div class="app-version">
-                        <div class="label">Daemon version:</div>
+                        <div class="label">hostname</div>
+                        <div class="hostname">turing</div>
+                    </div>
+                    <div class="app-version">
+                        <div class="label">daemon</div>
                         <div class="daemon-version">1.0.0</div>
                     </div>
                 </div>
@@ -299,11 +303,15 @@
     </div>
 </div>
 
-                    
+
                     <div data-tab="About" class="tabs-body__item ">
     <form class="form" id="form-about">
         <div class="form-group row">
             <div class="table-specification">
+                <div class="row">
+                    <div class="col">Host name:</div>
+                    <div id="aboutHostname" class="col"></div>
+                </div>
                 <div class="row">
                     <div class="col">Daemon version:</div>
                     <div id="aboutVer" class="col"></div>
@@ -403,7 +411,7 @@
     </div>
 </div>
 
-                    
+
                     <div data-tab="Firmware Upgrade" id="firmware-upgrade-tab" class="tabs-body__item ">
     <form class="form" id="firmware-upgrade-form">
         <div class="form-group row">
@@ -517,13 +525,13 @@
 </div>
 
                 </div>
-                
+
 
             </div>
         </div>
     </div>
 
-    <script type="text/javascript" src="assets/js/app.js?_v=20240318110122"></script>
+    <script type="text/javascript" src="assets/js/app.js?_v=20240325110053"></script>
 
 </body>
 

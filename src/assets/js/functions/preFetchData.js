@@ -90,8 +90,10 @@ function FillDataOnAboutTab(json) {
     var buildver = json.build_version;
     var api = json.api;
     var buildroot = json.buildroot;
+    var hostname = json.hostname;
 
-    $("#aboutVer,.daemon-version").text(version);
+    $("#aboutHostname, .host-name").text(hostname);
+    $("#aboutVer,.daemon-version").text("v"+ version);
     $("#aboutBuildtime").text(buildtime);
     $("#aboutBuildVer").text(buildver);
     $("#aboutApi").text(api);
