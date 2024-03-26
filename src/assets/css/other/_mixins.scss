@@ -1,7 +1,0 @@
-// CSS transition for animations
-@mixin transition {
-  transition: 0.3s all ease;
-}
-.transition {
-  @include transition;
-}
