@@ -1,6 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Logo from "../assets/logo.svg?react";
 import "../css/app.scss";
 
@@ -59,7 +60,8 @@ export const Route = createRootRoute({
         </div>
       </div>
       <hr />
-      <TanStackRouterDevtools position="bottom-right" />
+      <ReactQueryDevtools />
+      <TanStackRouterDevtools />
     </>
   ),
 });

@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { version } from "../../package.json";
 
 export const Route = createLazyFileRoute("/about")({
   component: About,
@@ -37,7 +38,7 @@ function About() {
             <div className="row">
               <div className="col">BMC UI:</div>
               <div id="aboutUi" className="col">
-                %BMC_UI%
+                v{version}
               </div>
             </div>
           </div>

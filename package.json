@@ -17,6 +17,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.29.0",
     "@tanstack/router-devtools": "^1.26.12",
     "@tanstack/router-vite-plugin": "^1.26.10",
     "@types/react": "^18.2.74",
