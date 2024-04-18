@@ -87,7 +87,7 @@ export function useNodesTabData() {
     queryKey: ["nodesTabData"],
     queryFn: async () => {
       const response = await fetch(`${host}/api/bmc?opt=get&type=node_info`);
-      return response.json() as Promise<APIResponse<NodeInfoResponse>>;
+      return response.json() as Promise<APIResponse<NodeInfoResponse[]>>;
     },
   });
 }
