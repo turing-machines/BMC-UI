@@ -2,16 +2,22 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useInfoTabData } from "../../services/api/calls";
 import { filesize } from "filesize";
 
+
+/**
+ * Calculates the progress data based on the total bytes and free bytes.
+ * 
+ * @param totalBytes - The total number of bytes.
+ * @param freeBytes - The number of free bytes.
+ * @returns An object containing the human-readable used bytes, total bytes, and used percentage.
+ */
 const progressData = (totalBytes: number, freeBytes: number) => {
-  const used = totalBytes - freeBytes;
-  const usedHuman = filesize(used, { round: 2, standard: "jedec" });
-  const totalHuman = filesize(totalBytes, { round: 2, standard: "jedec" });
-  const usedPct = (used / totalBytes) * 100;
+  const usedBytes = totalBytes - freeBytes;
+  const usedPct = (usedBytes / totalBytes) * 100;
 
   return {
-    usedHuman,
-    totalHuman,
-    usedPct,
+    usedHuman: filesize(usedBytes, { round: 2, standard: "jedec" }),
+    totalHuman: filesize(totalBytes, { round: 2, standard: "jedec" }),
+    usedPct: Math.round(usedPct),
   };
 };
 
