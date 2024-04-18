@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { version } from "../../../package.json";
-import { useAboutTabData } from "../../services/api/calls";
+import { useAboutTabData } from "../../services/api/get";
 
 export const Route = createLazyFileRoute("/about/")({
   component: About,
@@ -47,7 +47,7 @@ function About() {
             <div className="row">
               <div className="col">API version:</div>
               <div id="aboutApi" className="col">
-                {data?.response[0]!.result.api}
+                v{data?.response[0]!.result.api}
               </div>
             </div>
             <div className="row">

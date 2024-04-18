@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useNodesTabData } from "../../services/api/calls";
+import { useNodesTabData } from "../../services/api/get";
 
 export const Route = createLazyFileRoute("/nodes/")({
   component: Nodes,

@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useInfoTabData } from "../../services/api/calls";
+import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
 
 
