@@ -2,7 +2,6 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
 
-
 /**
  * Calculates the progress data based on the total bytes and free bytes.
  * 
