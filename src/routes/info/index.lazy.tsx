@@ -4,8 +4,8 @@ import { filesize } from "filesize";
 
 const progressData = (totalBytes: number, freeBytes: number) => {
   const used = totalBytes - freeBytes;
-  const usedHuman = filesize(used, { round: 2 });
-  const totalHuman = filesize(totalBytes, { round: 2 });
+  const usedHuman = filesize(used, { round: 2, standard: "jedec" });
+  const totalHuman = filesize(totalBytes, { round: 2, standard: "jedec" });
   const usedPct = (used / totalBytes) * 100;
 
   return {
