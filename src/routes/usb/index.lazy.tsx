@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/usb")({
+export const Route = createLazyFileRoute("/usb/")({
   component: USB,
 });
 

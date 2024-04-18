@@ -28,30 +28,28 @@ export const Route = createRootRoute({
           </div>
 
           <div className="tabs-wrapper">
-            <div className="tabs-header">
-              <ul className="tabs-header__list">
-                <Link to="/info" className="tabs-header__list-item">
-                  Info
-                </Link>
-                <Link to="/nodes" className="tabs-header__list-item">
-                  Nodes
-                </Link>
-                <Link to="/usb" className="tabs-header__list-item">
-                  USB
-                </Link>
-                <Link
-                  to="/firmware-upgrade"
-                  className="tabs-header__list-item large"
-                >
-                  Firmware Upgrade
-                </Link>
-                <Link to="/node-upgrade" className="tabs-header__list-item">
-                  Flash Node
-                </Link>
-                <Link to="/about" className="tabs-header__list-item">
-                  About
-                </Link>
-              </ul>
+            <div className="tabs-header tabs-header__list">
+              <Link to="/info" className="tabs-header__list-item">
+                Info
+              </Link>
+              <Link to="/nodes" className="tabs-header__list-item">
+                Nodes
+              </Link>
+              <Link to="/usb" className="tabs-header__list-item">
+                USB
+              </Link>
+              <Link
+                to="/firmware-upgrade"
+                className="tabs-header__list-item large"
+              >
+                Firmware Upgrade
+              </Link>
+              <Link to="/node-upgrade" className="tabs-header__list-item">
+                Flash Node
+              </Link>
+              <Link to="/about" className="tabs-header__list-item">
+                About
+              </Link>
             </div>
             <div className="tabs-body">
               <Outlet />

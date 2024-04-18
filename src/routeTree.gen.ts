@@ -16,52 +16,54 @@ import { Route as rootRoute } from './routes/__root'
 
 // Create Virtual Routes
 
-const UsbLazyImport = createFileRoute('/usb')()
-const NodesLazyImport = createFileRoute('/nodes')()
-const NodeUpgradeLazyImport = createFileRoute('/node-upgrade')()
-const InfoLazyImport = createFileRoute('/info')()
-const FirmwareUpgradeLazyImport = createFileRoute('/firmware-upgrade')()
-const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
+const UsbIndexLazyImport = createFileRoute('/usb/')()
+const NodesIndexLazyImport = createFileRoute('/nodes/')()
+const NodeUpgradeIndexLazyImport = createFileRoute('/node-upgrade/')()
+const InfoIndexLazyImport = createFileRoute('/info/')()
+const FirmwareUpgradeIndexLazyImport = createFileRoute('/firmware-upgrade/')()
+const AboutIndexLazyImport = createFileRoute('/about/')()
 
 // Create/Update Routes
-
-const UsbLazyRoute = UsbLazyImport.update({
-  path: '/usb',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/usb.lazy').then((d) => d.Route))
-
-const NodesLazyRoute = NodesLazyImport.update({
-  path: '/nodes',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/nodes.lazy').then((d) => d.Route))
-
-const NodeUpgradeLazyRoute = NodeUpgradeLazyImport.update({
-  path: '/node-upgrade',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/node-upgrade.lazy').then((d) => d.Route))
-
-const InfoLazyRoute = InfoLazyImport.update({
-  path: '/info',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/info.lazy').then((d) => d.Route))
-
-const FirmwareUpgradeLazyRoute = FirmwareUpgradeLazyImport.update({
-  path: '/firmware-upgrade',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/firmware-upgrade.lazy').then((d) => d.Route),
-)
-
-const AboutLazyRoute = AboutLazyImport.update({
-  path: '/about',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/about.lazy').then((d) => d.Route))
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
+
+const UsbIndexLazyRoute = UsbIndexLazyImport.update({
+  path: '/usb/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/usb/index.lazy').then((d) => d.Route))
+
+const NodesIndexLazyRoute = NodesIndexLazyImport.update({
+  path: '/nodes/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/nodes/index.lazy').then((d) => d.Route))
+
+const NodeUpgradeIndexLazyRoute = NodeUpgradeIndexLazyImport.update({
+  path: '/node-upgrade/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/node-upgrade/index.lazy').then((d) => d.Route),
+)
+
+const InfoIndexLazyRoute = InfoIndexLazyImport.update({
+  path: '/info/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/info/index.lazy').then((d) => d.Route))
+
+const FirmwareUpgradeIndexLazyRoute = FirmwareUpgradeIndexLazyImport.update({
+  path: '/firmware-upgrade/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/firmware-upgrade/index.lazy').then((d) => d.Route),
+)
+
+const AboutIndexLazyRoute = AboutIndexLazyImport.update({
+  path: '/about/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/about/index.lazy').then((d) => d.Route))
 
 // Populate the FileRoutesByPath interface
 
@@ -71,28 +73,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/about': {
-      preLoaderRoute: typeof AboutLazyImport
+    '/about/': {
+      preLoaderRoute: typeof AboutIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/firmware-upgrade': {
-      preLoaderRoute: typeof FirmwareUpgradeLazyImport
+    '/firmware-upgrade/': {
+      preLoaderRoute: typeof FirmwareUpgradeIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/info': {
-      preLoaderRoute: typeof InfoLazyImport
+    '/info/': {
+      preLoaderRoute: typeof InfoIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/node-upgrade': {
-      preLoaderRoute: typeof NodeUpgradeLazyImport
+    '/node-upgrade/': {
+      preLoaderRoute: typeof NodeUpgradeIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/nodes': {
-      preLoaderRoute: typeof NodesLazyImport
+    '/nodes/': {
+      preLoaderRoute: typeof NodesIndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/usb': {
-      preLoaderRoute: typeof UsbLazyImport
+    '/usb/': {
+      preLoaderRoute: typeof UsbIndexLazyImport
       parentRoute: typeof rootRoute
     }
   }
@@ -102,12 +104,12 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
-  AboutLazyRoute,
-  FirmwareUpgradeLazyRoute,
-  InfoLazyRoute,
-  NodeUpgradeLazyRoute,
-  NodesLazyRoute,
-  UsbLazyRoute,
+  AboutIndexLazyRoute,
+  FirmwareUpgradeIndexLazyRoute,
+  InfoIndexLazyRoute,
+  NodeUpgradeIndexLazyRoute,
+  NodesIndexLazyRoute,
+  UsbIndexLazyRoute,
 ])
 
 /* prettier-ignore-end */

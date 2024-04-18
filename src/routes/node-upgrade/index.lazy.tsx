@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 
-export const Route = createLazyFileRoute("/node-upgrade")({
+export const Route = createLazyFileRoute("/node-upgrade/")({
   component: Flash,
 });
 

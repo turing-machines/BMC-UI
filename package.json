@@ -11,14 +11,15 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.29.2",
-    "@tanstack/react-router": "^1.28.6",
+    "@tanstack/react-router": "^1.28.7",
     "axios": "^1.6.8",
+    "filesize": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.29.2",
-    "@tanstack/router-devtools": "^1.28.6",
+    "@tanstack/router-devtools": "^1.28.7",
     "@tanstack/router-vite-plugin": "^1.28.2",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
