@@ -41,7 +41,7 @@ function Info() {
                 storage.bytes_free
               );
               return (
-                <div className="row">
+                <div className="row" key={storage.name}>
                   <div className="col">{storage.name}</div>
                   <div className="col">
                     <div className="progress-bar-group form-group active">
@@ -76,20 +76,26 @@ function Info() {
           </div>
         </div>
         <div className="form-group row">
-          <div id="tableNetworkInfo" className="table-specification">
-            <div className="row">
-              <div className="col">eth0</div>
-              <div className="col"></div>
+          {data.response[0]!.result.ip.map((ip) => (
+            <div
+              id="tableNetworkInfo"
+              className="table-specification"
+              key={ip.device}
+            >
+              <div className="row">
+                <div className="col">{ip.device}</div>
+                <div className="col"></div>
+              </div>
+              <div className="row">
+                <div className="col">ip</div>
+                <div className="col">{ip.ip}</div>
+              </div>
+              <div className="row">
+                <div className="col">mac</div>
+                <div className="col">{ip.mac}</div>
+              </div>
             </div>
-            <div className="row">
-              <div className="col">ip</div>
-              <div className="col">10.0.0.163</div>
-            </div>
-            <div className="row">
-              <div className="col">mac</div>
-              <div className="col">02:00:16:4e:70:e4</div>
-            </div>
-          </div>
+          ))}
         </div>
         <div className="form-group row">
           <button type="submit" className="btn btn-turing-small-yellow">
