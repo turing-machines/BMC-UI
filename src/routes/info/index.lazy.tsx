@@ -22,8 +22,7 @@ export const Route = createLazyFileRoute("/info/")({
 });
 
 function Info() {
-  const { status, data, error, isFetching } = useInfoTabData();
-  // throw new Error("Error loading Infsafa");
+  const { data } = useInfoTabData();
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
