@@ -2,7 +2,8 @@ import { useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { NodeInfoResponse, useNodesTabData } from "../../services/api/get";
 import {
-  useNodePowerMutation,
+  usePowerNodeMutation,
+  useResetNodeMutation,
   useSetNodeInfoMutation,
 } from "../../services/api/set";
 
@@ -18,10 +19,11 @@ const NodeRow = (
   }
 ) => {
   const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
-  const { mutate } = useNodePowerMutation();
+  const { mutate: mutatePowerNode } = usePowerNodeMutation();
+  const { mutate: mutateResetNode } = useResetNodeMutation();
 
   const triggerMutation = () => {
-    mutate({ nodeId: props.nodeId, powerOn: !powerOn });
+    mutatePowerNode({ nodeId: props.nodeId, powerOn: !powerOn });
     setPowerOn(!powerOn);
   };
 
@@ -54,6 +56,7 @@ const NodeRow = (
             type="button"
             className="btn node-restart btn-turing-small-red"
             disabled={props.power_on_time === null}
+            onClick={() => mutateResetNode(props.nodeId - 1)}
           >
             <span className="caption">Restart</span>
           </button>
@@ -93,7 +96,7 @@ function NodesTab() {
   const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
   const [editingData, setEditingData] = useState<NodesProps[]>([]);
-  const { status, mutate } = useSetNodeInfoMutation();
+  const { mutate } = useSetNodeInfoMutation();
 
   const handleSave = () => {
     setEditMode(false);
@@ -110,7 +113,7 @@ function NodesTab() {
       <div className="form">
         <div className="form-group row">
           <div className="text-content">
-            <p>Control the power supply of connected nodes: {status}</p>
+            <p>Control the power supply of connected nodes:</p>
           </div>
         </div>
 

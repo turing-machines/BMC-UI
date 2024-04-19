@@ -8,7 +8,7 @@ type APIResponse<T> = {
 
 const host = "http://localhost:4460";
 
-export function useNodePowerMutation() {
+export function usePowerNodeMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -56,6 +56,18 @@ export function useSetNodeInfoMutation() {
     onSettled: () => {
       // Invalidate the query for the power tab data
       queryClient.invalidateQueries({ queryKey: ["nodesTabData"] });
+    },
+  });
+}
+
+export function useResetNodeMutation() {
+  return useMutation({
+    mutationKey: ["setResetNodeMutation"],
+    mutationFn: async (nodeId: number) => {
+      const response = await fetch(
+        `${host}/api/bmc?opt=set&type=reset&node=${nodeId}`
+      );
+      return response.json() as Promise<APIResponse<string>>;
     },
   });
 }
