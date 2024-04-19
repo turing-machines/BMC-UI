@@ -1,33 +1,39 @@
+import { useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useNodesTabData } from "../../services/api/get";
+import { NodeInfoResponse, useNodesTabData } from "../../services/api/get";
+import { useNodePowerMutation } from "../../services/api/set";
 
 export const Route = createLazyFileRoute("/nodes/")({
   component: Nodes,
 });
 
-const NodeExample = ({
-  params,
-}: {
-  params: {
-    name: string | null;
-    module_name?: string | null;
-    power_on_time?: string | null;
-    uart_baud?: string | null;
-  };
-}) => {
+const NodeExample = (
+  props: NodeInfoResponse & { nodeId: number; editMode: boolean }
+) => {
+  const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
+  const { mutate } = useNodePowerMutation();
+
+  const triggerMutation = () => {
+    mutate({ nodeId: props.nodeId, powerOn: !powerOn });
+    setPowerOn(!powerOn);
+  }
+
   return (
-    <div data-node-id="1" className="nodes-list__item">
+    <div data-node-id={props.nodeId} className="nodes-list__item">
       <div className="nodes-list__item-inner">
         <div className="state-col">
           <div className="state-indicator btn">
             <div className="switch">
               <input
-                data-node-id="1"
-                id="node-1"
+                data-node-id={props.nodeId}
+                id={`node-${props.nodeId}`}
                 type="checkbox"
                 className="node-power"
+                disabled={!props.editMode}
+                checked={powerOn}
+                onClick={() => triggerMutation()}
               />
-              <label htmlFor="node-1" className="switch-label">
+              <label htmlFor={`node-${props.nodeId}`} className="switch-label">
                 <span className="switch-btn"></span>
               </label>
             </div>
@@ -36,6 +42,7 @@ const NodeExample = ({
           <button
             type="button"
             className="btn node-restart btn-turing-small-red"
+            disabled={props.power_on_time === null}
           >
             <span className="caption">Restart</span>
           </button>
@@ -45,7 +52,8 @@ const NodeExample = ({
             <span className="label">Name</span>
             <input
               type="text"
-              value={params.name ?? "No name"}
+              value={props.name ?? undefined}
+              defaultValue={`My Node ${props.nodeId}`}
               data-field="name"
             />
           </label>
@@ -53,7 +61,8 @@ const NodeExample = ({
             <span className="label">Module Name</span>
             <input
               type="text"
-              value={params.module_name ?? "No module name"}
+              value={props.module_name ?? undefined}
+              defaultValue={`Module ${props.nodeId}`}
               data-field="module_name"
             />
           </label>
@@ -64,6 +73,7 @@ const NodeExample = ({
 };
 
 function Nodes() {
+  const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
 
   return (
@@ -77,8 +87,13 @@ function Nodes() {
 
         <div className="nodes-group">
           <div className="nodes-list">
-            {data.response[0]!.result!.map((node) => (
-              <NodeExample params={node} />
+            {data.response[0]!.result!.map((node, index) => (
+              <NodeExample
+                key={index}
+                {...node}
+                nodeId={index + 1}
+                editMode={editMode}
+              />
             ))}
           </div>
           <div className="nodes-group__actions">
@@ -86,13 +101,16 @@ function Nodes() {
               <button
                 type="button"
                 className="nodes-edit btn btn-turing-small-dark"
+                onClick={() => setEditMode(!editMode)}
               >
-                <span className="caption">Edit</span>
+                <span className="caption">{editMode ? "Cancel" : "Edit"}</span>
               </button>
 
               <button
                 type="button"
                 className="nodes-save btn btn-turing-small-yellow"
+                onClick={() => setEditMode(false)}
+                disabled={!editMode}
               >
                 <span className="caption">Save</span>
               </button>

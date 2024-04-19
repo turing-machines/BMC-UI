@@ -1,4 +1,4 @@
-import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 
 type APIResponse<T> = {
   response: {
@@ -33,17 +33,17 @@ interface InfoTabResponse {
   storage: { name: string; total_bytes: number; bytes_free: number }[];
 }
 
-interface NodeInfoResponse {
+export interface NodeInfoResponse {
   module_name: string | null;
   name: string | null;
-  power_on_time: string | null;
+  power_on_time: number | null;
   uart_baud: string | null;
 }
 
 const host = "http://localhost:4460";
 
 export function useUSBTabData() {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
       const response = await fetch(`${host}/api/bmc?opt=get&type=usb`);
@@ -53,7 +53,7 @@ export function useUSBTabData() {
 }
 
 export function usePowerTabData() {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["powerTabData"],
     queryFn: async () => {
       const response = await fetch(`${host}/api/bmc?opt=get&type=power`);
@@ -63,7 +63,7 @@ export function usePowerTabData() {
 }
 
 export function useAboutTabData() {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ["aboutTabData"],
     queryFn: async () => {
       const response = await fetch(`${host}/api/bmc?opt=get&type=about`);
