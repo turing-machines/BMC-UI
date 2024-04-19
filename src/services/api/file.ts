@@ -21,7 +21,7 @@ export function useBackupMutation() {
 }
 
 export function useFirmwareUpdateMutation(
-  progressCallBack: (progressEvent: AxiosProgressEvent) => void
+  progressCallBack?: (progressEvent: AxiosProgressEvent) => void
 ) {
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],

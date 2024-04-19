@@ -1,17 +1,31 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
 import type { AxiosProgressEvent } from "axios";
+import { filesize } from "filesize";
+import { useState } from "react";
 
 export const Route = createLazyFileRoute("/firmware-upgrade/")({
   component: FirmwareUpgrade,
 });
 
 function FirmwareUpgrade() {
-  const callback = (progressEvent: AxiosProgressEvent) => {
-    console.log(progressEvent);
-
+  const [progress, setProgress] = useState<{
+    transferred: string;
+    total: string;
+    pct: number;
+  }>({ transferred: "", total: "", pct: 0 });
+  const uploadProgressCallback = (progressEvent: AxiosProgressEvent) => {
+    setProgress({
+      transferred: filesize(progressEvent.loaded ?? 0, { standard: "jedec" }),
+      total: filesize(progressEvent.total ?? 0, { standard: "jedec" }),
+      pct: Math.round(
+        ((progressEvent.loaded ?? 0) / (progressEvent.total ?? 1)) * 100
+      ),
+    });
   };
-  const { mutate: mutateFirmwareUpdate } = useFirmwareUpdateMutation(callback);
+  const { mutate: mutateFirmwareUpdate } = useFirmwareUpdateMutation(
+    uploadProgressCallback
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -79,11 +93,18 @@ function FirmwareUpgrade() {
         </div>
         <div
           id="firmware-progress-group"
-          className="progress-bar-group form-group row"
+          className={`progress-bar-group form-group row ${
+            progress.transferred === progress.total || "active"
+          }`}
         >
           <div className="progress-bar-wrap">
-            <div className="progress-bar" style={{ width: "0%" }}></div>
-            <div className="progress-bar-caption"></div>
+            <div
+              className="progress-bar"
+              style={{ width: `${progress.pct}%` }}
+            ></div>
+            <div className="progress-bar-caption">
+              {progress.transferred} / {progress.total}
+            </div>
           </div>
           <div className="update-text"></div>
         </div>
