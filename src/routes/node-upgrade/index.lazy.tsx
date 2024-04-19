@@ -32,15 +32,12 @@ function Flash() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const file = form.file.files?.[0];
     const nodeId = form.nodeId.value;
+    const file = form.file.files?.[0];
     const sha256 = form.sha256.value;
     const skipCRC = form.skipCrc.checked;
-    const formData = new FormData();
-    formData.append("file", file as Blob);
-    if (sha256) formData.append("sha256", sha256);
 
-    mutateNodeUpdate({ nodeId, skipCRC, formData });
+    mutateNodeUpdate({ nodeId, file, sha256, skipCRC });
   };
 
   return (

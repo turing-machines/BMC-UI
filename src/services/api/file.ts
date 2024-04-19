@@ -43,12 +43,16 @@ export function useNodeUpdateMutation(
     mutationKey: ["nodeUpdateMutation"],
     mutationFn: async (variables: {
       nodeId: number;
+      file: Blob;
+      sha256?: string;
       skipCRC: boolean;
-      formData: FormData;
     }) => {
+      const data = new FormData();
+      data.append("file", variables.file);
+
       const response = await api.post(
-        `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}`,
-        variables.formData,
+        `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`,
+        data,
         {
           onUploadProgress: (progressEvent) => {
             progressCallBack && progressCallBack(progressEvent);
