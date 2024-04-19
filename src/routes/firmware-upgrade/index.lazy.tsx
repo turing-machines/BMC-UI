@@ -63,7 +63,7 @@ function FirmwareUpgrade() {
               name="file"
               id="firmware-upgrade-file-id"
               className="form-control"
-              accept=".tpu,.tpu.xz"
+              accept=".tpu,.tpu.xz,application/octet-stream"
               readOnly
             />
           </label>

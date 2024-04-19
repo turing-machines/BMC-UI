@@ -53,7 +53,7 @@ function Flash() {
               name="file"
               id="node-upgrade-file-id"
               className="form-control"
-              accept=".img,.bin,.xz"
+              accept=".img,.bin,.xz,application/octet-stream"
               readOnly
             />
           </label>
