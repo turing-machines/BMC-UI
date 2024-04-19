@@ -1,8 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useNodeUpdateMutation } from "../../services/api/file";
 import type { AxiosProgressEvent } from "axios";
-import { useState } from "react";
 import { filesize } from "filesize";
+import { useState } from "react";
+
+import { useNodeUpdateMutation } from "../../services/api/file";
 
 export const Route = createLazyFileRoute("/node-upgrade/")({
   component: Flash,
@@ -32,10 +33,10 @@ function Flash() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const nodeId = form.nodeId.value;
-    const file = form.file.files?.[0];
-    const sha256 = form.sha256.value;
-    const skipCRC = form.skipCrc.checked;
+    const nodeId = (form.nodeId as HTMLInputElement).value;
+    const file = (form.file as HTMLInputElement).files?.[0];
+    const sha256 = (form.sha256 as HTMLInputElement).value;
+    const skipCRC = (form.skipCrc as HTMLInputElement).checked;
 
     mutateNodeUpdate({ nodeId, file, sha256, skipCRC });
   };

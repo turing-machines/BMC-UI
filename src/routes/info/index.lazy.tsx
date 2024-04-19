@@ -1,12 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
+
+import { useBackupMutation } from "../../services/api/file";
+import { useInfoTabData } from "../../services/api/get";
 import {
   useNetworkResetMutation,
   useRebootBMCMutation,
   useReloadBMCMutation,
 } from "../../services/api/set";
-import { useBackupMutation } from "../../services/api/file";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -39,7 +40,7 @@ function Info() {
   const { mutate: mutateReloadBMC } = useReloadBMCMutation();
   const { mutate: mutateBackup, status: backupStatus } = useBackupMutation();
 
-  const handleBackupSubmit = async () => {
+  const handleBackupSubmit = () => {
     mutateBackup(undefined, {
       onSuccess: (data) => {
         const { blob, filename } = data;
@@ -68,7 +69,7 @@ function Info() {
         </div>
         <div className="form-group row">
           <div id="tableStorageInfo" className="table-specification">
-            {data.response[0]!.result.storage.map((storage) => {
+            {data.response[0].result.storage.map((storage) => {
               const formattedStorage = progressData(
                 storage.total_bytes,
                 storage.bytes_free
@@ -116,7 +117,7 @@ function Info() {
           </div>
         </div>
         <div className="form-group row">
-          {data.response[0]!.result.ip.map((ip) => (
+          {data.response[0].result.ip.map((ip) => (
             <div
               id="tableNetworkInfo"
               className="table-specification"

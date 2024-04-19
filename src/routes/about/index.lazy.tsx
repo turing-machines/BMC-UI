@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+
 import { version } from "../../../package.json";
 import { useAboutTabData } from "../../services/api/get";
 
@@ -17,37 +18,37 @@ function About() {
             <div className="row">
               <div className="col">Host name:</div>
               <div id="aboutHostname" className="col">
-                {data?.response[0]!.result.hostname}
+                {data?.response[0].result.hostname}
               </div>
             </div>
             <div className="row">
               <div className="col">Daemon version:</div>
               <div id="aboutVer" className="col">
-                v{data?.response[0]!.result.version}
+                v{data?.response[0].result.version}
               </div>
             </div>
             <div className="row">
               <div className="col">Build time:</div>
               <div id="aboutBuildtime" className="col">
-                {data?.response[0]!.result.buildtime}
+                {data?.response[0].result.buildtime}
               </div>
             </div>
             <div className="row">
               <div className="col">Build version:</div>
               <div id="aboutBuildVer" className="col">
-                {data?.response[0]!.result.build_version}
+                {data?.response[0].result.build_version}
               </div>
             </div>
             <div className="row">
               <div className="col">Buildroot release:</div>
               <div id="aboutBuildroot" className="col">
-                {data?.response[0]!.result.buildroot}
+                {data?.response[0].result.buildroot}
               </div>
             </div>
             <div className="row">
               <div className="col">API version:</div>
               <div id="aboutApi" className="col">
-                v{data?.response[0]!.result.api}
+                v{data?.response[0].result.api}
               </div>
             </div>
             <div className="row">

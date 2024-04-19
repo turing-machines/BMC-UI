@@ -1,6 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosProgressEvent } from "axios";
+
 import api from "../../utils/axios";
+
+interface APIResponse<T> {
+  response: {
+    result: T;
+  }[];
+}
 
 export function useBackupMutation() {
   return useMutation({
@@ -10,9 +17,8 @@ export function useBackupMutation() {
         method: "GET",
         responseType: "blob",
       });
-      const contentDisposition = response.headers["content-disposition"];
-      const blob: Blob = response.data;
-      console.log(response);
+      const contentDisposition = response.headers["content-disposition"] as string;
+      const blob = response.data as Blob;
       const match = contentDisposition?.match(/filename="(.+?)"/);
       const filename = match ? match[1] : "backup.tar.gz";
       return { blob, filename };
@@ -31,7 +37,7 @@ export function useFirmwareUpdateMutation(
           progressCallBack && progressCallBack(progressEvent);
         },
       });
-      return response.data;
+      return response.data as APIResponse<string>;
     },
   });
 }
@@ -42,13 +48,13 @@ export function useNodeUpdateMutation(
   return useMutation({
     mutationKey: ["nodeUpdateMutation"],
     mutationFn: async (variables: {
-      nodeId: number;
-      file: Blob;
+      nodeId: string;
+      file?: File;
       sha256?: string;
       skipCRC: boolean;
     }) => {
       const data = new FormData();
-      data.append("file", variables.file);
+      if (variables.file) data.append("file", variables.file);
 
       const response = await api.post(
         `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`,
@@ -59,7 +65,7 @@ export function useNodeUpdateMutation(
           },
         }
       );
-      return response.data;
+      return response.data as APIResponse<string>;
     },
   });
 }

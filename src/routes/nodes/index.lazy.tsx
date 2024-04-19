@@ -1,6 +1,7 @@
-import { useState } from "react";
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { NodeInfoResponse, useNodesTabData } from "../../services/api/get";
+import { useState } from "react";
+
+import { type NodeInfoResponse, useNodesTabData } from "../../services/api/get";
 import {
   usePowerNodeMutation,
   useResetNodeMutation,
@@ -86,11 +87,11 @@ const NodeRow = (
   );
 };
 
-type NodesProps = {
+interface NodesProps {
   node_id?: number;
   name?: string;
   module_name?: string;
-};
+}
 
 function NodesTab() {
   const [editMode, setEditMode] = useState(false);
@@ -119,7 +120,7 @@ function NodesTab() {
 
         <div className="nodes-group">
           <div className="nodes-list editing">
-            {data.response[0]!.result!.map((node, index) => (
+            {data.response[0].result.map((node, index) => (
               <NodeRow
                 key={index}
                 {...node}

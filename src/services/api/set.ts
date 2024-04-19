@@ -1,11 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import api from "../../utils/axios";
 
-type APIResponse<T> = {
+interface APIResponse<T> {
   response: {
     result: T;
   }[];
-};
+}
 
 export function usePowerNodeMutation() {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ export function usePowerNodeMutation() {
     },
     onSettled: () => {
       // Invalidate the query for the power tab data
-      queryClient.invalidateQueries({ queryKey: ["nodesTabData"] });
+      void queryClient.invalidateQueries({ queryKey: ["nodesTabData"] });
     },
   });
 }
@@ -30,12 +31,12 @@ interface NodePayload {
   module_name?: string;
 }
 
-type NodeInfoPayload = {
+interface NodeInfoPayload {
   Node1: NodePayload;
   Node2: NodePayload;
   Node3: NodePayload;
   Node4: NodePayload;
-};
+}
 
 export function useSetNodeInfoMutation() {
   const queryClient = useQueryClient();
@@ -48,7 +49,7 @@ export function useSetNodeInfoMutation() {
     },
     onSettled: () => {
       // Invalidate the query for the power tab data
-      queryClient.invalidateQueries({ queryKey: ["nodesTabData"] });
+      void queryClient.invalidateQueries({ queryKey: ["nodesTabData"] });
     },
   });
 }
@@ -105,7 +106,7 @@ export function useUSBModeMutation() {
       return response.data as APIResponse<string>;
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["usbTabData"] });
+      void queryClient.invalidateQueries({ queryKey: ["usbTabData"] });
     },
   });
 }

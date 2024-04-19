@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+
 import { useUSBTabData } from "../../services/api/get";
 import { useUSBModeMutation } from "../../services/api/set";
 
@@ -43,19 +44,19 @@ function USB() {
               </option>
               <option
                 value="0"
-                selected={data.response[0]!.result.mode === "Host"}
+                selected={data.response[0].result.mode === "Host"}
               >
                 Host
               </option>
               <option
                 value="1"
-                selected={data.response[0]!.result.mode === "Device"}
+                selected={data.response[0].result.mode === "Device"}
               >
                 Device
               </option>
               <option
                 value="2"
-                selected={data.response[0]!.result.mode === "Flash"}
+                selected={data.response[0].result.mode === "Flash"}
               >
                 Flash
               </option>
@@ -80,25 +81,25 @@ function USB() {
               </option>
               <option
                 value="0"
-                selected={data.response[0]!.result.node === "Node 1"}
+                selected={data.response[0].result.node === "Node 1"}
               >
                 Node 1
               </option>
               <option
                 value="1"
-                selected={data.response[0]!.result.node === "Node 2"}
+                selected={data.response[0].result.node === "Node 2"}
               >
                 Node 2
               </option>
               <option
                 value="2"
-                selected={data.response[0]!.result.node === "Node 3"}
+                selected={data.response[0].result.node === "Node 3"}
               >
                 Node 3
               </option>
               <option
                 value="3"
-                selected={data.response[0]!.result.node === "Node 4"}
+                selected={data.response[0].result.node === "Node 4"}
               >
                 Node 4
               </option>

@@ -1,11 +1,12 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+
 import api from "../../utils/axios";
 
-type APIResponse<T> = {
+interface APIResponse<T> {
   response: {
     result: T;
   }[];
-};
+}
 
 interface USBTabResponse {
   mode: string;

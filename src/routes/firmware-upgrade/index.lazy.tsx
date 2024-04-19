@@ -1,8 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useFirmwareUpdateMutation } from "../../services/api/file";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useState } from "react";
+
+import { useFirmwareUpdateMutation } from "../../services/api/file";
 
 export const Route = createLazyFileRoute("/firmware-upgrade/")({
   component: FirmwareUpgrade,
@@ -23,17 +24,19 @@ function FirmwareUpgrade() {
       ),
     });
   };
-  const { mutate: mutateFirmwareUpdate, isIdle, isPending } = useFirmwareUpdateMutation(
-    uploadProgressCallback
-  );
+  const {
+    mutate: mutateFirmwareUpdate,
+    isIdle,
+    isPending,
+  } = useFirmwareUpdateMutation(uploadProgressCallback);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    const file = form.file.files?.[0];
-    const sha256 = form.sha256.value;
+    const file = (form.file as HTMLInputElement).files?.[0];
+    const sha256 = (form.sha256 as HTMLInputElement).value;
     const formData = new FormData();
-    formData.append("file", file as Blob);
+    if (file) formData.append("file", file);
     if (sha256) formData.append("sha256", sha256);
 
     mutateFirmwareUpdate(formData);
@@ -93,9 +96,7 @@ function FirmwareUpgrade() {
         </div>
         <div
           id="firmware-progress-group"
-          className={`progress-bar-group form-group row ${
-            isIdle || "active"
-          }`}
+          className={`progress-bar-group form-group row ${isIdle || "active"}`}
         >
           <div className="progress-bar-wrap">
             <div
