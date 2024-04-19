@@ -26,9 +26,29 @@ export function useFirmwareUpdateMutation(
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],
     mutationFn: async (formData: FormData) => {
+      const response = await api.post(`/bmc?opt=set&type=firmware`, formData, {
+        onUploadProgress: (progressEvent) => {
+          progressCallBack && progressCallBack(progressEvent);
+        },
+      });
+      return response.data;
+    },
+  });
+}
+
+export function useNodeUpdateMutation(
+  progressCallBack?: (progressEvent: AxiosProgressEvent) => void
+) {
+  return useMutation({
+    mutationKey: ["nodeUpdateMutation"],
+    mutationFn: async (variables: {
+      nodeId: number;
+      skipCRC: boolean;
+      formData: FormData;
+    }) => {
       const response = await api.post(
-        `/bmc?opt=set&type=firmware`,
-        formData,
+        `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}`,
+        variables.formData,
         {
           onUploadProgress: (progressEvent) => {
             progressCallBack && progressCallBack(progressEvent);

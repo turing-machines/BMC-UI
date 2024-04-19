@@ -1,17 +1,55 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useNodeUpdateMutation } from "../../services/api/file";
+import type { AxiosProgressEvent } from "axios";
+import { useState } from "react";
+import { filesize } from "filesize";
 
 export const Route = createLazyFileRoute("/node-upgrade/")({
   component: Flash,
 });
 
 function Flash() {
+  const [progress, setProgress] = useState<{
+    transferred: string;
+    total: string;
+    pct: number;
+  }>({ transferred: "", total: "", pct: 0 });
+  const uploadProgressCallback = (progressEvent: AxiosProgressEvent) => {
+    setProgress({
+      transferred: filesize(progressEvent.loaded ?? 0, { standard: "jedec" }),
+      total: filesize(progressEvent.total ?? 0, { standard: "jedec" }),
+      pct: Math.round(
+        ((progressEvent.loaded ?? 0) / (progressEvent.total ?? 1)) * 100
+      ),
+    });
+  };
+  const {
+    mutate: mutateNodeUpdate,
+    isIdle,
+    isPending,
+  } = useNodeUpdateMutation(uploadProgressCallback);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const file = form.file.files?.[0];
+    const nodeId = form.nodeId.value;
+    const sha256 = form.sha256.value;
+    const skipCRC = form.skipCrc.checked;
+    const formData = new FormData();
+    formData.append("file", file as Blob);
+    if (sha256) formData.append("sha256", sha256);
+
+    mutateNodeUpdate({ nodeId, skipCRC, formData });
+  };
+
   return (
     <div
       data-tab="Flash Node"
       id="node-upgrade-tab"
       className="tabs-body__item force-tab-style "
     >
-      <form id="node-upgrade-form" className="form ">
+      <form id="node-upgrade-form" className="form" onSubmit={handleSubmit}>
         <div className="form-group row">
           <div className="text-content">
             <p>Install an OS image on a selected node:</p>
@@ -25,6 +63,7 @@ function Flash() {
             </label>
             <select
               id="node-upgrade-picker"
+              name="nodeId"
               className="selectpicker"
               data-style="btn-outline-primary"
               required
@@ -67,6 +106,7 @@ function Flash() {
             <span className="label">Sha256: (optional)</span>
             <input
               type="text"
+              name="sha256"
               className="upgrade-sha256"
               id="node-upgrade-sha256"
             />
@@ -74,11 +114,7 @@ function Flash() {
         </div>
 
         <div className="form-group form-flex-row">
-          <button
-            disabled
-            type="submit"
-            className="btn btn btn-turing-small-yellow"
-          >
+          <button type="submit" className="btn btn btn-turing-small-yellow">
             <span className="caption">Install OS</span>
           </button>
           <div className="checkbox-row form-flex-row">
@@ -86,6 +122,7 @@ function Flash() {
               <input
                 type="checkbox"
                 id="skipCrc"
+                name="skipCrc"
                 data-color="#008000"
                 data-size="small"
               />
@@ -98,11 +135,16 @@ function Flash() {
 
         <div
           id="node-progress-group"
-          className="progress-bar-group form-group row"
+          className={`progress-bar-group form-group row ${isIdle || "active"}`}
         >
           <div className="progress-bar-wrap">
-            <div className="progress-bar" style={{ width: "0%" }}></div>
-            <div className="progress-bar-caption"></div>
+            <div
+              className={`progress-bar ${!isPending ? "loaded" : ""}`}
+              style={{ width: `${progress.pct}%` }}
+            ></div>
+            <div className="progress-bar-caption">
+              {progress.transferred} / {progress.total}
+            </div>
           </div>
           <div className="update-text"></div>
         </div>
