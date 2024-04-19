@@ -7,10 +7,10 @@ import {
 } from "../../services/api/set";
 
 export const Route = createLazyFileRoute("/nodes/")({
-  component: Nodes,
+  component: NodesTab,
 });
 
-const NodeExample = (
+const NodeRow = (
   props: NodeInfoResponse & {
     nodeId: number;
     editMode: boolean;
@@ -63,8 +63,7 @@ const NodeExample = (
             <span className="label">Name</span>
             <input
               type="text"
-              value={props.name ?? undefined}
-              defaultValue={`My Node ${props.nodeId}`}
+              defaultValue={props.name ?? `My Node ${props.nodeId}`}
               data-field="name"
               onBlur={(e) => handleEditField("name", e.target.value)}
             />
@@ -73,8 +72,7 @@ const NodeExample = (
             <span className="label">Module Name</span>
             <input
               type="text"
-              value={props.module_name ?? undefined}
-              defaultValue={`Module ${props.nodeId}`}
+              defaultValue={props.module_name ?? `Module ${props.nodeId}`}
               data-field="module_name"
               onBlur={(e) => handleEditField("module_name", e.target.value)}
             />
@@ -91,7 +89,7 @@ type NodesProps = {
   module_name?: string;
 };
 
-function Nodes() {
+function NodesTab() {
   const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
   const [editingData, setEditingData] = useState<NodesProps[]>([]);
@@ -100,10 +98,10 @@ function Nodes() {
   const handleSave = () => {
     setEditMode(false);
     mutate({
-      Node1: editingData.find((node) => node.node_id === 1) ?? {},
-      Node2: editingData[1],
-      Node3: editingData[2],
-      Node4: editingData[3],
+      Node1: editingData.find((node) => node?.node_id === 1) ?? {},
+      Node2: editingData.find((node) => node?.node_id === 2) ?? {},
+      Node3: editingData.find((node) => node?.node_id === 3) ?? {},
+      Node4: editingData.find((node) => node?.node_id === 4) ?? {},
     });
   };
 
@@ -119,7 +117,7 @@ function Nodes() {
         <div className="nodes-group">
           <div className="nodes-list editing">
             {data.response[0]!.result!.map((node, index) => (
-              <NodeExample
+              <NodeRow
                 key={index}
                 {...node}
                 nodeId={index + 1}
