@@ -20,8 +20,8 @@ const progressData = (totalBytes: number, freeBytes: number) => {
   const usedPct = (usedBytes / totalBytes) * 100;
 
   return {
-    usedHuman: filesize(usedBytes, { round: 2, standard: "jedec" }),
-    totalHuman: filesize(totalBytes, { round: 2, standard: "jedec" }),
+    usedHuman: filesize(usedBytes, { standard: "jedec" }),
+    totalHuman: filesize(totalBytes, { standard: "jedec" }),
     usedPct: Math.round(usedPct),
   };
 };

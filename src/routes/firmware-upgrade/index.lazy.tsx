@@ -23,7 +23,7 @@ function FirmwareUpgrade() {
       ),
     });
   };
-  const { mutate: mutateFirmwareUpdate } = useFirmwareUpdateMutation(
+  const { mutate: mutateFirmwareUpdate, isIdle, isPending } = useFirmwareUpdateMutation(
     uploadProgressCallback
   );
 
@@ -94,12 +94,12 @@ function FirmwareUpgrade() {
         <div
           id="firmware-progress-group"
           className={`progress-bar-group form-group row ${
-            progress.transferred === progress.total || "active"
+            isIdle || "active"
           }`}
         >
           <div className="progress-bar-wrap">
             <div
-              className="progress-bar"
+              className={`progress-bar ${!isPending ? "loaded" : ""}`}
               style={{ width: `${progress.pct}%` }}
             ></div>
             <div className="progress-bar-caption">
