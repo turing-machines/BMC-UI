@@ -1,7 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
-import { useNetworkResetMutation, useRebootBMCMutation, useReloadBMCMutation } from "../../services/api/set";
+import {
+  useNetworkResetMutation,
+  useRebootBMCMutation,
+  useReloadBMCMutation,
+} from "../../services/api/set";
+import { useBackupMutation } from "../../services/api/file";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -32,6 +37,26 @@ function Info() {
   const { mutate: mutateResetNetwork } = useNetworkResetMutation();
   const { mutate: mutateRebootBMC } = useRebootBMCMutation();
   const { mutate: mutateReloadBMC } = useReloadBMCMutation();
+  const { mutate: mutateBackup, status: backupStatus } = useBackupMutation();
+
+  const handleBackupSubmit = async () => {
+    mutateBackup(undefined, {
+      onSuccess: (data) => {
+        const { blob, filename } = data;
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      },
+      onError: () => {
+        // Handle error
+      },
+    });
+  };
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
@@ -71,8 +96,15 @@ function Info() {
           </div>
         </div>
         <div className="form-group row">
-          <button type="submit" className="btn btn-turing-small-yellow">
-            <span className="caption">Backup user data</span>
+          <button
+            type="button"
+            className="btn btn-turing-small-yellow"
+            disabled={backupStatus === "pending"}
+            onClick={() => handleBackupSubmit()}
+          >
+            <span className="caption">
+              {backupStatus === "pending" ? "Loading..." : "Backup user data"}
+            </span>
           </button>
         </div>
         <div className="form-group row"></div>
@@ -130,7 +162,11 @@ function Info() {
           >
             <span className="caption">Reboot</span>
           </button>
-          <div id="reload-btn" className="btn btn-turing-small-dark" onClick={() => mutateReloadBMC()}>
+          <div
+            id="reload-btn"
+            className="btn btn-turing-small-dark"
+            onClick={() => mutateReloadBMC()}
+          >
             <span className="caption">Reload daemon</span>
           </div>
         </div>
