@@ -24,7 +24,6 @@ function Flash() {
               Selected node:
             </label>
             <select
-              data-parsley-errors-container="[data-errors=node-upgrade-picker]"
               id="node-upgrade-picker"
               className="selectpicker"
               data-style="btn-outline-primary"

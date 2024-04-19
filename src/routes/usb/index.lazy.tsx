@@ -1,10 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useUSBTabData } from "../../services/api/get";
 
 export const Route = createLazyFileRoute("/usb/")({
   component: USB,
 });
 
 function USB() {
+  const { data } = useUSBTabData();
+
   return (
     <div data-tab="USB" className="tabs-body__item ">
       <form className="form" id="form-usb">
@@ -19,7 +22,6 @@ function USB() {
               USB mode
             </label>
             <select
-              data-parsley-errors-container="[data-errors=usbMode]"
               id="usbMode"
               className="selectpicker"
               data-style="btn-outline-primary"
@@ -28,9 +30,9 @@ function USB() {
               <option selected disabled>
                 Nothing Selected
               </option>
-              <option value="0">Host</option>
-              <option value="1">Device</option>
-              <option value="2">Flash</option>
+              <option value="0" selected={data.response[0]!.result.mode === 'Host'}>Host</option>
+              <option value="1" selected={data.response[0]!.result.mode === 'Device'}>Device</option>
+              <option value="2" selected={data.response[0]!.result.mode === 'Flash'}>Flash</option>
             </select>
           </div>
           <div data-errors="usbMode" className="errors"></div>
@@ -42,7 +44,6 @@ function USB() {
               Connected node
             </label>
             <select
-              data-parsley-errors-container="[data-errors=usbNode]"
               id="usbNode"
               className="selectpicker"
               data-style="btn-outline-primary"
@@ -51,10 +52,10 @@ function USB() {
               <option selected disabled>
                 Nothing Selected
               </option>
-              <option value="0">Node 1</option>
-              <option value="1">Node 2</option>
-              <option value="2">Node 3</option>
-              <option value="3">Node 4</option>
+              <option value="0" selected={data.response[0]!.result.node === 'Node 1'}>Node 1</option>
+              <option value="1" selected={data.response[0]!.result.node === 'Node 2'}>Node 2</option>
+              <option value="2" selected={data.response[0]!.result.node === 'Node 3'}>Node 3</option>
+              <option value="3" selected={data.response[0]!.result.node === 'Node 4'}>Node 4</option>
             </select>
           </div>
           <div data-errors="usbNode" className="errors"></div>
