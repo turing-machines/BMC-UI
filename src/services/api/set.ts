@@ -71,3 +71,13 @@ export function useResetNodeMutation() {
     },
   });
 }
+
+export function useNetworkResetMutation() {
+  return useMutation({
+    mutationKey: ["networkResetMutation"],
+    mutationFn: async () => {
+      const response = await fetch(`${host}/api/bmc?opt=set&type=network&cmd=reset`);
+      return response.json() as Promise<APIResponse<string>>;
+    },
+  });
+}

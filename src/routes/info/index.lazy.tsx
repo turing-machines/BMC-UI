@@ -1,10 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
+import { useNetworkResetMutation } from "../../services/api/set";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
- * 
+ *
  * @param totalBytes - The total number of bytes.
  * @param freeBytes - The number of free bytes.
  * @returns An object containing the human-readable used bytes, total bytes, and used percentage.
@@ -28,13 +29,14 @@ export const Route = createLazyFileRoute("/info/")({
 
 function Info() {
   const { data } = useInfoTabData();
+  const { status, mutate: mutateResetNetwork } = useNetworkResetMutation();
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
       <form className="form" id="form-storage">
         <div className="form-group row">
           <div className="text-content">
-            <p>User Storage</p>
+            <p>User Storage {status}</p>
           </div>
         </div>
         <div className="form-group row">
@@ -102,7 +104,11 @@ function Info() {
           ))}
         </div>
         <div className="form-group row">
-          <button type="submit" className="btn btn-turing-small-yellow">
+          <button
+            type="button"
+            className="btn btn-turing-small-yellow"
+            onClick={() => mutateResetNetwork()}
+          >
             <span className="caption">Reset network</span>
           </button>
         </div>
