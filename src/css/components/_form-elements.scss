@@ -2,6 +2,8 @@
   
   .form-group {
     margin-bottom: 24px;
+    display: flex;
+    gap: 5px;
     
     &:last-child {
       margin-bottom: 0;

@@ -27,17 +27,20 @@
   }
   .app-info {
     padding-left: 20px;
-    
     .app-version {
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      padding-left: 3px;
+      display: flex;
+      gap: 5px;
+      &-item {
+        display: inline-flex;
+        align-items: center;
+        justify-content: flex-start;
+        padding-left: 3px;
       
-      .label {
-        font-weight: bold;
-        margin-right: 6px;
-      }
+        .label {
+          font-weight: bold;
+          margin-right: 6px;
+        }
+      }   
     }
   }
   

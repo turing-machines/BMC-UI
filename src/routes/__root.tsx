@@ -17,12 +17,14 @@ export const Route = createRootRoute({
             <div className="app-info">
               <h1 className="h3 app-title">Turing PI</h1>
               <div className="app-version">
-                <div className="label">hostname</div>
-                <div className="hostname">turing</div>
-              </div>
-              <div className="app-version">
-                <div className="label">daemon</div>
-                <div className="daemon-version">1.0.0</div>
+                <div className="app-version-item">
+                  <div className="label">hostname</div>
+                  <div className="hostname">turing</div>
+                </div>
+                <div className="app-version-item">
+                  <div className="label">daemon</div>
+                  <div className="daemon-version">1.0.0</div>
+                </div>
               </div>
             </div>
           </div>
