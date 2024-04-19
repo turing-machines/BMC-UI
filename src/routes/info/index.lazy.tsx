@@ -1,7 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useInfoTabData } from "../../services/api/get";
 import { filesize } from "filesize";
-import { useNetworkResetMutation, useRebootBMCMutation } from "../../services/api/set";
+import { useNetworkResetMutation, useRebootBMCMutation, useReloadBMCMutation } from "../../services/api/set";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -31,6 +31,7 @@ function Info() {
   const { data } = useInfoTabData();
   const { mutate: mutateResetNetwork } = useNetworkResetMutation();
   const { mutate: mutateRebootBMC } = useRebootBMCMutation();
+  const { mutate: mutateReloadBMC } = useReloadBMCMutation();
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
@@ -129,7 +130,7 @@ function Info() {
           >
             <span className="caption">Reboot</span>
           </button>
-          <div id="reload-btn" className="btn btn-turing-small-dark">
+          <div id="reload-btn" className="btn btn-turing-small-dark" onClick={() => mutateReloadBMC()}>
             <span className="caption">Reload daemon</span>
           </div>
         </div>

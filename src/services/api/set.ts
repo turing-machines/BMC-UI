@@ -91,3 +91,13 @@ export function useRebootBMCMutation() {
     },
   });
 }
+
+export function useReloadBMCMutation() {
+  return useMutation({
+    mutationKey: ["reloadBMCMutation"],
+    mutationFn: async () => {
+      const response = await fetch(`${host}/api/bmc?opt=set&type=reload`);
+      return response.json() as Promise<APIResponse<string>>;
+    },
+  });
+}
