@@ -4,6 +4,7 @@
     margin-bottom: 24px;
     display: flex;
     gap: 5px;
+    align-items: center;
     
     &:last-child {
       margin-bottom: 0;
@@ -23,7 +24,6 @@
     margin-left: 12px;
   }
 }
-
 
 // Table Specification
 .table-specification {
