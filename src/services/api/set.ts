@@ -81,3 +81,13 @@ export function useNetworkResetMutation() {
     },
   });
 }
+
+export function useRebootBMCMutation() {
+  return useMutation({
+    mutationKey: ["rebootBMCMutation"],
+    mutationFn: async () => {
+      const response = await fetch(`${host}/api/bmc?opt=set&type=reboot`);
+      return response.json() as Promise<APIResponse<string>>;
+    },
+  });
+}
