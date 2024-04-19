@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "../../utils/axios";
 
 type APIResponse<T> = {
   response: {
@@ -6,18 +7,16 @@ type APIResponse<T> = {
   }[];
 };
 
-const host = "http://localhost:4460";
-
 export function usePowerNodeMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["nodePowerMutation"],
     mutationFn: async (variables: { nodeId: number; powerOn: boolean }) => {
-      const response = await fetch(
-        `${host}/api/bmc?opt=set&type=power&node${variables.nodeId}=${variables.powerOn ? "1" : "0"}`
+      const response = await api.get(
+        `/bmc?opt=set&type=power&node${variables.nodeId}=${variables.powerOn ? "1" : "0"}`
       );
-      return response.json() as Promise<APIResponse<string>>;
+      return response.data as APIResponse<string>;
     },
     onSettled: () => {
       // Invalidate the query for the power tab data
@@ -44,14 +43,8 @@ export function useSetNodeInfoMutation() {
   return useMutation({
     mutationKey: ["setNodeInfoMutation"],
     mutationFn: async (nodeInfo: NodeInfoPayload) => {
-      const response = await fetch(`${host}/api/bmc?opt=set&type=node_info`, {
-        method: "POST",
-        body: JSON.stringify(nodeInfo),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return response.json() as Promise<APIResponse<string>>;
+      const response = await api.post(`/bmc?opt=set&type=node_info`, nodeInfo);
+      return response.data as APIResponse<string>;
     },
     onSettled: () => {
       // Invalidate the query for the power tab data
@@ -64,10 +57,8 @@ export function useResetNodeMutation() {
   return useMutation({
     mutationKey: ["setResetNodeMutation"],
     mutationFn: async (nodeId: number) => {
-      const response = await fetch(
-        `${host}/api/bmc?opt=set&type=reset&node=${nodeId}`
-      );
-      return response.json() as Promise<APIResponse<string>>;
+      const response = await api.get(`/bmc?opt=set&type=reset&node=${nodeId}`);
+      return response.data as APIResponse<string>;
     },
   });
 }
@@ -76,10 +67,8 @@ export function useNetworkResetMutation() {
   return useMutation({
     mutationKey: ["networkResetMutation"],
     mutationFn: async () => {
-      const response = await fetch(
-        `${host}/api/bmc?opt=set&type=network&cmd=reset`
-      );
-      return response.json() as Promise<APIResponse<string>>;
+      const response = await api.get(`/bmc?opt=set&type=network&cmd=reset`);
+      return response.data as APIResponse<string>;
     },
   });
 }
@@ -88,8 +77,8 @@ export function useRebootBMCMutation() {
   return useMutation({
     mutationKey: ["rebootBMCMutation"],
     mutationFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=set&type=reboot`);
-      return response.json() as Promise<APIResponse<string>>;
+      const response = await api.get(`/bmc?opt=set&type=reboot`);
+      return response.data as APIResponse<string>;
     },
   });
 }
@@ -98,8 +87,8 @@ export function useReloadBMCMutation() {
   return useMutation({
     mutationKey: ["reloadBMCMutation"],
     mutationFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=set&type=reload`);
-      return response.json() as Promise<APIResponse<string>>;
+      const response = await api.get(`/bmc?opt=set&type=reload`);
+      return response.data as APIResponse<string>;
     },
   });
 }
@@ -110,10 +99,10 @@ export function useUSBModeMutation() {
   return useMutation({
     mutationKey: ["usbModeMutation"],
     mutationFn: async (variables: { node: number; mode: number }) => {
-      const response = await fetch(
-        `${host}/api/bmc?opt=set&type=usb&mode=${variables.mode}&node=${variables.node}`
+      const response = await api.get(
+        `/bmc?opt=set&type=usb&mode=${variables.mode}&node=${variables.node}`
       );
-      return response.json() as Promise<APIResponse<string>>;
+      return response.data as APIResponse<string>;
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["usbTabData"] });

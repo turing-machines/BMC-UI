@@ -1,12 +1,17 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
+import type { AxiosProgressEvent } from "axios";
 
 export const Route = createLazyFileRoute("/firmware-upgrade/")({
   component: FirmwareUpgrade,
 });
 
 function FirmwareUpgrade() {
-  const { mutate: mutateFirmwareUpdate } = useFirmwareUpdateMutation();
+  const callback = (progressEvent: AxiosProgressEvent) => {
+    console.log(progressEvent);
+
+  };
+  const { mutate: mutateFirmwareUpdate } = useFirmwareUpdateMutation(callback);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -1,16 +1,18 @@
 import { useMutation } from "@tanstack/react-query";
-
-const host = "http://localhost:4460";
+import type { AxiosProgressEvent } from "axios";
+import api from "../../utils/axios";
 
 export function useBackupMutation() {
   return useMutation({
     mutationKey: ["backupMutation"],
     mutationFn: async () => {
-      const response = await fetch(`${host}/api/bmc/backup`, {
+      const response = await api.get(`/bmc/backup`, {
         method: "GET",
+        responseType: "blob",
       });
-      const contentDisposition = response.headers.get("Content-Disposition");
-      const blob = await response.blob();
+      const contentDisposition = response.headers["content-disposition"];
+      const blob: Blob = response.data;
+      console.log(response);
       const match = contentDisposition?.match(/filename="(.+?)"/);
       const filename = match ? match[1] : "backup.tar.gz";
       return { blob, filename };
@@ -18,15 +20,22 @@ export function useBackupMutation() {
   });
 }
 
-export function useFirmwareUpdateMutation() {
+export function useFirmwareUpdateMutation(
+  progressCallBack: (progressEvent: AxiosProgressEvent) => void
+) {
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],
     mutationFn: async (formData: FormData) => {
-      const response = await fetch(`${host}/api/bmc?opt=set&type=firmware`, {
-        method: "POST",
-        body: formData,
-      });
-      return response.json();
+      const response = await api.post(
+        `/bmc?opt=set&type=firmware`,
+        formData,
+        {
+          onUploadProgress: (progressEvent) => {
+            progressCallBack && progressCallBack(progressEvent);
+          },
+        }
+      );
+      return response.data;
     },
   });
 }

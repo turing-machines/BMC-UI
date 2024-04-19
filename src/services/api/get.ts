@@ -1,4 +1,5 @@
 import { useSuspenseQuery } from "@tanstack/react-query";
+import api from "../../utils/axios";
 
 type APIResponse<T> = {
   response: {
@@ -40,14 +41,12 @@ export interface NodeInfoResponse {
   uart_baud: string | null;
 }
 
-const host = "http://localhost:4460";
-
 export function useUSBTabData() {
   return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=get&type=usb`);
-      return response.json() as Promise<APIResponse<USBTabResponse>>;
+      const response = await api.get("/bmc?opt=get&type=usb");
+      return response.data as APIResponse<USBTabResponse>;
     },
   });
 }
@@ -56,8 +55,8 @@ export function usePowerTabData() {
   return useSuspenseQuery({
     queryKey: ["powerTabData"],
     queryFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=get&type=power`);
-      return response.json() as Promise<APIResponse<PowerTabResponse>>;
+      const response = await api.get(`/bmc?opt=get&type=power`);
+      return response.data as APIResponse<PowerTabResponse>;
     },
   });
 }
@@ -66,8 +65,8 @@ export function useAboutTabData() {
   return useSuspenseQuery({
     queryKey: ["aboutTabData"],
     queryFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=get&type=about`);
-      return response.json() as Promise<APIResponse<AboutTabResponse>>;
+      const response = await api.get(`/bmc?opt=get&type=about`);
+      return response.data as APIResponse<AboutTabResponse>;
     },
   });
 }
@@ -76,8 +75,8 @@ export function useInfoTabData() {
   return useSuspenseQuery({
     queryKey: ["infoTabData"],
     queryFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=get&type=info`);
-      return response.json() as Promise<APIResponse<InfoTabResponse>>;
+      const response = await api.get(`/bmc?opt=get&type=info`);
+      return response.data as APIResponse<InfoTabResponse>;
     },
   });
 }
@@ -86,8 +85,8 @@ export function useNodesTabData() {
   return useSuspenseQuery({
     queryKey: ["nodesTabData"],
     queryFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=get&type=node_info`);
-      return response.json() as Promise<APIResponse<NodeInfoResponse[]>>;
+      const response = await api.get(`/bmc?opt=get&type=node_info`);
+      return response.data as APIResponse<NodeInfoResponse[]>;
     },
   });
 }
