@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useUSBTabData } from "../../services/api/get";
+import { useUSBModeMutation } from "../../services/api/set";
 
 export const Route = createLazyFileRoute("/usb/")({
   component: USB,
@@ -7,10 +8,20 @@ export const Route = createLazyFileRoute("/usb/")({
 
 function USB() {
   const { data } = useUSBTabData();
+  const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const modeSelect = document.getElementById("usbMode") as HTMLSelectElement;
+    const nodeSelect = document.getElementById("usbNode") as HTMLSelectElement;
+    const mode = Number.parseInt(modeSelect.value);
+    const node = Number.parseInt(nodeSelect.value);
+    mutateUSBMode({ node, mode });
+  };
 
   return (
     <div data-tab="USB" className="tabs-body__item ">
-      <form className="form" id="form-usb">
+      <form className="form" id="form-usb" onSubmit={handleSubmit}>
         <div className="form-group row">
           <div className="text-content">
             <p>USB route:</p>
@@ -30,9 +41,24 @@ function USB() {
               <option selected disabled>
                 Nothing Selected
               </option>
-              <option value="0" selected={data.response[0]!.result.mode === 'Host'}>Host</option>
-              <option value="1" selected={data.response[0]!.result.mode === 'Device'}>Device</option>
-              <option value="2" selected={data.response[0]!.result.mode === 'Flash'}>Flash</option>
+              <option
+                value="0"
+                selected={data.response[0]!.result.mode === "Host"}
+              >
+                Host
+              </option>
+              <option
+                value="1"
+                selected={data.response[0]!.result.mode === "Device"}
+              >
+                Device
+              </option>
+              <option
+                value="2"
+                selected={data.response[0]!.result.mode === "Flash"}
+              >
+                Flash
+              </option>
             </select>
           </div>
           <div data-errors="usbMode" className="errors"></div>
@@ -52,17 +78,41 @@ function USB() {
               <option selected disabled>
                 Nothing Selected
               </option>
-              <option value="0" selected={data.response[0]!.result.node === 'Node 1'}>Node 1</option>
-              <option value="1" selected={data.response[0]!.result.node === 'Node 2'}>Node 2</option>
-              <option value="2" selected={data.response[0]!.result.node === 'Node 3'}>Node 3</option>
-              <option value="3" selected={data.response[0]!.result.node === 'Node 4'}>Node 4</option>
+              <option
+                value="0"
+                selected={data.response[0]!.result.node === "Node 1"}
+              >
+                Node 1
+              </option>
+              <option
+                value="1"
+                selected={data.response[0]!.result.node === "Node 2"}
+              >
+                Node 2
+              </option>
+              <option
+                value="2"
+                selected={data.response[0]!.result.node === "Node 3"}
+              >
+                Node 3
+              </option>
+              <option
+                value="3"
+                selected={data.response[0]!.result.node === "Node 4"}
+              >
+                Node 4
+              </option>
             </select>
           </div>
           <div data-errors="usbNode" className="errors"></div>
         </div>
 
         <div className="form-group row">
-          <button type="submit" className="btn btn-turing-small-yellow">
+          <button
+            type="submit"
+            className="btn btn-turing-small-yellow"
+            disabled={isPending}
+          >
             <span className="caption">Change</span>
           </button>
         </div>

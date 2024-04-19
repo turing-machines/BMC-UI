@@ -76,7 +76,9 @@ export function useNetworkResetMutation() {
   return useMutation({
     mutationKey: ["networkResetMutation"],
     mutationFn: async () => {
-      const response = await fetch(`${host}/api/bmc?opt=set&type=network&cmd=reset`);
+      const response = await fetch(
+        `${host}/api/bmc?opt=set&type=network&cmd=reset`
+      );
       return response.json() as Promise<APIResponse<string>>;
     },
   });
@@ -98,6 +100,23 @@ export function useReloadBMCMutation() {
     mutationFn: async () => {
       const response = await fetch(`${host}/api/bmc?opt=set&type=reload`);
       return response.json() as Promise<APIResponse<string>>;
+    },
+  });
+}
+
+export function useUSBModeMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["usbModeMutation"],
+    mutationFn: async (variables: { node: number; mode: number }) => {
+      const response = await fetch(
+        `${host}/api/bmc?opt=set&type=usb&mode=${variables.mode}&node=${variables.node}`
+      );
+      return response.json() as Promise<APIResponse<string>>;
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["usbTabData"] });
     },
   });
 }
