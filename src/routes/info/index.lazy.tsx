@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { filesize } from "filesize";
+import { toast } from "react-toastify";
 
 import { useBackupMutation } from "../../services/api/file";
 import { useInfoTabData } from "../../services/api/get";
@@ -52,6 +53,7 @@ function Info() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
+        toast.success("Backup successful");
       },
       onError: () => {
         // Handle error

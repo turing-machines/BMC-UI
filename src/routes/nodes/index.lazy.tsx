@@ -20,8 +20,10 @@ const NodeRow = (
   }
 ) => {
   const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
-  const { mutate: mutatePowerNode } = usePowerNodeMutation();
-  const { mutate: mutateResetNode } = useResetNodeMutation();
+  const { mutate: mutatePowerNode, isPending: isPendingPower } =
+    usePowerNodeMutation();
+  const { mutate: mutateResetNode, isPending: isPendingReset } =
+    useResetNodeMutation();
 
   const triggerMutation = () => {
     mutatePowerNode({ nodeId: props.nodeId, powerOn: !powerOn });
@@ -36,7 +38,9 @@ const NodeRow = (
     <div data-node-id={props.nodeId} className="nodes-list__item">
       <div className="nodes-list__item-inner">
         <div className="state-col">
-          <div className="state-indicator btn">
+          <div
+            className={`state-indicator btn ${isPendingPower ? "loading" : ""}`}
+          >
             <div className="switch">
               <input
                 data-node-id={props.nodeId}
@@ -55,7 +59,7 @@ const NodeRow = (
 
           <button
             type="button"
-            className="btn node-restart btn-turing-small-red"
+            className={`btn node-restart btn-turing-small-red ${isPendingReset ? "loading" : ""}`}
             disabled={props.power_on_time === null}
             onClick={() => mutateResetNode(props.nodeId - 1)}
           >

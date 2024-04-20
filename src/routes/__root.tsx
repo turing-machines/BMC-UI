@@ -4,6 +4,7 @@ import "../css/app.scss";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
+import { ToastContainer } from "react-toastify";
 
 import Logo from "../assets/logo.svg?react";
 import { UseBasicInfo } from "../contexts/basicInfo";
@@ -62,6 +63,7 @@ export const Route = createRootRoute({
               <div className="tabs-body">
                 <Outlet />
               </div>
+              <ToastContainer position="bottom-right" stacked />
             </div>
           </div>
         </div>
