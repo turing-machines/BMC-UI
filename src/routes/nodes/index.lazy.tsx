@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 import { type NodeInfoResponse, useNodesTabData } from "../../services/api/get";
 import {
@@ -25,13 +26,27 @@ const NodeRow = (
   const { mutate: mutateResetNode, isPending: isPendingReset } =
     useResetNodeMutation();
 
-  const triggerMutation = () => {
+  const handlePowerNode = () => {
     mutatePowerNode({ nodeId: props.nodeId, powerOn: !powerOn });
     setPowerOn(!powerOn);
+    toast.success(
+      `Node ${props.nodeId} was ${powerOn ? "turned off" : "turned on"}`
+    );
   };
 
   const handleEditField = (field: string, value: string) => {
     props.onEditField(field, value);
+  };
+
+  const handleResetNode = () => {
+    mutateResetNode(props.nodeId - 1, {
+      onSuccess: () => {
+        toast.success(`Node ${props.nodeId} was restarted`);
+      },
+      onError: () => {
+        toast.error(`Failed to restart node ${props.nodeId}`);
+      },
+    });
   };
 
   return (
@@ -49,7 +64,7 @@ const NodeRow = (
                 className="node-power"
                 disabled={!props.editMode}
                 checked={powerOn}
-                onClick={() => triggerMutation()}
+                onClick={() => handlePowerNode()}
               />
               <label htmlFor={`node-${props.nodeId}`} className="switch-label">
                 <span className="switch-btn"></span>
@@ -61,7 +76,7 @@ const NodeRow = (
             type="button"
             className={`btn node-restart btn-turing-small-red ${isPendingReset ? "loading" : ""}`}
             disabled={props.power_on_time === null}
-            onClick={() => mutateResetNode(props.nodeId - 1)}
+            onClick={() => handleResetNode()}
           >
             <span className="caption">Restart</span>
           </button>
@@ -110,6 +125,13 @@ function NodesTab() {
       Node2: editingData.find((node) => node?.node_id === 2) ?? {},
       Node3: editingData.find((node) => node?.node_id === 3) ?? {},
       Node4: editingData.find((node) => node?.node_id === 4) ?? {},
+    }, {
+      onSuccess: () => {
+        toast.success("Nodes information was saved");
+      },
+      onError: () => {
+        toast.error("Failed to save nodes information");
+      },
     });
   };
 

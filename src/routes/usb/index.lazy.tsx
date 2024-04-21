@@ -1,4 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { toast } from "react-toastify";
 
 import { useUSBTabData } from "../../services/api/get";
 import { useUSBModeMutation } from "../../services/api/set";
@@ -17,7 +18,14 @@ function USB() {
     const nodeSelect = document.getElementById("usbNode") as HTMLSelectElement;
     const mode = Number.parseInt(modeSelect.value);
     const node = Number.parseInt(nodeSelect.value);
-    mutateUSBMode({ node, mode });
+    mutateUSBMode({ node, mode }, {
+      onSuccess: () => {
+        toast.success("USB mode changed successfully");
+      }, 
+      onError: () => {
+        toast.error("Failed to change USB mode");
+      }
+    });
   };
 
   return (

@@ -53,13 +53,46 @@ function Info() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        toast.success("Backup successful");
+        toast.success(`Successfully downloaded backup file: ${filename}`);
       },
       onError: () => {
-        // Handle error
+        toast.error("Failed to download backup file");
       },
     });
   };
+
+  const handleResetNetwork = () => {
+    mutateResetNetwork(undefined, {
+      onSuccess: () => {
+        toast.success("Network reset successfully");
+      },
+      onError: () => {
+        toast.error("Failed to reset network");
+      },
+    });
+  }
+
+  const handleRebootBMC = () => {
+    mutateRebootBMC(undefined, {
+      onSuccess: () => {
+        toast.success("Rebooting BMC...");
+      },
+      onError: () => {
+        toast.error("Failed to reboot BMC");
+      },
+    });
+  };
+
+  const handleReloadBMC = () => {
+    mutateReloadBMC(undefined, {
+      onSuccess: () => {
+        toast.success("Reloading BMC daemon...");
+      },
+      onError: () => {
+        toast.error("Failed to reload BMC daemon");
+      },
+    });
+  }
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
@@ -144,7 +177,7 @@ function Info() {
           <button
             type="button"
             className="btn btn-turing-small-yellow"
-            onClick={() => mutateResetNetwork()}
+            onClick={() => handleResetNetwork()}
           >
             <span className="caption">Reset network</span>
           </button>
@@ -161,14 +194,14 @@ function Info() {
           <button
             type="button"
             className="btn btn-turing-small-red"
-            onClick={() => mutateRebootBMC()}
+            onClick={() => handleRebootBMC()}
           >
             <span className="caption">Reboot</span>
           </button>
           <div
             id="reload-btn"
             className="btn btn-turing-small-dark"
-            onClick={() => mutateReloadBMC()}
+            onClick={() => handleReloadBMC()}
           >
             <span className="caption">Reload daemon</span>
           </div>
