@@ -15,10 +15,7 @@ function About() {
 
   useEffect(() => {
     if (data) {
-      updateBasicInfo(
-        data.response[0].result.hostname,
-        data.response[0].result.version
-      );
+      updateBasicInfo(data.hostname, data.version);
     }
   }, []);
 
@@ -30,37 +27,37 @@ function About() {
             <div className="row">
               <div className="col">Host name:</div>
               <div id="aboutHostname" className="col">
-                {data?.response[0].result.hostname}
+                {data.hostname}
               </div>
             </div>
             <div className="row">
               <div className="col">Daemon version:</div>
               <div id="aboutVer" className="col">
-                v{data?.response[0].result.version}
+                v{data.version}
               </div>
             </div>
             <div className="row">
               <div className="col">Build time:</div>
               <div id="aboutBuildtime" className="col">
-                {data?.response[0].result.buildtime}
+                {data.buildtime}
               </div>
             </div>
             <div className="row">
               <div className="col">Build version:</div>
               <div id="aboutBuildVer" className="col">
-                {data?.response[0].result.build_version}
+                {data.build_version}
               </div>
             </div>
             <div className="row">
               <div className="col">Buildroot release:</div>
               <div id="aboutBuildroot" className="col">
-                {data?.response[0].result.buildroot}
+                {data.buildroot}
               </div>
             </div>
             <div className="row">
               <div className="col">API version:</div>
               <div id="aboutApi" className="col">
-                v{data?.response[0].result.api}
+                v{data.api}
               </div>
             </div>
             <div className="row">

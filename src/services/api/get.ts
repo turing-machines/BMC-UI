@@ -46,8 +46,10 @@ export function useUSBTabData() {
   return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
-      const response = await api.get("/bmc?opt=get&type=usb");
-      return response.data as APIResponse<USBTabResponse>;
+      const response = await api.get<APIResponse<USBTabResponse>>(
+        "/bmc?opt=get&type=usb"
+      );
+      return response.data.response[0].result;
     },
   });
 }
@@ -56,8 +58,10 @@ export function usePowerTabData() {
   return useSuspenseQuery({
     queryKey: ["powerTabData"],
     queryFn: async () => {
-      const response = await api.get(`/bmc?opt=get&type=power`);
-      return response.data as APIResponse<PowerTabResponse>;
+      const response = await api.get<APIResponse<PowerTabResponse>>(
+        `/bmc?opt=get&type=power`
+      );
+      return response.data.response[0].result;
     },
   });
 }
@@ -66,8 +70,10 @@ export function useAboutTabData() {
   return useSuspenseQuery({
     queryKey: ["aboutTabData"],
     queryFn: async () => {
-      const response = await api.get(`/bmc?opt=get&type=about`);
-      return response.data as APIResponse<AboutTabResponse>;
+      const response = await api.get<APIResponse<AboutTabResponse>>(
+        `/bmc?opt=get&type=about`
+      );
+      return response.data.response[0].result;
     },
   });
 }
@@ -76,8 +82,10 @@ export function useInfoTabData() {
   return useSuspenseQuery({
     queryKey: ["infoTabData"],
     queryFn: async () => {
-      const response = await api.get(`/bmc?opt=get&type=info`);
-      return response.data as APIResponse<InfoTabResponse>;
+      const response = await api.get<APIResponse<InfoTabResponse>>(
+        `/bmc?opt=get&type=info`
+      );
+      return response.data.response[0].result;
     },
   });
 }
@@ -86,8 +94,10 @@ export function useNodesTabData() {
   return useSuspenseQuery({
     queryKey: ["nodesTabData"],
     queryFn: async () => {
-      const response = await api.get(`/bmc?opt=get&type=node_info`);
-      return response.data as APIResponse<NodeInfoResponse[]>;
+      const response = await api.get<APIResponse<NodeInfoResponse[]>>(
+        `/bmc?opt=get&type=node_info`
+      );
+      return response.data.response[0].result;
     },
   });
 }

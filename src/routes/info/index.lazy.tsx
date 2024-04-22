@@ -112,7 +112,7 @@ function Info() {
         </div>
         <div className="form-group row">
           <div id="tableStorageInfo" className="table-specification">
-            {data.response[0].result.storage.map((storage) => {
+            {data.storage.map((storage) => {
               const formattedStorage = progressData(
                 storage.total_bytes,
                 storage.bytes_free
@@ -158,7 +158,7 @@ function Info() {
           </div>
         </div>
         <div className="form-group row">
-          {data.response[0].result.ip.map((ip) => (
+          {data.ip.map((ip) => (
             <div
               id="tableNetworkInfo"
               className="table-specification"

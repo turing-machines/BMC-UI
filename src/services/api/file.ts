@@ -17,7 +17,9 @@ export function useBackupMutation() {
         method: "GET",
         responseType: "blob",
       });
-      const contentDisposition = response.headers["content-disposition"] as string;
+      const contentDisposition = response.headers[
+        "content-disposition"
+      ] as string;
       const blob = response.data as Blob;
       const match = contentDisposition?.match(/filename="(.+?)"/);
       const filename = match ? match[1] : "backup.tar.gz";
@@ -32,12 +34,16 @@ export function useFirmwareUpdateMutation(
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],
     mutationFn: async (formData: FormData) => {
-      const response = await api.post(`/bmc?opt=set&type=firmware`, formData, {
-        onUploadProgress: (progressEvent) => {
-          progressCallBack && progressCallBack(progressEvent);
-        },
-      });
-      return response.data as APIResponse<string>;
+      const response = await api.post<APIResponse<string>>(
+        `/bmc?opt=set&type=firmware`,
+        formData,
+        {
+          onUploadProgress: (progressEvent) => {
+            progressCallBack && progressCallBack(progressEvent);
+          },
+        }
+      );
+      return response.data.response[0].result;
     },
   });
 }
@@ -56,7 +62,7 @@ export function useNodeUpdateMutation(
       const data = new FormData();
       if (variables.file) data.append("file", variables.file);
 
-      const response = await api.post(
+      const response = await api.post<APIResponse<string>>(
         `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`,
         data,
         {
@@ -65,7 +71,7 @@ export function useNodeUpdateMutation(
           },
         }
       );
-      return response.data as APIResponse<string>;
+      return response.data.response[0].result;
     },
   });
 }

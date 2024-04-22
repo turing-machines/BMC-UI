@@ -11,7 +11,7 @@ import {
 import NodesSkeleton from "./-components/skeleton";
 
 export const Route = createLazyFileRoute("/nodes/")({
-  component: NodesSkeleton,
+  component: NodesTab,
   pendingComponent: NodesSkeleton,
 });
 
@@ -122,19 +122,22 @@ function NodesTab() {
 
   const handleSave = () => {
     setEditMode(false);
-    mutate({
-      Node1: editingData.find((node) => node?.node_id === 1) ?? {},
-      Node2: editingData.find((node) => node?.node_id === 2) ?? {},
-      Node3: editingData.find((node) => node?.node_id === 3) ?? {},
-      Node4: editingData.find((node) => node?.node_id === 4) ?? {},
-    }, {
-      onSuccess: () => {
-        toast.success("Nodes information was saved");
+    mutate(
+      {
+        Node1: editingData.find((node) => node?.node_id === 1) ?? {},
+        Node2: editingData.find((node) => node?.node_id === 2) ?? {},
+        Node3: editingData.find((node) => node?.node_id === 3) ?? {},
+        Node4: editingData.find((node) => node?.node_id === 4) ?? {},
       },
-      onError: () => {
-        toast.error("Failed to save nodes information");
-      },
-    });
+      {
+        onSuccess: () => {
+          toast.success("Nodes information was saved");
+        },
+        onError: () => {
+          toast.error("Failed to save nodes information");
+        },
+      }
+    );
   };
 
   return (
@@ -148,7 +151,7 @@ function NodesTab() {
 
         <div className="nodes-group">
           <div className="nodes-list editing">
-            {data.response[0].result.map((node, index) => (
+            {data.map((node, index) => (
               <NodeRow
                 key={index}
                 {...node}

@@ -64,7 +64,7 @@ function USB() {
               className="selectpicker"
               data-style="btn-outline-primary"
               required
-              defaultValue={usbModeMapper[data.response[0].result.mode]}
+              defaultValue={usbModeMapper[data.mode]}
             >
               <option disabled>Nothing Selected</option>
               <option value="0">Host</option>
@@ -85,7 +85,7 @@ function USB() {
               className="selectpicker"
               data-style="btn-outline-primary"
               required
-              defaultValue={usbNodeMapper[data.response[0].result.node]}
+              defaultValue={usbNodeMapper[data.node]}
             >
               <option disabled>Nothing Selected</option>
               <option value="0">Node 1</option>
