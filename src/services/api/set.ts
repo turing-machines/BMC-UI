@@ -70,6 +70,8 @@ export function useResetNodeMutation() {
 }
 
 export function useNetworkResetMutation() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["networkResetMutation"],
     mutationFn: async () => {
@@ -78,6 +80,9 @@ export function useNetworkResetMutation() {
       );
       return response.data.response[0].result;
     },
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ["infoTabData"] });
+    }
   });
 }
 
