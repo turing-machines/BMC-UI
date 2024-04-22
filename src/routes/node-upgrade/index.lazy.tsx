@@ -1,8 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Modal } from "react-responsive-modal";
+import { toast } from "react-toastify";
 
+import WarningSvg from "../../assets/alert-warning.svg?react";
 import { useNodeUpdateMutation } from "../../services/api/file";
 
 export const Route = createLazyFileRoute("/node-upgrade/")({
@@ -10,6 +13,9 @@ export const Route = createLazyFileRoute("/node-upgrade/")({
 });
 
 function Flash() {
+  const formRef = useRef<HTMLFormElement>(null);
+  const [rebootModalOpened, setRebootModalOpened] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
   const [progress, setProgress] = useState<{
     transferred: string;
     total: string;
@@ -30,15 +36,32 @@ function Flash() {
     isPending,
   } = useNodeUpdateMutation(uploadProgressCallback);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const nodeId = (form.nodeId as HTMLInputElement).value;
-    const file = (form.file as HTMLInputElement).files?.[0];
-    const sha256 = (form.sha256 as HTMLInputElement).value;
-    const skipCRC = (form.skipCrc as HTMLInputElement).checked;
+  const handleSubmit = () => {
+    if (formRef.current) {
+      setRebootModalOpened(false);
+      const form = formRef.current;
+      const nodeId = (form.elements.namedItem("nodeId") as HTMLSelectElement)
+        .value;
+      const file = (form.elements.namedItem("file") as HTMLInputElement)
+        .files?.[0];
+      const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
+        .value;
+      const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
+        .checked;
 
-    mutateNodeUpdate({ nodeId, file, sha256, skipCRC });
+      setStatusMessage(`Transferring image to node ${Number.parseInt(nodeId) + 1}...`);
+      mutateNodeUpdate(
+        { nodeId, file, sha256, skipCRC },
+        {
+          onSuccess: () => {
+            toast.success("OS image installed successfully");
+          },
+          onError: () => {
+            toast.error("Failed to install OS image");
+          },
+        }
+      );
+    }
   };
 
   return (
@@ -47,7 +70,7 @@ function Flash() {
       id="node-upgrade-tab"
       className="tabs-body__item force-tab-style "
     >
-      <form id="node-upgrade-form" className="form" onSubmit={handleSubmit}>
+      <form ref={formRef} className="form">
         <div className="form-group row">
           <div className="text-content">
             <p>Install an OS image on a selected node:</p>
@@ -112,7 +135,12 @@ function Flash() {
         </div>
 
         <div className="form-group form-flex-row">
-          <button type="submit" className="btn btn btn-turing-small-yellow">
+          <button
+            type="button"
+            className={`btn btn btn-turing-small-yellow " ${isPending ? "loading" : ""}`}
+            onClick={() => setRebootModalOpened(true)}
+            disabled={isPending}
+          >
             <span className="caption">Install OS</span>
           </button>
           <div className="checkbox-row form-flex-row">
@@ -144,9 +172,42 @@ function Flash() {
               {progress.transferred} / {progress.total}
             </div>
           </div>
-          <div className="update-text"></div>
+          <div className="update-text">{statusMessage}</div>
         </div>
       </form>
+      <Modal
+        open={rebootModalOpened}
+        onClose={() => setRebootModalOpened(false)}
+        center
+        showCloseIcon={false}
+        classNames={{ modal: "modal-rounded" }}
+      >
+        <div className="modal">
+          <div className="modal__icon">
+            <WarningSvg />
+          </div>
+          <h2 className="modal__title">Do you want to continue?</h2>
+          <p className="modal__text">
+            You are about to overwrite a new image to the selected node.
+          </p>
+          <div className="modal__buttons">
+            <button
+              className="btn btn-turing-small-dark"
+              onClick={() => setRebootModalOpened(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className={"reboot-btn btn btn-turing-small-red"}
+              onClick={() => {
+                handleSubmit();
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
