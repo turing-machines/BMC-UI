@@ -3,7 +3,6 @@ import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
-import { BasicInfoProvider } from "./contexts/basicInfo";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
@@ -24,9 +23,7 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <QueryClientProvider client={queryClient}>
-        <BasicInfoProvider>
-          <RouterProvider router={router} />
-        </BasicInfoProvider>
+        <RouterProvider router={router} />
       </QueryClientProvider>
     </StrictMode>
   );

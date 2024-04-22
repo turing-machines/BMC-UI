@@ -1,8 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 
 import { version } from "../../../package.json";
-import { UseBasicInfo } from "../../contexts/basicInfo";
 import { useAboutTabData } from "../../services/api/get";
 import AboutSkeleton from "./-components/skeleton";
 
@@ -13,13 +11,6 @@ export const Route = createLazyFileRoute("/about/")({
 
 function About() {
   const { data } = useAboutTabData();
-  const { updateBasicInfo } = UseBasicInfo();
-
-  useEffect(() => {
-    if (data) {
-      updateBasicInfo(data.hostname, data.version);
-    }
-  }, []);
 
   return (
     <div data-tab="About" className="tabs-body__item">

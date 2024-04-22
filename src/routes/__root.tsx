@@ -7,12 +7,10 @@ import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { ToastContainer } from "react-toastify";
 
 import Logo from "../assets/logo.svg?react";
-import { UseBasicInfo } from "../contexts/basicInfo";
+import BasicInfo from "../components/BasicInfo";
 
 export const Route = createRootRoute({
   component: () => {
-    const { hostname, version } = UseBasicInfo();
-
     return (
       <>
         <div>
@@ -21,19 +19,7 @@ export const Route = createRootRoute({
               <div className="logo">
                 <Logo />
               </div>
-              <div className="app-info">
-                <h1 className="h3 app-title">Turing PI</h1>
-                <div className="app-version">
-                  <div className="app-version-item">
-                    <div className="label">hostname</div>
-                    <div className="hostname">{hostname}</div>
-                  </div>
-                  <div className="app-version-item">
-                    <div className="label">daemon</div>
-                    <div className="daemon-version">v{version}</div>
-                  </div>
-                </div>
-              </div>
+              <BasicInfo />
             </div>
 
             <div className="tabs-wrapper">
