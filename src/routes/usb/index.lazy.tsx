@@ -10,6 +10,19 @@ export const Route = createLazyFileRoute("/usb/")({
   component: USB,
 });
 
+const usbModeMapper = {
+  Host: 0,
+  Device: 1,
+  Flash: 2,
+};
+
+const usbNodeMapper = {
+  "Node 1": 0,
+  "Node 2": 1,
+  "Node 3": 2,
+  "Node 4": 3,
+};
+
 function USB() {
   const { data } = useUSBTabData();
   const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
@@ -51,28 +64,12 @@ function USB() {
               className="selectpicker"
               data-style="btn-outline-primary"
               required
+              defaultValue={usbModeMapper[data.response[0].result.mode]}
             >
-              <option selected disabled>
-                Nothing Selected
-              </option>
-              <option
-                value="0"
-                selected={data.response[0].result.mode === "Host"}
-              >
-                Host
-              </option>
-              <option
-                value="1"
-                selected={data.response[0].result.mode === "Device"}
-              >
-                Device
-              </option>
-              <option
-                value="2"
-                selected={data.response[0].result.mode === "Flash"}
-              >
-                Flash
-              </option>
+              <option disabled>Nothing Selected</option>
+              <option value="0">Host</option>
+              <option value="1">Device</option>
+              <option value="2">Flash</option>
             </select>
           </div>
           <div data-errors="usbMode" className="errors"></div>
@@ -88,34 +85,13 @@ function USB() {
               className="selectpicker"
               data-style="btn-outline-primary"
               required
+              defaultValue={usbNodeMapper[data.response[0].result.node]}
             >
-              <option selected disabled>
-                Nothing Selected
-              </option>
-              <option
-                value="0"
-                selected={data.response[0].result.node === "Node 1"}
-              >
-                Node 1
-              </option>
-              <option
-                value="1"
-                selected={data.response[0].result.node === "Node 2"}
-              >
-                Node 2
-              </option>
-              <option
-                value="2"
-                selected={data.response[0].result.node === "Node 3"}
-              >
-                Node 3
-              </option>
-              <option
-                value="3"
-                selected={data.response[0].result.node === "Node 4"}
-              >
-                Node 4
-              </option>
+              <option disabled>Nothing Selected</option>
+              <option value="0">Node 1</option>
+              <option value="1">Node 2</option>
+              <option value="2">Node 3</option>
+              <option value="3">Node 4</option>
             </select>
           </div>
           <div data-errors="usbNode" className="errors"></div>

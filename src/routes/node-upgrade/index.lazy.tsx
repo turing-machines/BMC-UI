@@ -88,8 +88,9 @@ function Flash() {
               className="selectpicker"
               data-style="btn-outline-primary"
               required
+              defaultValue={-1}
             >
-              <option selected disabled>
+              <option value={-1} disabled>
                 Nothing Selected
               </option>
               <option value="0">Node 1</option>

@@ -9,9 +9,9 @@ interface APIResponse<T> {
 }
 
 interface USBTabResponse {
-  mode: string;
-  node: string;
-  route: string;
+  mode: "Host" | "Device" | "Flash";
+  node: "Node 1" | "Node 2" | "Node 3" | "Node 4";
+  route: "Bmc" | "AlternativePort";
 }
 
 interface PowerTabResponse {
