@@ -16,8 +16,8 @@ export default function NodesSkeleton() {
           <div className="nodes-list">
             {[...Array<number>(4)].map((_, index) => (
               <div key={index} className="nodes-list__item">
-                <div className="nodes-list__item-inner">
-                  <Skeleton width={500} height={44} />
+                <div className="nodes-list__item-inner-skeleton">
+                  <Skeleton width="100%" height={44} />
                 </div>
               </div>
             ))}

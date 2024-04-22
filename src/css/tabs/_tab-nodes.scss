@@ -17,6 +17,11 @@
           align-items: flex-start;
           justify-content: flex-start;
           width: 100%;
+
+          &-skeleton {
+            display: block;
+            width: 100%;
+          }
         }
         
         .state-col {
