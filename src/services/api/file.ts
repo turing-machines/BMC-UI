@@ -31,19 +31,33 @@ export function useBackupMutation() {
 export function useFirmwareUpdateMutation(
   progressCallBack?: (progressEvent: AxiosProgressEvent) => void
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],
-    mutationFn: async (formData: FormData) => {
-      const response = await api.post<APIResponse<string>>(
-        `/bmc?opt=set&type=firmware`,
-        formData,
-        {
-          onUploadProgress: (progressEvent) => {
-            progressCallBack && progressCallBack(progressEvent);
-          },
-        }
+    mutationFn: async (variables: {
+      file?: File;
+      sha256?: string;
+    }) => {
+      // Step 1: Obtain the upload handle
+      const {
+        data: { handle },
+      } = await api.get<{ handle: number }>(
+        `/bmc?opt=set&type=firmware&file=${variables.file?.name}&length=${variables.file?.size}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`
       );
-      return response.data.response[0].result;
+
+      // Step 2: Upload the file data
+      const formData = new FormData();
+      if (variables.file) formData.append("file", variables.file);
+      await api.post(`/bmc/upload/${handle}`, formData, {
+        onUploadProgress: (progressEvent) => {
+          progressCallBack && progressCallBack(progressEvent);
+        },
+      });
+    },
+    onSuccess: () => {
+      // Invalidate the query for the firmware status
+      void queryClient.invalidateQueries({ queryKey: ["firmwareStatus"] });
     },
   });
 }

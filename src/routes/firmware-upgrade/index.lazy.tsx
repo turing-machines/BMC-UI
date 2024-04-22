@@ -1,13 +1,14 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
 
 import SuccessSvg from "../../assets/alert-success.svg?react";
 import WarningSvg from "../../assets/alert-warning.svg?react";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
+import { useFirmwareStatusQuery } from "../../services/api/get";
 import { useRebootBMCMutation } from "../../services/api/set";
 
 export const Route = createLazyFileRoute("/firmware-upgrade/")({
@@ -16,11 +17,13 @@ export const Route = createLazyFileRoute("/firmware-upgrade/")({
 
 function FirmwareUpgrade() {
   const formRef = useRef<HTMLFormElement>(null);
+  const [isUpgrading, setIsUpgrading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
   const [confirmFlashModal, setConfirmFlashModal] = useState(false);
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const [progress, setProgress] = useState<{
     transferred: string;
-    total: string;
+    total?: string;
     pct: number;
   }>({ transferred: "", total: "", pct: 0 });
   const uploadProgressCallback = (progressEvent: AxiosProgressEvent) => {
@@ -38,6 +41,28 @@ function FirmwareUpgrade() {
     isPending,
   } = useFirmwareUpdateMutation(uploadProgressCallback);
   const { mutate: mutateRebootBMC } = useRebootBMCMutation();
+  const { data, refetch } = useFirmwareStatusQuery(isUpgrading);
+
+  useEffect(() => {
+    if (data?.Transferring) {
+      setIsUpgrading(true);
+      setStatusMessage("Writing firmware to BMC...");
+
+      // Update progress bar using bytes_written from Transferring data
+      const bytesWritten = data.Transferring.bytes_written ?? 0;
+      setProgress({
+        transferred: `${filesize(bytesWritten, { standard: "jedec" })} written`,
+        total: undefined,
+        pct: 100,
+      });
+    } else if (data?.Done) {
+      setIsUpgrading(false);
+      const msg = `Firmware upgrade completed successfully in ${data.Done[0].secs}s`;
+      setStatusMessage(msg);
+      toast.success(msg);
+      setRebootModalOpened(true);
+    }
+  }, [data]);
 
   const handleRebootBMC = () => {
     setRebootModalOpened(false);
@@ -60,18 +85,21 @@ function FirmwareUpgrade() {
         .files?.[0];
       const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
         .value;
-      const formData = new FormData();
-      if (file) formData.append("file", file);
-      if (sha256) formData.append("sha256", sha256);
 
-      mutateFirmwareUpdate(formData, {
-        onSuccess: () => {
-          setRebootModalOpened(true);
-        },
-        onError: () => {
-          toast.error("Failed to upgrade firmware");
-        },
-      });
+      setStatusMessage("Uploading BMC firmware...");
+      mutateFirmwareUpdate(
+        { file, sha256 },
+        {
+          onSuccess: () => {
+            void refetch();
+          },
+          onError: () => {
+            const msg = "Failed to upgrade firmware";
+            setStatusMessage(msg);
+            toast.error(msg);
+          },
+        }
+      );
     }
   };
 
@@ -122,7 +150,7 @@ function FirmwareUpgrade() {
           <button
             type="button"
             className="btn btn-turing-small-yellow"
-            disabled={isPending}
+            disabled={isPending || isUpgrading}
             onClick={() => setConfirmFlashModal(true)}
           >
             <span className="caption">Upgrade</span>
@@ -134,14 +162,15 @@ function FirmwareUpgrade() {
         >
           <div className="progress-bar-wrap">
             <div
-              className={`progress-bar ${!isPending ? "loaded" : ""}`}
+              className={`progress-bar ${!isPending && !isUpgrading ? "loaded" : ""}`}
               style={{ width: `${progress.pct}%` }}
             ></div>
             <div className="progress-bar-caption">
-              {progress.transferred} / {progress.total}
+              {progress.transferred}
+              {progress.total ? ` / ${progress.total}` : ""}
             </div>
           </div>
-          <div className="update-text"></div>
+          <div className="update-text">{statusMessage}</div>
         </div>
       </form>
       <Modal

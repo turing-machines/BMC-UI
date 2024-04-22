@@ -54,7 +54,7 @@ function Flash() {
       // Update progress bar using bytes_written from Transferring data
       const bytesWritten = data.Transferring.bytes_written ?? 0;
       setProgress({
-        transferred: filesize(bytesWritten, { standard: "jedec" }),
+        transferred: `${filesize(bytesWritten, { standard: "jedec" })} written`,
         total: undefined,
         pct: 100,
       });

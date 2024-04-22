@@ -124,3 +124,15 @@ export function useFlashStatusQuery(enabled: boolean) {
     enabled, // Enable/disable the query based on the provided boolean value
   });
 }
+
+export function useFirmwareStatusQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: ["firmwareStatus"],
+    queryFn: async () => {
+      const response = await api.get<FlashStatus>("/bmc?opt=get&type=firmware");
+      return response.data;
+    },
+    refetchInterval: 1000, // Refetch every 1 second
+    enabled, // Enable/disable the query based on the provided boolean value
+  });
+}
