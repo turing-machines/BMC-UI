@@ -12,6 +12,7 @@ import {
   useRebootBMCMutation,
   useReloadBMCMutation,
 } from "../../services/api/set";
+import InfoSkeleton from "./-components/skeleton";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -34,7 +35,7 @@ const progressData = (totalBytes: number, freeBytes: number) => {
 export const Route = createLazyFileRoute("/info/")({
   component: Info,
   errorComponent: () => <div>Error loading Info</div>,
-  pendingComponent: () => <div>Loading Info</div>,
+  pendingComponent: InfoSkeleton,
 });
 
 function Info() {
@@ -44,7 +45,8 @@ function Info() {
   const { mutate: mutateRebootBMC, isPending: rebootPending } =
     useRebootBMCMutation();
   const { mutate: mutateReloadBMC } = useReloadBMCMutation();
-  const { mutate: mutateBackup, status: backupStatus } = useBackupMutation();
+  const { mutate: mutateBackup, isPending: backupPending } =
+    useBackupMutation();
 
   const handleBackupSubmit = () => {
     mutateBackup(undefined, {
@@ -140,13 +142,11 @@ function Info() {
         <div className="form-group row">
           <button
             type="button"
-            className="btn btn-turing-small-yellow"
-            disabled={backupStatus === "pending"}
+            className={`btn btn-turing-small-yellow ${backupPending ? "loading" : ""}`}
+            disabled={backupPending}
             onClick={() => handleBackupSubmit()}
           >
-            <span className="caption">
-              {backupStatus === "pending" ? "Loading..." : "Backup user data"}
-            </span>
+            <span className="caption">Backup user data</span>
           </button>
         </div>
         <div className="form-group row"></div>

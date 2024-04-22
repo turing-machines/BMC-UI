@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as InfoImport } from './routes/_info'
 
 // Create Virtual Routes
 
@@ -25,6 +26,11 @@ const FirmwareUpgradeIndexLazyImport = createFileRoute('/firmware-upgrade/')()
 const AboutIndexLazyImport = createFileRoute('/about/')()
 
 // Create/Update Routes
+
+const InfoRoute = InfoImport.update({
+  id: '/_info',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexLazyRoute = IndexLazyImport.update({
   path: '/',
@@ -71,6 +77,10 @@ declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/_info': {
+      preLoaderRoute: typeof InfoImport
       parentRoute: typeof rootRoute
     }
     '/about/': {

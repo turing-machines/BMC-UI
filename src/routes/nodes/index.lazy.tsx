@@ -8,9 +8,11 @@ import {
   useResetNodeMutation,
   useSetNodeInfoMutation,
 } from "../../services/api/set";
+import NodesSkeleton from "./-components/skeleton";
 
 export const Route = createLazyFileRoute("/nodes/")({
-  component: NodesTab,
+  component: NodesSkeleton,
+  pendingComponent: NodesSkeleton,
 });
 
 const NodeRow = (
