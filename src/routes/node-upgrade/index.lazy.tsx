@@ -1,12 +1,13 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
 
 import WarningSvg from "../../assets/alert-warning.svg?react";
 import { useNodeUpdateMutation } from "../../services/api/file";
+import { useFlashStatusQuery } from "../../services/api/get";
 
 export const Route = createLazyFileRoute("/node-upgrade/")({
   component: Flash,
@@ -14,20 +15,23 @@ export const Route = createLazyFileRoute("/node-upgrade/")({
 
 function Flash() {
   const formRef = useRef<HTMLFormElement>(null);
+  const [isFlashing, setIsFlashing] = useState(false);
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [progress, setProgress] = useState<{
     transferred: string;
-    total: string;
+    total?: string;
     pct: number;
   }>({ transferred: "", total: "", pct: 0 });
   const uploadProgressCallback = (progressEvent: AxiosProgressEvent) => {
     setProgress({
       transferred: filesize(progressEvent.loaded ?? 0, { standard: "jedec" }),
-      total: filesize(progressEvent.total ?? 0, { standard: "jedec" }),
-      pct: Math.round(
-        ((progressEvent.loaded ?? 0) / (progressEvent.total ?? 1)) * 100
-      ),
+      total: progressEvent.total
+        ? filesize(progressEvent.total, { standard: "jedec" })
+        : undefined,
+      pct: progressEvent.total
+        ? Math.round((progressEvent.loaded / (progressEvent.total ?? 1)) * 100)
+        : 100,
     });
   };
   const {
@@ -35,6 +39,32 @@ function Flash() {
     isIdle,
     isPending,
   } = useNodeUpdateMutation(uploadProgressCallback);
+  const { data, refetch } = useFlashStatusQuery(isFlashing);
+
+  useEffect(() => {
+    if (data?.Transferring) {
+      setIsFlashing(true);
+      const msg = (
+        formRef.current?.elements.namedItem("skipCrc") as HTMLInputElement
+      ).checked
+        ? "Transferring image to the node..."
+        : "Checking CRC and transferring image to the node...";
+      setStatusMessage(msg);
+
+      // Update progress bar using bytes_written from Transferring data
+      const bytesWritten = data.Transferring.bytes_written ?? 0;
+      setProgress({
+        transferred: filesize(bytesWritten, { standard: "jedec" }),
+        total: undefined,
+        pct: 100,
+      });
+    } else if (data?.Done) {
+      setIsFlashing(false);
+      const msg = `Image transferred successfully to node in ${data.Done[0].secs}s`;
+      setStatusMessage(msg);
+      toast.success(msg);
+    }
+  }, [data]);
 
   const handleSubmit = () => {
     if (formRef.current) {
@@ -49,15 +79,19 @@ function Flash() {
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
         .checked;
 
-      setStatusMessage(`Transferring image to node ${Number.parseInt(nodeId) + 1}...`);
+      setStatusMessage(
+        `Transferring image to node ${Number.parseInt(nodeId) + 1}...`
+      );
       mutateNodeUpdate(
         { nodeId, file, sha256, skipCRC },
         {
           onSuccess: () => {
-            toast.success("OS image installed successfully");
+            void refetch();
           },
           onError: () => {
-            toast.error("Failed to install OS image");
+            const msg = `Failed to transfer the image to node ${Number.parseInt(nodeId) + 1}`;
+            setStatusMessage(msg);
+            toast.error(msg);
           },
         }
       );
@@ -138,9 +172,9 @@ function Flash() {
         <div className="form-group form-flex-row">
           <button
             type="button"
-            className={`btn btn btn-turing-small-yellow " ${isPending ? "loading" : ""}`}
+            className={`btn btn btn-turing-small-yellow " ${isPending || isFlashing ? "loading" : ""}`}
             onClick={() => setRebootModalOpened(true)}
-            disabled={isPending}
+            disabled={isPending || isFlashing}
           >
             <span className="caption">Install OS</span>
           </button>
@@ -166,11 +200,12 @@ function Flash() {
         >
           <div className="progress-bar-wrap">
             <div
-              className={`progress-bar ${!isPending ? "loaded" : ""}`}
+              className={`progress-bar ${!isPending && !isFlashing ? "loaded" : ""}`}
               style={{ width: `${progress.pct}%` }}
             ></div>
             <div className="progress-bar-caption">
-              {progress.transferred} / {progress.total}
+              {progress.transferred}
+              {progress.total ? ` / ${progress.total}` : ""}
             </div>
           </div>
           <div className="update-text">{statusMessage}</div>

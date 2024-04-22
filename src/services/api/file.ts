@@ -1,4 +1,4 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosProgressEvent } from "axios";
 
 import api from "../../utils/axios";
@@ -51,6 +51,8 @@ export function useFirmwareUpdateMutation(
 export function useNodeUpdateMutation(
   progressCallBack?: (progressEvent: AxiosProgressEvent) => void
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationKey: ["nodeUpdateMutation"],
     mutationFn: async (variables: {
@@ -59,19 +61,25 @@ export function useNodeUpdateMutation(
       sha256?: string;
       skipCRC: boolean;
     }) => {
-      const data = new FormData();
-      if (variables.file) data.append("file", variables.file);
-
-      const response = await api.post<APIResponse<string>>(
-        `/bmc?opt=set&type=flash&node=${variables.nodeId}${variables.skipCRC ? "&skip_crc" : ""}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`,
-        data,
-        {
-          onUploadProgress: (progressEvent) => {
-            progressCallBack && progressCallBack(progressEvent);
-          },
-        }
+      // Step 1: Obtain the upload handle
+      const {
+        data: { handle },
+      } = await api.get<{ handle: number }>(
+        `/bmc?opt=set&type=flash&node=${variables.nodeId}&file=${variables.file?.name}&length=${variables.file?.size}${variables.skipCRC ? "&skip_crc" : ""}${variables.sha256 ? `&sha256=${variables.sha256}` : ""}`
       );
-      return response.data.response[0].result;
+
+      // Step 2: Upload the file data
+      const formData = new FormData();
+      if (variables.file) formData.append("file", variables.file);
+      await api.post(`/bmc/upload/${handle}`, formData, {
+        onUploadProgress: (progressEvent) => {
+          progressCallBack && progressCallBack(progressEvent);
+        },
+      });
+    },
+    onSuccess: () => {
+      // Invalidate the query for the flash status
+      void queryClient.invalidateQueries({ queryKey: ["flashStatus"] });
     },
   });
 }

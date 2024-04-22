@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 import api from "../../utils/axios";
 
@@ -28,6 +28,17 @@ interface AboutTabResponse {
   buildtime: string;
   hostname: string;
   version: string;
+}
+
+interface FlashStatus {
+  Transferring?: {
+    id: number;
+    process_name: string;
+    size: number;
+    cancelled: boolean;
+    bytes_written: number;
+  };
+  Done?: [{ secs: number; nanos: number }, number];
 }
 
 interface InfoTabResponse {
@@ -99,5 +110,17 @@ export function useNodesTabData() {
       );
       return response.data.response[0].result;
     },
+  });
+}
+
+export function useFlashStatusQuery(enabled: boolean) {
+  return useQuery({
+    queryKey: ["flashStatus"],
+    queryFn: async () => {
+      const response = await api.get<FlashStatus>("/bmc?opt=get&type=flash");
+      return response.data;
+    },
+    refetchInterval: 1000, // Refetch every 1 second
+    enabled, // Enable/disable the query based on the provided boolean value
   });
 }
