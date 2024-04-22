@@ -1,26 +1,8 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
+import "react-loading-skeleton/dist/skeleton.css";
 
-import { version } from "../../../package.json";
-import { UseBasicInfo } from "../../contexts/basicInfo";
-import { useAboutTabData } from "../../services/api/get";
-import AboutSkeleton from "./-components/skeleton";
+import Skeleton from "react-loading-skeleton";
 
-export const Route = createLazyFileRoute("/about/")({
-  component: About,
-  pendingComponent: AboutSkeleton,
-});
-
-function About() {
-  const { data } = useAboutTabData();
-  const { updateBasicInfo } = UseBasicInfo();
-
-  useEffect(() => {
-    if (data) {
-      updateBasicInfo(data.hostname, data.version);
-    }
-  }, []);
-
+export default function AboutSkeleton() {
   return (
     <div data-tab="About" className="tabs-body__item">
       <form className="form" id="form-about">
@@ -29,43 +11,43 @@ function About() {
             <div className="row">
               <div className="col">Host name:</div>
               <div id="aboutHostname" className="col">
-                {data.hostname}
+                <Skeleton width={100} />
               </div>
             </div>
             <div className="row">
               <div className="col">Daemon version:</div>
               <div id="aboutVer" className="col">
-                v{data.version}
+                <Skeleton width={100} />
               </div>
             </div>
             <div className="row">
               <div className="col">Build time:</div>
               <div id="aboutBuildtime" className="col">
-                {data.buildtime}
+                <Skeleton width={300} />
               </div>
             </div>
             <div className="row">
               <div className="col">Build version:</div>
               <div id="aboutBuildVer" className="col">
-                {data.build_version}
+                <Skeleton width={100} />
               </div>
             </div>
             <div className="row">
               <div className="col">Buildroot release:</div>
               <div id="aboutBuildroot" className="col">
-                {data.buildroot}
+                <Skeleton width={200} />
               </div>
             </div>
             <div className="row">
               <div className="col">API version:</div>
               <div id="aboutApi" className="col">
-                v{data.api}
+                <Skeleton width={100} />
               </div>
             </div>
             <div className="row">
               <div className="col">BMC UI:</div>
               <div id="aboutUi" className="col">
-                v{version}
+                <Skeleton width={100} />
               </div>
             </div>
           </div>
