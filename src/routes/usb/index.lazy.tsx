@@ -119,8 +119,7 @@ function USB() {
         <div className="form-group row">
           <button
             type="submit"
-            className="btn btn-turing-small-yellow"
-            disabled={isPending}
+            className={`btn btn-turing-small-yellow ${isPending ? "loading" : ""}`}
           >
             <span className="caption">Change</span>
           </button>

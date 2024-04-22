@@ -41,7 +41,8 @@ function Info() {
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
   const { mutate: mutateResetNetwork } = useNetworkResetMutation();
-  const { mutate: mutateRebootBMC } = useRebootBMCMutation();
+  const { mutate: mutateRebootBMC, isPending: rebootPending } =
+    useRebootBMCMutation();
   const { mutate: mutateReloadBMC } = useReloadBMCMutation();
   const { mutate: mutateBackup, status: backupStatus } = useBackupMutation();
 
@@ -80,6 +81,7 @@ function Info() {
     mutateRebootBMC(undefined, {
       onSuccess: () => {
         toast.success("Rebooting BMC...");
+        setRebootModalOpened(false);
       },
       onError: () => {
         toast.error("Failed to reboot BMC");
@@ -225,7 +227,7 @@ function Info() {
           </div>
           <h2 className="modal__title">Do you want to reboot?</h2>
           <p className="modal__text">
-            <p>Be aware that the nodes will lose power until booted.</p>
+            Be aware that the nodes will lose power until booted.
           </p>
           <div className="modal__buttons">
             <button
@@ -235,7 +237,10 @@ function Info() {
               Cancel
             </button>
             <button
-              className="reboot-btn btn btn-turing-small-red"
+              className={`reboot-btn btn btn-turing-small-red ${
+                rebootPending ? "loading" : ""
+              }`}
+              disabled={rebootPending}
               onClick={() => handleRebootBMC()}
             >
               Reboot
