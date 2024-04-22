@@ -1,7 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { filesize } from "filesize";
+import { useState } from "react";
+import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
 
+import WarningSvg from "../../assets/alert-warning.svg?react";
 import { useBackupMutation } from "../../services/api/file";
 import { useInfoTabData } from "../../services/api/get";
 import {
@@ -35,6 +38,7 @@ export const Route = createLazyFileRoute("/info/")({
 });
 
 function Info() {
+  const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
   const { mutate: mutateResetNetwork } = useNetworkResetMutation();
   const { mutate: mutateRebootBMC } = useRebootBMCMutation();
@@ -70,7 +74,7 @@ function Info() {
         toast.error("Failed to reset network");
       },
     });
-  }
+  };
 
   const handleRebootBMC = () => {
     mutateRebootBMC(undefined, {
@@ -92,7 +96,7 @@ function Info() {
         toast.error("Failed to reload BMC daemon");
       },
     });
-  }
+  };
 
   return (
     <div data-tab="Info" className="tabs-body__item ">
@@ -194,7 +198,7 @@ function Info() {
           <button
             type="button"
             className="btn btn-turing-small-red"
-            onClick={() => handleRebootBMC()}
+            onClick={() => setRebootModalOpened(true)}
           >
             <span className="caption">Reboot</span>
           </button>
@@ -207,6 +211,38 @@ function Info() {
           </div>
         </div>
       </div>
+
+      <Modal
+        open={rebootModalOpened}
+        onClose={() => setRebootModalOpened(false)}
+        center
+        showCloseIcon={false}
+        classNames={{ modal: "modal-rounded" }}
+      >
+        <div className="modal">
+          <div className="modal__icon">
+            <WarningSvg />
+          </div>
+          <h2 className="modal__title">Do you want to reboot?</h2>
+          <p className="modal__text">
+            <p>Be aware that the nodes will lose power until booted.</p>
+          </p>
+          <div className="modal__buttons">
+            <button
+              className="btn btn-turing-small-dark"
+              onClick={() => setRebootModalOpened(false)}
+            >
+              Cancel
+            </button>
+            <button
+              className="reboot-btn btn btn-turing-small-red"
+              onClick={() => handleRebootBMC()}
+            >
+              Reboot
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
