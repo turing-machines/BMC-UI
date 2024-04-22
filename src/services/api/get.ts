@@ -39,6 +39,7 @@ interface FlashStatus {
     bytes_written: number;
   };
   Done?: [{ secs: number; nanos: number }, number];
+  Error?: string;
 }
 
 interface InfoTabResponse {

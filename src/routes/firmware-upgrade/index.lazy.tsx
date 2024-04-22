@@ -44,7 +44,11 @@ function FirmwareUpgrade() {
   const { data, refetch } = useFirmwareStatusQuery(isUpgrading);
 
   useEffect(() => {
-    if (data?.Transferring) {
+    if (data?.Error) {
+      setStatusMessage(data.Error);
+      toast.error(data.Error);
+      setIsUpgrading(false);
+    } else if (data?.Transferring) {
       setIsUpgrading(true);
       setStatusMessage("Writing firmware to BMC...");
 
@@ -57,7 +61,7 @@ function FirmwareUpgrade() {
       });
     } else if (data?.Done) {
       setIsUpgrading(false);
-      const msg = `Firmware upgrade completed successfully in ${data.Done[0].secs}s`;
+      const msg = "Firmware upgrade completed successfully";
       setStatusMessage(msg);
       toast.success(msg);
       setRebootModalOpened(true);
@@ -149,7 +153,7 @@ function FirmwareUpgrade() {
         <div className="form-group">
           <button
             type="button"
-            className="btn btn-turing-small-yellow"
+            className={`btn btn-turing-small-yellow ${isPending || isUpgrading ? "loading" : ""}`}
             disabled={isPending || isUpgrading}
             onClick={() => setConfirmFlashModal(true)}
           >

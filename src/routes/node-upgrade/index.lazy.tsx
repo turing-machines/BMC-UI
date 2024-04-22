@@ -42,7 +42,11 @@ function Flash() {
   const { data, refetch } = useFlashStatusQuery(isFlashing);
 
   useEffect(() => {
-    if (data?.Transferring) {
+    if (data?.Error) {
+      setStatusMessage(data.Error);
+      toast.error(data.Error);
+      setIsFlashing(false);
+    } else if (data?.Transferring) {
       setIsFlashing(true);
       const msg = (
         formRef.current?.elements.namedItem("skipCrc") as HTMLInputElement
@@ -60,7 +64,7 @@ function Flash() {
       });
     } else if (data?.Done) {
       setIsFlashing(false);
-      const msg = `Image transferred successfully to node in ${data.Done[0].secs}s`;
+      const msg = "Image flashed successfully to the node";
       setStatusMessage(msg);
       toast.success(msg);
     }
@@ -172,7 +176,7 @@ function Flash() {
         <div className="form-group form-flex-row">
           <button
             type="button"
-            className={`btn btn btn-turing-small-yellow " ${isPending || isFlashing ? "loading" : ""}`}
+            className={`btn btn btn-turing-small-yellow ${isPending || isFlashing ? "loading" : ""}`}
             onClick={() => setRebootModalOpened(true)}
             disabled={isPending || isFlashing}
           >
