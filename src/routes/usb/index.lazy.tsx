@@ -5,9 +5,11 @@ import TooltipInfo from "../../assets/tooltip-info.svg?react";
 import TooltipInner from "../../assets/tooltip-inner.svg?react";
 import { useUSBTabData } from "../../services/api/get";
 import { useUSBModeMutation } from "../../services/api/set";
+import USBSkeleton from "./-components/skeleton";
 
 export const Route = createLazyFileRoute("/usb/")({
   component: USB,
+  pendingComponent: USBSkeleton,
 });
 
 const usbModeMapper = {
