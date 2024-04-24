@@ -1,4 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useRef, useState } from "react";
+import Select, { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
 import TooltipInfo from "../../assets/tooltip-info.svg?react";
@@ -12,29 +14,38 @@ export const Route = createLazyFileRoute("/usb/")({
   pendingComponent: USBSkeleton,
 });
 
-const usbModeMapper = {
-  Host: 0,
-  Device: 1,
-  Flash: 2,
-};
+interface SelectOption {
+  value: number;
+  label: string;
+}
 
-const usbNodeMapper = {
-  "Node 1": 0,
-  "Node 2": 1,
-  "Node 3": 2,
-  "Node 4": 3,
-};
+const modeOptions: SelectOption[] = [
+  { value: 0, label: "Host" },
+  { value: 1, label: "Device" },
+  { value: 2, label: "Flash" },
+];
+
+const nodeOptions: SelectOption[] = [
+  { value: 0, label: "Node 1" },
+  { value: 1, label: "Node 2" },
+  { value: 2, label: "Node 3" },
+  { value: 3, label: "Node 4" },
+];
 
 function USB() {
+  const selectNodeRef = useRef<SelectInstance<SelectOption> | null>(null);
+  const selectModeRef = useRef<SelectInstance<SelectOption> | null>(null);
+
   const { data } = useUSBTabData();
+  const [nodeStateOpened, setNodeStateOpened] = useState(false);
+  const [modeStateOpened, setModeStateOpened] = useState(false);
   const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const modeSelect = document.getElementById("usbMode") as HTMLSelectElement;
-    const nodeSelect = document.getElementById("usbNode") as HTMLSelectElement;
-    const mode = Number.parseInt(modeSelect.value);
-    const node = Number.parseInt(nodeSelect.value);
+
+    const node = selectNodeRef.current?.state.selectValue[0].value ?? 0;
+    const mode = selectModeRef.current?.state.selectValue[0].value ?? 0;
     mutateUSBMode(
       { node, mode },
       {
@@ -56,47 +67,132 @@ function USB() {
             <p>USB route:</p>
           </div>
         </div>
-        <div className="form-group row">
+        <div
+          className="form-group row"
+          onClick={() => setModeStateOpened(!modeStateOpened)}
+        >
           <div className="select-item">
-            <label htmlFor="usbMode" className="col-form-label">
-              USB mode
-            </label>
-            <select
-              id="usbMode"
-              className="selectpicker"
-              data-style="btn-outline-primary"
-              required
-              defaultValue={usbModeMapper[data.mode]}
-            >
-              <option disabled>Nothing Selected</option>
-              <option value="0">Host</option>
-              <option value="1">Device</option>
-              <option value="2">Flash</option>
-            </select>
+            <label htmlFor="usb-mode-select">USB mode</label>
+            <Select
+              inputId="usb-mode-select"
+              ref={selectModeRef}
+              menuIsOpen={modeStateOpened}
+              options={modeOptions}
+              defaultValue={modeOptions.find(
+                (option) => option.label === data.mode
+              )}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  border: "none",
+                  padding: 0,
+                  margin: 0,
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  padding: "0 0 0 14px",
+                  margin: 0,
+                }),
+                indicatorsContainer: (base) => ({
+                  ...base,
+                  display: "none",
+                }),
+                menu: (base) => ({
+                  ...base,
+                  zIndex: 15,
+                }),
+                input: (base) => ({
+                  ...base,
+                  padding: 0,
+                  margin: 0,
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected
+                    ? "#e4e4e7"
+                    : state.isFocused
+                      ? "#f4f4f5"
+                      : "inherit",
+                  color: "black",
+                }),
+              }}
+              components={{
+                DropdownIndicator: () => null,
+                Control(value) {
+                  return (
+                    <div
+                      className="control"
+                      onClick={value.selectProps.onMenuOpen}
+                    >
+                      <div className="value">{value.children}</div>
+                    </div>
+                  );
+                },
+              }}
+            />
           </div>
-          <div data-errors="usbMode" className="errors"></div>
         </div>
 
-        <div className="form-group row">
+        <div
+          className="form-group row"
+          onClick={() => setNodeStateOpened(!nodeStateOpened)}
+        >
           <div className="select-item">
-            <label htmlFor="usbNode" className="col-form-label">
-              Connected node
-            </label>
-            <select
-              id="usbNode"
-              className="selectpicker"
-              data-style="btn-outline-primary"
-              required
-              defaultValue={usbNodeMapper[data.node]}
-            >
-              <option disabled>Nothing Selected</option>
-              <option value="0">Node 1</option>
-              <option value="1">Node 2</option>
-              <option value="2">Node 3</option>
-              <option value="3">Node 4</option>
-            </select>
+            <label htmlFor="connected-node-select">Connected node</label>
+            <Select
+              inputId="connected-node-select"
+              ref={selectNodeRef}
+              menuIsOpen={nodeStateOpened}
+              options={nodeOptions}
+              defaultValue={nodeOptions.find(
+                (option) => option.label === data.node
+              )}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  border: "none",
+                  padding: 0,
+                  margin: 0,
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  padding: "0 0 0 14px",
+                  margin: 0,
+                }),
+                indicatorsContainer: (base) => ({
+                  ...base,
+                  display: "none",
+                }),
+                input: (base) => ({
+                  ...base,
+                  padding: 0,
+                  margin: 0,
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected
+                    ? "#e4e4e7"
+                    : state.isFocused
+                      ? "#f4f4f5"
+                      : "inherit",
+                  color: "black",
+                }),
+              }}
+              components={{
+                DropdownIndicator: () => null,
+                Control(value) {
+                  return (
+                    <div
+                      className="control"
+                      onClick={value.selectProps.onMenuOpen}
+                    >
+                      <div className="value">{value.children}</div>
+                    </div>
+                  );
+                },
+              }}
+            />
           </div>
-          <div data-errors="usbNode" className="errors"></div>
         </div>
 
         <div className="form-group row">
