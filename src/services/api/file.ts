@@ -3,12 +3,6 @@ import type { AxiosProgressEvent } from "axios";
 
 import api from "../../utils/axios";
 
-interface APIResponse<T> {
-  response: {
-    result: T;
-  }[];
-}
-
 export function useBackupMutation() {
   return useMutation({
     mutationKey: ["backupMutation"],
