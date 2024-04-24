@@ -1,4 +1,3 @@
-// src/components/FileInput.tsx
 import { useRef } from "react";
 
 import UploadIcon from "../assets/upload-icon.svg?react";

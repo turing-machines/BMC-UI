@@ -2,11 +2,10 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
-import { Modal } from "react-responsive-modal";
 import Select, { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
-import WarningSvg from "../../assets/alert-warning.svg?react";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import FileInput from "../../components/FileInput";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
@@ -32,9 +31,9 @@ function Flash() {
   const selectNodeRef = useRef<SelectInstance<SelectOption> | null>(null);
 
   const [nodeStateOpened, setNodeStateOpened] = useState(false);
+  const [confirmFlashModal, setConfirmFlashModal] = useState(false);
 
   const [isFlashing, setIsFlashing] = useState(false);
-  const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [progress, setProgress] = useState<{
     transferred: string;
@@ -90,7 +89,7 @@ function Flash() {
 
   const handleSubmit = () => {
     if (formRef.current) {
-      setRebootModalOpened(false);
+      setConfirmFlashModal(false);
       const form = formRef.current;
 
       const nodeId = selectNodeRef.current!.state.selectValue[0].value;
@@ -218,7 +217,7 @@ function Flash() {
           <button
             type="button"
             className={`btn btn btn-turing-small-yellow ${isPending || isFlashing ? "loading" : ""}`}
-            onClick={() => setRebootModalOpened(true)}
+            onClick={() => setConfirmFlashModal(true)}
             disabled={isPending || isFlashing}
           >
             <span className="caption">Install OS</span>
@@ -256,39 +255,15 @@ function Flash() {
           <div className="update-text">{statusMessage}</div>
         </div>
       </form>
-      <Modal
-        open={rebootModalOpened}
-        onClose={() => setRebootModalOpened(false)}
-        center
-        showCloseIcon={false}
-        classNames={{ modal: "modal-rounded" }}
-      >
-        <div className="modal">
-          <div className="modal__icon">
-            <WarningSvg />
-          </div>
-          <h2 className="modal__title">Do you want to continue?</h2>
-          <p className="modal__text">
-            You are about to overwrite a new image to the selected node.
-          </p>
-          <div className="modal__buttons">
-            <button
-              className="btn btn-turing-small-dark"
-              onClick={() => setRebootModalOpened(false)}
-            >
-              Cancel
-            </button>
-            <button
-              className={"reboot-btn btn btn-turing-small-red"}
-              onClick={() => {
-                handleSubmit();
-              }}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      </Modal>
+      <ConfirmationModal
+        isOpen={confirmFlashModal}
+        onClose={() => setConfirmFlashModal(false)}
+        onConfirm={handleSubmit}
+        title="Install OS Image"
+        message="You are about to overwrite a new image to the selected node."
+        confirmText="Continue"
+        cancelText="Cancel"
+      />
     </div>
   );
 }

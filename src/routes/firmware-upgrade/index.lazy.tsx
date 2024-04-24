@@ -2,12 +2,11 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
-import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
 
-import SuccessSvg from "../../assets/alert-success.svg?react";
-import WarningSvg from "../../assets/alert-warning.svg?react";
+import ConfirmationModal from "../../components/ConfirmationModal";
 import FileInput from "../../components/FileInput";
+import RebootModal from "../../components/RebootModal";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
 import { useFirmwareStatusQuery } from "../../services/api/get";
 import { useRebootBMCMutation } from "../../services/api/set";
@@ -168,73 +167,27 @@ function FirmwareUpgrade() {
           <div className="update-text">{statusMessage}</div>
         </div>
       </form>
-      <Modal
-        open={confirmFlashModal}
+      <ConfirmationModal
+        isOpen={confirmFlashModal}
         onClose={() => setConfirmFlashModal(false)}
-        center
-        showCloseIcon={false}
-        classNames={{ modal: "modal-rounded" }}
-      >
-        <div className="modal">
-          <div className="modal__icon">
-            <WarningSvg />
-          </div>
-          <h2 className="modal__title">Upgrade Firmware?</h2>
-          <p className="modal__text">
-            A reboot is required to finalise the upgrade process
-          </p>
-          <div className="modal__buttons">
-            <button
-              className="btn btn-turing-small-dark"
-              onClick={() => setConfirmFlashModal(false)}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="continue-btn btn btn-turing-small-yellow"
-              onClick={handleFirmwareUpload}
-            >
-              Continue
-            </button>
-          </div>
-        </div>
-      </Modal>
-      <Modal
-        open={rebootModalOpened}
+        onConfirm={handleFirmwareUpload}
+        title="Upgrade Firmware?"
+        message="A reboot is required to finalise the upgrade process"
+      />
+      <RebootModal
+        isOpen={rebootModalOpened}
         onClose={() => setRebootModalOpened(false)}
-        center
-        showCloseIcon={false}
-        classNames={{ modal: "modal-rounded" }}
-      >
-        <div className="modal">
-          <div className="modal__icon">
-            <SuccessSvg />
-          </div>
-          <h2 className="modal__title">Upgrade Finished!</h2>
-          <p className="modal__text">
-            To complete the upgrade a reboot is required.
-          </p>
-          <p className="modal__text">
-            Be aware that the nodes will lose power until booted.
-          </p>
-          <p className="modal__text">Do you want to reboot?</p>
-          <div className="modal__buttons">
-            <button
-              className="btn btn-turing-small-dark"
-              onClick={() => setRebootModalOpened(false)}
-            >
-              Cancel
-            </button>
-            <button
-              className="reboot-btn btn btn-turing-small-red"
-              onClick={() => handleRebootBMC()}
-            >
-              Reboot
-            </button>
-          </div>
-        </div>
-      </Modal>
+        onReboot={handleRebootBMC}
+        title="Upgrade Finished!"
+        message={
+          <>
+            <p>To complete the upgrade a reboot is required.</p>
+            <p>Be aware that the nodes will lose power until booted.</p>
+            <p>Do you want to reboot?</p>
+          </>
+        }
+        isPending={isPending}
+      />
     </div>
   );
 }

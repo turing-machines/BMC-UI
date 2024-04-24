@@ -1,10 +1,9 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { filesize } from "filesize";
 import { useState } from "react";
-import { Modal } from "react-responsive-modal";
 import { toast } from "react-toastify";
 
-import WarningSvg from "../../assets/alert-warning.svg?react";
+import RebootModal from "../../components/RebootModal";
 import { useBackupMutation } from "../../services/api/file";
 import { useInfoTabData } from "../../services/api/get";
 import {
@@ -214,40 +213,14 @@ function Info() {
         </div>
       </div>
 
-      <Modal
-        open={rebootModalOpened}
+      <RebootModal
+        isOpen={rebootModalOpened}
         onClose={() => setRebootModalOpened(false)}
-        center
-        showCloseIcon={false}
-        classNames={{ modal: "modal-rounded" }}
-      >
-        <div className="modal">
-          <div className="modal__icon">
-            <WarningSvg />
-          </div>
-          <h2 className="modal__title">Do you want to reboot?</h2>
-          <p className="modal__text">
-            Be aware that the nodes will lose power until booted.
-          </p>
-          <div className="modal__buttons">
-            <button
-              className="btn btn-turing-small-dark"
-              onClick={() => setRebootModalOpened(false)}
-            >
-              Cancel
-            </button>
-            <button
-              className={`reboot-btn btn btn-turing-small-red ${
-                rebootPending ? "loading" : ""
-              }`}
-              disabled={rebootPending}
-              onClick={() => handleRebootBMC()}
-            >
-              Reboot
-            </button>
-          </div>
-        </div>
-      </Modal>
+        onReboot={handleRebootBMC}
+        title="Do you want to reboot?"
+        message="Be aware that the nodes will lose power until booted."
+        isPending={rebootPending}
+      />
     </div>
   );
 }
