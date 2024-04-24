@@ -84,7 +84,7 @@ const NodeRow = (
           </button>
         </div>
         <div className="info-col">
-          <label className="input-wrap name">
+          <label className="input-wrap name active">
             <span className="label">Name</span>
             <input
               type="text"
@@ -93,7 +93,7 @@ const NodeRow = (
               onBlur={(e) => handleEditField("name", e.target.value)}
             />
           </label>
-          <label className="input-wrap module_name">
+          <label className="input-wrap module_name active">
             <span className="label">Module Name</span>
             <input
               type="text"
@@ -150,7 +150,7 @@ function NodesTab() {
         </div>
 
         <div className="nodes-group">
-          <div className="nodes-list editing">
+          <div className={`nodes-list ${editMode ? "editing" : ""}`}>
             {data.map((node, index) => (
               <NodeRow
                 key={index}

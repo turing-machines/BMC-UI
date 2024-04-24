@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 
 import SuccessSvg from "../../assets/alert-success.svg?react";
 import WarningSvg from "../../assets/alert-warning.svg?react";
+import UploadIcon from "../../assets/upload-icon.svg?react";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
 import { useFirmwareStatusQuery } from "../../services/api/get";
 import { useRebootBMCMutation } from "../../services/api/set";
@@ -125,14 +126,36 @@ function FirmwareUpgrade() {
             className="input-wrap input-type-file-wrap active"
           >
             <span className="label">.tpu file</span>
-            <input type="text" className="file-upload-input" />
+            <input type="text" name="url" className="file-upload-input" />
+
+            <button
+              type="button"
+              className="file-upload-button"
+              onClick={() => {
+                const fileInput = formRef.current?.elements.namedItem(
+                  "file"
+                ) as HTMLInputElement;
+                fileInput.click();
+              }}
+            >
+              <UploadIcon />
+            </button>
             <input
               type="file"
               name="file"
               id="firmware-upgrade-file-id"
-              className="form-control"
+              className="form-control hidden"
               accept=".tpu,.tpu.xz,application/octet-stream"
               readOnly
+              onChange={(e) => {
+                const filename = e.target.value.split("\\").pop();
+                if (filename) {
+                  const urlInput = formRef.current?.elements.namedItem(
+                    "url"
+                  ) as HTMLInputElement;
+                  urlInput.value = filename;
+                }
+              }}
             />
           </label>
         </div>

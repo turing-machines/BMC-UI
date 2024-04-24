@@ -7,6 +7,7 @@ import Select, { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
 import WarningSvg from "../../assets/alert-warning.svg?react";
+import UploadIcon from "../../assets/upload-icon.svg?react";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
 
@@ -100,9 +101,7 @@ function Flash() {
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
         .checked;
 
-      setStatusMessage(
-        `Transferring image to node ${nodeId + 1}...`
-      );
+      setStatusMessage(`Transferring image to node ${nodeId + 1}...`);
       mutateNodeUpdate(
         { nodeId, file, sha256, skipCRC },
         {
@@ -197,15 +196,37 @@ function Flash() {
             htmlFor="node-upgrade-file-id"
             className="input-wrap input-type-file-wrap active"
           >
-            <span className="label">File: (remote or local)</span>
-            <input type="text" className="file-upload-input" />
+            <span className="label">File (remote or local):</span>
+            <input type="text" name="url" className="file-upload-input" />
+
+            <button
+              type="button"
+              className="file-upload-button"
+              onClick={() => {
+                const fileInput = formRef.current?.elements.namedItem(
+                  "file"
+                ) as HTMLInputElement;
+                fileInput.click();
+              }}
+            >
+              <UploadIcon />
+            </button>
             <input
               type="file"
               name="file"
               id="node-upgrade-file-id"
-              className="form-control"
+              className="form-control hidden"
               accept=".img,.bin,.xz,application/octet-stream"
               readOnly
+              onChange={(e) => {
+                const filename = e.target.value.split("\\").pop();
+                if (filename) {
+                  const urlInput = formRef.current?.elements.namedItem(
+                    "url"
+                  ) as HTMLInputElement;
+                  urlInput.value = filename;
+                }
+              }}
             />
           </label>
         </div>
