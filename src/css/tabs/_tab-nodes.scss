@@ -41,9 +41,12 @@
           align-items: center;
           margin-left: 32px;
           gap: 16px;
+          width: 100%;
+          justify-content: space-between;
           
           .input-wrap {
             min-width: 280px;
+            width: 48%;
           }
         }
         

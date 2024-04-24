@@ -31,7 +31,6 @@ export default function FileInput({ name, label, accept }: FileInputProps) {
         name={`${name}-url`}
         className="file-upload-input"
         ref={inputRef}
-        readOnly
       />
 
       <button
