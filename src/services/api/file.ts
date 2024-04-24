@@ -70,7 +70,7 @@ export function useNodeUpdateMutation(
   return useMutation({
     mutationKey: ["nodeUpdateMutation"],
     mutationFn: async (variables: {
-      nodeId: string;
+      nodeId: number;
       file?: File;
       sha256?: string;
       skipCRC: boolean;

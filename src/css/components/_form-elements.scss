@@ -185,7 +185,6 @@
     opacity: 1 !important;
     user-select: none;
     will-change: top, transform, scale;
-    z-index: 10;
     position: absolute;
     line-height: 1 !important;
     padding-right: 0 !important;
@@ -619,9 +618,7 @@
     font-size: 14px !important;
     opacity: 1 !important;
     user-select: none;
-    will-change: top, transform, scale;
-    z-index: 10;
-    position: absolute;
+    will-change: top, transform, scale;    position: absolute;
     line-height: 1 !important;
     padding-right: 0 !important;
     padding-top: 0 !important;

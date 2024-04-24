@@ -3,6 +3,7 @@ import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
 import { Modal } from "react-responsive-modal";
+import Select, { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
 import WarningSvg from "../../assets/alert-warning.svg?react";
@@ -13,8 +14,24 @@ export const Route = createLazyFileRoute("/node-upgrade/")({
   component: Flash,
 });
 
+interface SelectOption {
+  value: number;
+  label: string;
+}
+
+const nodeOptions: SelectOption[] = [
+  { value: 0, label: "Node 1" },
+  { value: 1, label: "Node 2" },
+  { value: 2, label: "Node 3" },
+  { value: 3, label: "Node 4" },
+];
+
 function Flash() {
   const formRef = useRef<HTMLFormElement>(null);
+  const selectNodeRef = useRef<SelectInstance<SelectOption> | null>(null);
+
+  const [nodeStateOpened, setNodeStateOpened] = useState(false);
+
   const [isFlashing, setIsFlashing] = useState(false);
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
@@ -74,8 +91,8 @@ function Flash() {
     if (formRef.current) {
       setRebootModalOpened(false);
       const form = formRef.current;
-      const nodeId = (form.elements.namedItem("nodeId") as HTMLSelectElement)
-        .value;
+
+      const nodeId = selectNodeRef.current!.state.selectValue[0].value;
       const file = (form.elements.namedItem("file") as HTMLInputElement)
         .files?.[0];
       const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
@@ -84,7 +101,7 @@ function Flash() {
         .checked;
 
       setStatusMessage(
-        `Transferring image to node ${Number.parseInt(nodeId) + 1}...`
+        `Transferring image to node ${nodeId + 1}...`
       );
       mutateNodeUpdate(
         { nodeId, file, sha256, skipCRC },
@@ -93,7 +110,7 @@ function Flash() {
             void refetch();
           },
           onError: () => {
-            const msg = `Failed to transfer the image to node ${Number.parseInt(nodeId) + 1}`;
+            const msg = `Failed to transfer the image to node ${nodeId + 1}`;
             setStatusMessage(msg);
             toast.error(msg);
           },
@@ -115,29 +132,64 @@ function Flash() {
           </div>
         </div>
 
-        <div className="form-group row">
+        <div
+          className="form-group row"
+          onClick={() => setNodeStateOpened(!nodeStateOpened)}
+        >
           <div className="select-item">
-            <label htmlFor="node-upgrade-picker" className="col-form-label">
-              Selected node:
-            </label>
-            <select
-              id="node-upgrade-picker"
-              name="nodeId"
-              className="selectpicker"
-              data-style="btn-outline-primary"
-              required
-              defaultValue={-1}
-            >
-              <option value={-1} disabled>
-                Nothing Selected
-              </option>
-              <option value="0">Node 1</option>
-              <option value="1">Node 2</option>
-              <option value="2">Node 3</option>
-              <option value="3">Node 4</option>
-            </select>
+            <label htmlFor="connected-node-select">Selected node</label>
+            <Select
+              inputId="connected-node-select"
+              ref={selectNodeRef}
+              menuIsOpen={nodeStateOpened}
+              options={nodeOptions}
+              placeholder="Nothing Selected"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  border: "none",
+                  padding: 0,
+                  margin: 0,
+                }),
+                valueContainer: (base) => ({
+                  ...base,
+                  padding: "0 0 0 14px",
+                  margin: 0,
+                }),
+                indicatorsContainer: (base) => ({
+                  ...base,
+                  display: "none",
+                }),
+                input: (base) => ({
+                  ...base,
+                  padding: 0,
+                  margin: 0,
+                }),
+                option: (provided, state) => ({
+                  ...provided,
+                  backgroundColor: state.isSelected
+                    ? "#e4e4e7"
+                    : state.isFocused
+                      ? "#f4f4f5"
+                      : "inherit",
+                  color: "black",
+                }),
+              }}
+              components={{
+                DropdownIndicator: () => null,
+                Control(value) {
+                  return (
+                    <div
+                      className="control"
+                      onClick={value.selectProps.onMenuOpen}
+                    >
+                      <div className="value">{value.children}</div>
+                    </div>
+                  );
+                },
+              }}
+            />
           </div>
-          <div data-errors="node-upgrade-picker" className="errors"></div>
         </div>
 
         <div className="form-group row">
