@@ -17,6 +17,7 @@ import { Route as TabLayoutImport } from './routes/_tabLayout'
 
 // Create Virtual Routes
 
+const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
 const TabLayoutUsbLazyImport = createFileRoute('/_tabLayout/usb')()
 const TabLayoutNodesLazyImport = createFileRoute('/_tabLayout/nodes')()
@@ -30,6 +31,11 @@ const TabLayoutFirmwareUpgradeLazyImport = createFileRoute(
 const TabLayoutAboutLazyImport = createFileRoute('/_tabLayout/about')()
 
 // Create/Update Routes
+
+const LoginLazyRoute = LoginLazyImport.update({
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
 
 const TabLayoutRoute = TabLayoutImport.update({
   id: '/_tabLayout',
@@ -96,6 +102,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TabLayoutImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      preLoaderRoute: typeof LoginLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/_tabLayout/about': {
       preLoaderRoute: typeof TabLayoutAboutLazyImport
       parentRoute: typeof TabLayoutImport
@@ -135,6 +145,7 @@ export const routeTree = rootRoute.addChildren([
     TabLayoutNodesLazyRoute,
     TabLayoutUsbLazyRoute,
   ]),
+  LoginLazyRoute,
 ])
 
 /* prettier-ignore-end */
