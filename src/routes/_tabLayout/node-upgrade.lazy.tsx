@@ -179,13 +179,7 @@ function Flash() {
           </button>
           <div className="checkbox-row form-flex-row">
             <div className="checkbox-item">
-              <input
-                type="checkbox"
-                id="skipCrc"
-                name="skipCrc"
-                data-color="#008000"
-                data-size="small"
-              />
+              <input type="checkbox" id="skipCrc" name="skipCrc" />
             </div>
             <label htmlFor="skipCrc" className="label">
               skip crc

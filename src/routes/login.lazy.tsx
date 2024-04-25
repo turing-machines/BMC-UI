@@ -13,9 +13,18 @@ function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const username = (form.elements.namedItem("username") as HTMLInputElement)
+      .value;
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value;
+    const rememberMe = (
+      form.elements.namedItem("rememberMe") as HTMLInputElement
+    ).checked;
+
     // Mock authentication logic
     const token = "your_mocked_token";
-    login(token);
+    login(token, rememberMe);
     void navigate({ to: "/info" });
   };
 
@@ -35,6 +44,16 @@ function Login() {
               <span className="label">Password</span>
               <input type="password" id="password" name="password" />
             </label>
+          </div>
+          <div className="form-group form-flex-row">
+            <div className="checkbox-row form-flex-row">
+              <div className="checkbox-item">
+                <input type="checkbox" id="rememberMe" name="rememberMe" />
+              </div>
+              <label htmlFor="rememberMe" className="label">
+                Remember me
+              </label>
+            </div>
           </div>
           <div className="form-group">
             <button type="submit" className="btn btn-turing-small-yellow">
