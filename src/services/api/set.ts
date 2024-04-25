@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-import api from "../../utils/axios";
+import useAxiosWithAuth from "../../utils/axios";
 
 interface APIResponse<T> {
   response: {
@@ -9,6 +9,7 @@ interface APIResponse<T> {
 }
 
 export function usePowerNodeMutation() {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -39,6 +40,7 @@ interface NodeInfoPayload {
 }
 
 export function useSetNodeInfoMutation() {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -58,6 +60,8 @@ export function useSetNodeInfoMutation() {
 }
 
 export function useResetNodeMutation() {
+  const api = useAxiosWithAuth();
+
   return useMutation({
     mutationKey: ["setResetNodeMutation"],
     mutationFn: async (nodeId: number) => {
@@ -70,6 +74,7 @@ export function useResetNodeMutation() {
 }
 
 export function useNetworkResetMutation() {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -82,11 +87,13 @@ export function useNetworkResetMutation() {
     },
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ["infoTabData"] });
-    }
+    },
   });
 }
 
 export function useRebootBMCMutation() {
+  const api = useAxiosWithAuth();
+
   return useMutation({
     mutationKey: ["rebootBMCMutation"],
     mutationFn: async () => {
@@ -99,6 +106,8 @@ export function useRebootBMCMutation() {
 }
 
 export function useReloadBMCMutation() {
+  const api = useAxiosWithAuth();
+
   return useMutation({
     mutationKey: ["reloadBMCMutation"],
     mutationFn: async () => {
@@ -111,6 +120,7 @@ export function useReloadBMCMutation() {
 }
 
 export function useUSBModeMutation() {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({

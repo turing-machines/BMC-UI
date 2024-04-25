@@ -1,8 +1,20 @@
 import axios from "axios";
 
-const host = import.meta.env.DEV ? "http://localhost:4460/api" : "/api";
-const api = axios.create({
-  baseURL: host,
-});
+import { useAuth } from "../hooks/useAuth";
 
-export default api;
+const host = import.meta.env.DEV ? "http://localhost:4460/api" : "/api";
+
+const useAxiosWithAuth = () => {
+  const { token } = useAuth();
+
+  const api = axios.create({
+    baseURL: host,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : "",
+    },
+  });
+
+  return api;
+};
+
+export default useAxiosWithAuth;

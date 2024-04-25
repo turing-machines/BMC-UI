@@ -1,9 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import type { AxiosProgressEvent } from "axios";
 
-import api from "../../utils/axios";
+import useAxiosWithAuth from "../../utils/axios";
 
 export function useBackupMutation() {
+  const api = useAxiosWithAuth();
+
   return useMutation({
     mutationKey: ["backupMutation"],
     mutationFn: async () => {
@@ -25,14 +27,12 @@ export function useBackupMutation() {
 export function useFirmwareUpdateMutation(
   progressCallBack?: (progressEvent: AxiosProgressEvent) => void
 ) {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ["firmwareUpdateMutation"],
-    mutationFn: async (variables: {
-      file?: File;
-      sha256?: string;
-    }) => {
+    mutationFn: async (variables: { file?: File; sha256?: string }) => {
       // Step 1: Obtain the upload handle
       const {
         data: { handle },
@@ -59,6 +59,7 @@ export function useFirmwareUpdateMutation(
 export function useNodeUpdateMutation(
   progressCallBack?: (progressEvent: AxiosProgressEvent) => void
 ) {
+  const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
 
   return useMutation({

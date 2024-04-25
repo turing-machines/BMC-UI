@@ -1,15 +1,29 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
+
+import { useAuth } from "../hooks/useAuth";
 
 export const Route = createLazyFileRoute("/login")({
   component: Login,
 });
 
 function Login() {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Mock authentication logic
+    const token = "your_mocked_token";
+    login(token);
+    void navigate({ to: "/info" });
+  };
+
   return (
     <div className="login-wrapper">
       <div className="login-form">
         <h2 className="login-title">Login</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username" className="input-wrap active">
               <span className="label">Username</span>

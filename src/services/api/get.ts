@@ -1,6 +1,6 @@
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
-import api from "../../utils/axios";
+import useAxiosWithAuth from "../../utils/axios";
 
 interface APIResponse<T> {
   response: {
@@ -55,6 +55,8 @@ export interface NodeInfoResponse {
 }
 
 export function useUSBTabData() {
+  const api = useAxiosWithAuth();
+
   return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
@@ -67,6 +69,8 @@ export function useUSBTabData() {
 }
 
 export function usePowerTabData() {
+  const api = useAxiosWithAuth();
+
   return useSuspenseQuery({
     queryKey: ["powerTabData"],
     queryFn: async () => {
@@ -79,6 +83,8 @@ export function usePowerTabData() {
 }
 
 export function useAboutTabData() {
+  const api = useAxiosWithAuth();
+
   return useSuspenseQuery({
     queryKey: ["aboutTabData"],
     queryFn: async () => {
@@ -94,6 +100,8 @@ export function useAboutTabData() {
 }
 
 export function useInfoTabData() {
+  const api = useAxiosWithAuth();
+
   return useSuspenseQuery({
     queryKey: ["infoTabData"],
     queryFn: async () => {
@@ -106,6 +114,8 @@ export function useInfoTabData() {
 }
 
 export function useNodesTabData() {
+  const api = useAxiosWithAuth();
+
   return useSuspenseQuery({
     queryKey: ["nodesTabData"],
     queryFn: async () => {
@@ -118,6 +128,8 @@ export function useNodesTabData() {
 }
 
 export function useFlashStatusQuery(enabled: boolean) {
+  const api = useAxiosWithAuth();
+
   return useQuery({
     queryKey: ["flashStatus"],
     queryFn: async () => {
@@ -130,6 +142,8 @@ export function useFlashStatusQuery(enabled: boolean) {
 }
 
 export function useFirmwareStatusQuery(enabled: boolean) {
+  const api = useAxiosWithAuth();
+
   return useQuery({
     queryKey: ["firmwareStatus"],
     queryFn: async () => {
