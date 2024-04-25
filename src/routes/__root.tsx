@@ -3,17 +3,23 @@ import "../css/app.scss";
 import "react-responsive-modal/styles.css";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 
-import { AuthProvider } from "../contexts/AuthContext";
+import { type AuthContextType } from "../contexts/AuthContext";
 
-export const Route = createRootRoute({
+interface RouterContext {
+  auth: AuthContextType;
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
     return (
-      <AuthProvider>
+      <>
         <Outlet />
         <ReactQueryDevtools />
-      </AuthProvider>
+        <TanStackRouterDevtools />
+      </>
     );
   },
 });

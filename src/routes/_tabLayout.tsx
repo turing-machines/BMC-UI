@@ -1,10 +1,23 @@
-import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  Outlet,
+  redirect,
+} from "@tanstack/react-router";
 import { ToastContainer } from "react-toastify";
 
 import Logo from "../assets/logo.svg?react";
 import BasicInfo from "../components/BasicInfo";
 
 export const Route = createFileRoute("/_tabLayout")({
+  beforeLoad: ({ context }) => {
+    if (!context.auth.token) {
+      throw redirect({
+        to: "/login",
+      });
+    }
+    return {};
+  },
   component: AppLayoutComponent,
 });
 

@@ -1,5 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { useAuth } from "../hooks/useAuth";
@@ -13,7 +12,6 @@ function Login() {
   const { mutate: mutateLogin } = useLoginMutation();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
-  const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +28,10 @@ function Login() {
       { username, password },
       {
         onSuccess: (data) => {
+          setMessage("");
           login(data.id, rememberMe);
-          void navigate({ to: "/info" });
+          // force browser to go to /
+          window.location.href = "/";
         },
         onError: (error) => {
           setMessage(error.message);

@@ -1,12 +1,11 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { createRouter, RouterProvider } from "@tanstack/react-router";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
-import { routeTree } from "./routeTree.gen";
+import { AuthProvider } from "./contexts/AuthContext";
+import InnerApp from "./innerApp";
+import { type router } from "./router";
 
-// Create a new router instance
-const router = createRouter({ routeTree });
 const queryClient = new QueryClient();
 
 // Register your router for maximum type safety
@@ -22,9 +21,11 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <InnerApp />
+        </QueryClientProvider>
+      </AuthProvider>
     </StrictMode>
   );
 }

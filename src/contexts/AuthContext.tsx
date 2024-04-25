@@ -1,7 +1,6 @@
-import { useNavigate } from "@tanstack/react-router";
 import React, { createContext, type ReactNode, useState } from "react";
 
-interface AuthContextType {
+export interface AuthContextType {
   isAuthenticated: boolean;
   token: string | null;
   login: (token: string, rememberMe: boolean) => void;
@@ -24,7 +23,6 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem("token") || !!sessionStorage.getItem("token")
   );
@@ -48,7 +46,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setToken(null);
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
-    void navigate({ to: "/login" });
   };
 
   return (
