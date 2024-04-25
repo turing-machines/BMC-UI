@@ -8,6 +8,29 @@ interface APIResponse<T> {
   }[];
 }
 
+interface LoginResponse {
+  id: string;
+  description: string;
+  name: string;
+  username: string;
+}
+
+
+export function useLoginMutation() {
+  const api = useAxiosWithAuth();
+
+  return useMutation({
+    mutationKey: ["loginMutation"],
+    mutationFn: async (variables: { username: string; password: string }) => {
+      const response = await api.post<LoginResponse>(
+        `/bmc/authenticate`,
+        variables
+      );
+      return response.data;
+    },
+  });
+}
+
 export function usePowerNodeMutation() {
   const api = useAxiosWithAuth();
   const queryClient = useQueryClient();
