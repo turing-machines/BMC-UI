@@ -8,9 +8,9 @@ import TooltipInner from "../../assets/tooltip-inner.svg?react";
 import SelectInput from "../../components/SelectInput";
 import { useUSBTabData } from "../../services/api/get";
 import { useUSBModeMutation } from "../../services/api/set";
-import USBSkeleton from "./-components/skeleton";
+import USBSkeleton from "./-components/usb.skeleton";
 
-export const Route = createLazyFileRoute("/usb/")({
+export const Route = createLazyFileRoute("/_tabLayout/usb")({
   component: USB,
   pendingComponent: USBSkeleton,
 });

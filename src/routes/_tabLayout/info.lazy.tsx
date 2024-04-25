@@ -11,7 +11,7 @@ import {
   useRebootBMCMutation,
   useReloadBMCMutation,
 } from "../../services/api/set";
-import InfoSkeleton from "./-components/skeleton";
+import InfoSkeleton from "./-components/info.skeleton";
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -31,7 +31,7 @@ const progressData = (totalBytes: number, freeBytes: number) => {
   };
 };
 
-export const Route = createLazyFileRoute("/info/")({
+export const Route = createLazyFileRoute("/_tabLayout/info")({
   component: Info,
   errorComponent: () => <div>Error loading Info</div>,
   pendingComponent: InfoSkeleton,

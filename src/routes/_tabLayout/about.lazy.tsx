@@ -4,9 +4,9 @@ import en from 'javascript-time-ago/locale/en'
 
 import { version } from "../../../package.json";
 import { useAboutTabData } from "../../services/api/get";
-import AboutSkeleton from "./-components/skeleton";
+import AboutSkeleton from "./-components/about.skeleton";
 
-export const Route = createLazyFileRoute("/about/")({
+export const Route = createLazyFileRoute("/_tabLayout/about")({
   component: About,
   pendingComponent: AboutSkeleton,
 });

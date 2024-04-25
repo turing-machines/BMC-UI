@@ -8,9 +8,9 @@ import {
   useResetNodeMutation,
   useSetNodeInfoMutation,
 } from "../../services/api/set";
-import NodesSkeleton from "./-components/skeleton";
+import NodesSkeleton from "./-components/nodes.skeleton";
 
-export const Route = createLazyFileRoute("/nodes/")({
+export const Route = createLazyFileRoute("/_tabLayout/nodes")({
   component: NodesTab,
   pendingComponent: NodesSkeleton,
 });

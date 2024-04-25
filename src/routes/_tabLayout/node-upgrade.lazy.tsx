@@ -11,7 +11,7 @@ import SelectInput from "../../components/SelectInput";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
 
-export const Route = createLazyFileRoute("/node-upgrade/")({
+export const Route = createLazyFileRoute("/_tabLayout/node-upgrade")({
   component: Flash,
 });
 

@@ -11,7 +11,7 @@ import { useFirmwareUpdateMutation } from "../../services/api/file";
 import { useFirmwareStatusQuery } from "../../services/api/get";
 import { useRebootBMCMutation } from "../../services/api/set";
 
-export const Route = createLazyFileRoute("/firmware-upgrade/")({
+export const Route = createLazyFileRoute("/_tabLayout/firmware-upgrade")({
   component: FirmwareUpgrade,
 });
 
