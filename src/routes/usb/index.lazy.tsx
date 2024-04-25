@@ -1,10 +1,11 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import Select, { type SelectInstance } from "react-select";
+import { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
 import TooltipInfo from "../../assets/tooltip-info.svg?react";
 import TooltipInner from "../../assets/tooltip-inner.svg?react";
+import SelectInput from "../../components/SelectInput";
 import { useUSBTabData } from "../../services/api/get";
 import { useUSBModeMutation } from "../../services/api/set";
 import USBSkeleton from "./-components/skeleton";
@@ -71,128 +72,34 @@ function USB() {
           className="form-group row"
           onClick={() => setModeStateOpened(!modeStateOpened)}
         >
-          <div className="select-item">
-            <label htmlFor="usb-mode-select">USB mode</label>
-            <Select
-              inputId="usb-mode-select"
-              ref={selectModeRef}
-              menuIsOpen={modeStateOpened}
-              options={modeOptions}
-              defaultValue={modeOptions.find(
-                (option) => option.label === data.mode
-              )}
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  border: "none",
-                  padding: 0,
-                  margin: 0,
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  padding: "0 0 0 14px",
-                  margin: 0,
-                }),
-                indicatorsContainer: (base) => ({
-                  ...base,
-                  display: "none",
-                }),
-                menu: (base) => ({
-                  ...base,
-                  zIndex: 15,
-                }),
-                input: (base) => ({
-                  ...base,
-                  padding: 0,
-                  margin: 0,
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected
-                    ? "#e4e4e7"
-                    : state.isFocused
-                      ? "#f4f4f5"
-                      : "inherit",
-                  color: "black",
-                }),
-              }}
-              components={{
-                DropdownIndicator: () => null,
-                Control(value) {
-                  return (
-                    <div
-                      className="control"
-                      onClick={value.selectProps.onMenuOpen}
-                    >
-                      <div className="value">{value.children}</div>
-                    </div>
-                  );
-                },
-              }}
-            />
-          </div>
+          <SelectInput
+            inputId="usb-mode-select"
+            ref={selectModeRef}
+            menuIsOpen={modeStateOpened}
+            options={modeOptions}
+            defaultValue={modeOptions.find(
+              (option) => option.label === data.mode
+            )}
+            label="USB mode"
+            onMenuOpen={() => setModeStateOpened(!modeStateOpened)}
+          />
         </div>
 
         <div
           className="form-group row"
           onClick={() => setNodeStateOpened(!nodeStateOpened)}
         >
-          <div className="select-item">
-            <label htmlFor="connected-node-select">Connected node</label>
-            <Select
-              inputId="connected-node-select"
-              ref={selectNodeRef}
-              menuIsOpen={nodeStateOpened}
-              options={nodeOptions}
-              defaultValue={nodeOptions.find(
-                (option) => option.label === data.node
-              )}
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  border: "none",
-                  padding: 0,
-                  margin: 0,
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  padding: "0 0 0 14px",
-                  margin: 0,
-                }),
-                indicatorsContainer: (base) => ({
-                  ...base,
-                  display: "none",
-                }),
-                input: (base) => ({
-                  ...base,
-                  padding: 0,
-                  margin: 0,
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected
-                    ? "#e4e4e7"
-                    : state.isFocused
-                      ? "#f4f4f5"
-                      : "inherit",
-                  color: "black",
-                }),
-              }}
-              components={{
-                DropdownIndicator: () => null,
-                Control(value) {
-                  return (
-                    <div
-                      className="control"
-                      onClick={value.selectProps.onMenuOpen}
-                    >
-                      <div className="value">{value.children}</div>
-                    </div>
-                  );
-                },
-              }}
-            />
-          </div>
+          <SelectInput
+            inputId="connected-node-select"
+            ref={selectNodeRef}
+            menuIsOpen={nodeStateOpened}
+            options={nodeOptions}
+            defaultValue={nodeOptions.find(
+              (option) => option.label === data.node
+            )}
+            label="Connected node"
+            onMenuOpen={() => setNodeStateOpened(!nodeStateOpened)}
+          />
         </div>
 
         <div className="form-group row">

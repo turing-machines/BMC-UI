@@ -2,11 +2,12 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
-import Select, { type SelectInstance } from "react-select";
+import { type SelectInstance } from "react-select";
 import { toast } from "react-toastify";
 
 import ConfirmationModal from "../../components/ConfirmationModal";
 import FileInput from "../../components/FileInput";
+import SelectInput from "../../components/SelectInput";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
 
@@ -134,60 +135,14 @@ function Flash() {
           className="form-group row"
           onClick={() => setNodeStateOpened(!nodeStateOpened)}
         >
-          <div className="select-item">
-            <label htmlFor="connected-node-select">Selected node</label>
-            <Select
-              inputId="connected-node-select"
-              ref={selectNodeRef}
-              menuIsOpen={nodeStateOpened}
-              options={nodeOptions}
-              placeholder="Nothing Selected"
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  border: "none",
-                  padding: 0,
-                  margin: 0,
-                }),
-                valueContainer: (base) => ({
-                  ...base,
-                  padding: "0 0 0 14px",
-                  margin: 0,
-                }),
-                indicatorsContainer: (base) => ({
-                  ...base,
-                  display: "none",
-                }),
-                input: (base) => ({
-                  ...base,
-                  padding: 0,
-                  margin: 0,
-                }),
-                option: (provided, state) => ({
-                  ...provided,
-                  backgroundColor: state.isSelected
-                    ? "#e4e4e7"
-                    : state.isFocused
-                      ? "#f4f4f5"
-                      : "inherit",
-                  color: "black",
-                }),
-              }}
-              components={{
-                DropdownIndicator: () => null,
-                Control(value) {
-                  return (
-                    <div
-                      className="control"
-                      onClick={value.selectProps.onMenuOpen}
-                    >
-                      <div className="value">{value.children}</div>
-                    </div>
-                  );
-                },
-              }}
-            />
-          </div>
+          <SelectInput
+            inputId="connected-node-select"
+            ref={selectNodeRef}
+            menuIsOpen={nodeStateOpened}
+            options={nodeOptions}
+            label="Selected node"
+            onMenuOpen={() => setNodeStateOpened(!nodeStateOpened)}
+          />
         </div>
 
         <div className="form-group row">
