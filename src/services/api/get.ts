@@ -25,7 +25,7 @@ interface AboutTabResponse {
   api: string;
   build_version: string;
   buildroot: string;
-  buildtime: string;
+  buildtime: Date;
   hostname: string;
   version: string;
 }
@@ -85,7 +85,10 @@ export function useAboutTabData() {
       const response = await api.get<APIResponse<AboutTabResponse>>(
         `/bmc?opt=get&type=about`
       );
-      return response.data.response[0].result;
+      return {
+        ...response.data.response[0].result,
+        buildtime: new Date(response.data.response[0].result.buildtime),
+      };
     },
   });
 }

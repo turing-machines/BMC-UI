@@ -1,4 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
+import TimeAgo from 'javascript-time-ago'
+import en from 'javascript-time-ago/locale/en'
 
 import { version } from "../../../package.json";
 import { useAboutTabData } from "../../services/api/get";
@@ -8,6 +10,9 @@ export const Route = createLazyFileRoute("/about/")({
   component: About,
   pendingComponent: AboutSkeleton,
 });
+
+TimeAgo.addDefaultLocale(en)
+const timeAgo = new TimeAgo('en-US')
 
 function About() {
   const { data } = useAboutTabData();
@@ -32,7 +37,7 @@ function About() {
             <div className="row">
               <div className="col">Build time:</div>
               <div id="aboutBuildtime" className="col">
-                {data.buildtime}
+                {data.buildtime.toLocaleString()} ({timeAgo.format(new Date(data.buildtime))})
               </div>
             </div>
             <div className="row">
