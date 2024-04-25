@@ -1,52 +1,55 @@
-import React, { createContext, type ReactNode, useState } from "react";
+import React, {
+  createContext,
+  type ReactNode,
+  useCallback,
+  useState,
+} from "react";
 
-export interface AuthContextType {
+export interface AuthContext {
   isAuthenticated: boolean;
   token: string | null;
   login: (token: string, rememberMe: boolean) => void;
   logout: () => void;
 }
 
-export const AuthContext = createContext<AuthContextType>({
-  isAuthenticated: false,
-  token: null,
-  login: () => {
-    console.warn("no auth provider");
-  },
-  logout: () => {
-    console.warn("no auth provider");
-  },
-});
+export const AuthContext = createContext<AuthContext | null>(null);
+
+function getStoredToken() {
+  return localStorage.getItem("token") ?? sessionStorage.getItem("token");
+}
+
+function setStoredToken(token: string | null, rememberMe: boolean) {
+  if (token) {
+    if (rememberMe) {
+      localStorage.setItem("token", token);
+    } else {
+      sessionStorage.setItem("token", token);
+    }
+  } else {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+  }
+}
 
 interface AuthProviderProps {
   children: ReactNode;
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    !!localStorage.getItem("token") || !!sessionStorage.getItem("token")
-  );
-  const [token, setToken] = useState<string | null>(
-    localStorage.getItem("token") ?? sessionStorage.getItem("token")
-  );
+  const [token, setToken] = useState<string | null>(getStoredToken());
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
-  const login = (token: string, rememberMe: boolean) => {
-    setIsAuthenticated(true);
-    setToken(token);
-
-    if (rememberMe) {
-      localStorage.setItem("token", token);
-    } else {
-      sessionStorage.setItem("token", token);
-    }
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
+  const logout = useCallback(() => {
+    setStoredToken(null, false);
     setToken(null);
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-  };
+    setIsAuthenticated(false);
+  }, []);
+
+  const login = React.useCallback((token: string, rememberMe: boolean) => {
+    setStoredToken(token, rememberMe);
+    setToken(token);
+    setIsAuthenticated(true);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>

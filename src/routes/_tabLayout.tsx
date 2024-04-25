@@ -10,10 +10,13 @@ import Logo from "../assets/logo.svg?react";
 import BasicInfo from "../components/BasicInfo";
 
 export const Route = createFileRoute("/_tabLayout")({
-  beforeLoad: ({ context }) => {
-    if (!context.auth.token) {
+  beforeLoad: ({ context, location }) => {
+    if (!context.auth.isAuthenticated) {
       throw redirect({
         to: "/login",
+        search: {
+          redirect: location.href,
+        },
       });
     }
     return {};

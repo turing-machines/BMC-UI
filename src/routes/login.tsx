@@ -1,10 +1,16 @@
-import { createLazyFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 
 import { useAuth } from "../hooks/useAuth";
 import { useLoginMutation } from "../services/api/set";
 
-export const Route = createLazyFileRoute("/login")({
+export const Route = createFileRoute("/login")({
+  beforeLoad: ({ context, search }) => {
+    if (context.auth.isAuthenticated) {
+      const redirectPath = (search as { redirect: string }).redirect || "/info";
+      throw redirect({ to: redirectPath });
+    }
+  },
   component: Login,
 });
 
@@ -12,6 +18,10 @@ function Login() {
   const { mutate: mutateLogin } = useLoginMutation();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
+  const router = useRouter();
+  const navigate = Route.useNavigate();
+
+  const search = Route.useSearch<{ redirect: string }>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,8 +40,9 @@ function Login() {
         onSuccess: (data) => {
           setMessage("");
           login(data.id, rememberMe);
-          // force browser to go to /
-          window.location.href = "/";
+
+          // force refresh the same page, natively
+          window.location.reload();
         },
         onError: (error) => {
           setMessage(error.message);

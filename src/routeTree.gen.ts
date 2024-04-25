@@ -13,11 +13,11 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
 import { Route as TabLayoutImport } from './routes/_tabLayout'
 
 // Create Virtual Routes
 
-const LoginLazyImport = createFileRoute('/login')()
 const IndexLazyImport = createFileRoute('/')()
 const TabLayoutUsbLazyImport = createFileRoute('/_tabLayout/usb')()
 const TabLayoutNodesLazyImport = createFileRoute('/_tabLayout/nodes')()
@@ -32,10 +32,10 @@ const TabLayoutAboutLazyImport = createFileRoute('/_tabLayout/about')()
 
 // Create/Update Routes
 
-const LoginLazyRoute = LoginLazyImport.update({
+const LoginRoute = LoginImport.update({
   path: '/login',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/login.lazy').then((d) => d.Route))
+} as any)
 
 const TabLayoutRoute = TabLayoutImport.update({
   id: '/_tabLayout',
@@ -103,7 +103,7 @@ declare module '@tanstack/react-router' {
       parentRoute: typeof rootRoute
     }
     '/login': {
-      preLoaderRoute: typeof LoginLazyImport
+      preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/_tabLayout/about': {
@@ -145,7 +145,7 @@ export const routeTree = rootRoute.addChildren([
     TabLayoutNodesLazyRoute,
     TabLayoutUsbLazyRoute,
   ]),
-  LoginLazyRoute,
+  LoginRoute,
 ])
 
 /* prettier-ignore-end */
