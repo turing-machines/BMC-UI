@@ -539,6 +539,10 @@
   .switch input:checked + .switch-label {
     background: $green;
   }
+
+  .switch input:disabled + .switch-label {
+    opacity: 0.5;
+  }
   
   .switch input:checked + .switch-label:before {
     color: $white;
