@@ -1,5 +1,5 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 import TextInput from "../../components/TextInput";
@@ -20,7 +20,6 @@ const NodeRow = (
   props: NodeInfoResponse & {
     nodeId: number;
     editMode: boolean;
-    onEditField: (field: string, value: string) => void;
   }
 ) => {
   const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
@@ -86,14 +85,12 @@ const NodeRow = (
             label="Name"
             defaultValue={props.name ?? `My Node ${props.nodeId}`}
             disabled={!props.editMode}
-            onChange={(e) => props.onEditField("name", e.target.value)}
           />
           <TextInput
             name={`node-${props.nodeId}-module-name`}
             label="Module Name"
             defaultValue={props.module_name ?? `Module ${props.nodeId}`}
             disabled={!props.editMode}
-            onChange={(e) => props.onEditField("module_name", e.target.value)}
           />
         </div>
       </div>
@@ -101,41 +98,61 @@ const NodeRow = (
   );
 };
 
-interface NodesProps {
-  node_id?: number;
-  name?: string;
-  module_name?: string;
-}
-
 function NodesTab() {
+  const formRef = useRef<HTMLFormElement>(null);
   const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
-  const [editingData, setEditingData] = useState<NodesProps[]>([]);
   const { mutate } = useSetNodeInfoMutation();
 
   const handleSave = () => {
-    setEditMode(false);
-    mutate(
-      {
-        Node1: editingData.find((node) => node?.node_id === 1) ?? {},
-        Node2: editingData.find((node) => node?.node_id === 2) ?? {},
-        Node3: editingData.find((node) => node?.node_id === 3) ?? {},
-        Node4: editingData.find((node) => node?.node_id === 4) ?? {},
-      },
-      {
+    if (formRef.current) {
+      const form = formRef.current;
+      const nodeInfo = {
+        Node1: {
+          name: (form.elements.namedItem("node-1-name") as HTMLInputElement)
+            .value,
+          module_name: (
+            form.elements.namedItem("node-1-module-name") as HTMLInputElement
+          ).value,
+        },
+        Node2: {
+          name: (form.elements.namedItem("node-2-name") as HTMLInputElement)
+            .value,
+          module_name: (
+            form.elements.namedItem("node-2-module-name") as HTMLInputElement
+          ).value,
+        },
+        Node3: {
+          name: (form.elements.namedItem("node-3-name") as HTMLInputElement)
+            .value,
+          module_name: (
+            form.elements.namedItem("node-3-module-name") as HTMLInputElement
+          ).value,
+        },
+        Node4: {
+          name: (form.elements.namedItem("node-4-name") as HTMLInputElement)
+            .value,
+          module_name: (
+            form.elements.namedItem("node-4-module-name") as HTMLInputElement
+          ).value,
+        },
+      };
+
+      mutate(nodeInfo, {
         onSuccess: () => {
+          setEditMode(false);
           toast.success("Nodes information was saved");
         },
         onError: () => {
           toast.error("Failed to save nodes information");
         },
-      }
-    );
+      });
+    }
   };
 
   return (
     <div data-tab="Nodes" className="tabs-body__item">
-      <div className="form">
+      <form ref={formRef} className="form">
         <div className="form-group row">
           <div className="text-content">
             <p>Control the power supply of connected nodes:</p>
@@ -150,15 +167,6 @@ function NodesTab() {
                 {...node}
                 nodeId={index + 1}
                 editMode={editMode}
-                onEditField={(field, value) => {
-                  const newData = [...editingData];
-                  newData[index] = {
-                    ...newData[index],
-                    [field]: value,
-                    node_id: index + 1,
-                  };
-                  setEditingData(newData);
-                }}
               />
             ))}
           </div>
@@ -183,7 +191,7 @@ function NodesTab() {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
