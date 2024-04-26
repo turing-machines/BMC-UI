@@ -2,6 +2,7 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
+import TextInput from "../../components/TextInput";
 import { type NodeInfoResponse, useNodesTabData } from "../../services/api/get";
 import {
   usePowerNodeMutation,
@@ -34,10 +35,6 @@ const NodeRow = (
     toast.success(
       `Node ${props.nodeId} was ${powerOn ? "turned off" : "turned on"}`
     );
-  };
-
-  const handleEditField = (field: string, value: string) => {
-    props.onEditField(field, value);
   };
 
   const handleResetNode = () => {
@@ -84,24 +81,20 @@ const NodeRow = (
           </button>
         </div>
         <div className="info-col">
-          <label className="input-wrap name active">
-            <span className="label">Name</span>
-            <input
-              type="text"
-              defaultValue={props.name ?? `My Node ${props.nodeId}`}
-              data-field="name"
-              onBlur={(e) => handleEditField("name", e.target.value)}
-            />
-          </label>
-          <label className="input-wrap module_name active">
-            <span className="label">Module Name</span>
-            <input
-              type="text"
-              defaultValue={props.module_name ?? `Module ${props.nodeId}`}
-              data-field="module_name"
-              onBlur={(e) => handleEditField("module_name", e.target.value)}
-            />
-          </label>
+          <TextInput
+            name={`node-${props.nodeId}-name`}
+            label="Name"
+            defaultValue={props.name ?? `My Node ${props.nodeId}`}
+            disabled={!props.editMode}
+            onChange={(e) => props.onEditField("name", e.target.value)}
+          />
+          <TextInput
+            name={`node-${props.nodeId}-module-name`}
+            label="Module Name"
+            defaultValue={props.module_name ?? `Module ${props.nodeId}`}
+            disabled={!props.editMode}
+            onChange={(e) => props.onEditField("module_name", e.target.value)}
+          />
         </div>
       </div>
     </div>
@@ -141,7 +134,7 @@ function NodesTab() {
   };
 
   return (
-    <div data-tab="Nodes" className="tabs-body__item ">
+    <div data-tab="Nodes" className="tabs-body__item">
       <div className="form">
         <div className="form-group row">
           <div className="text-content">

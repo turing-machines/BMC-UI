@@ -1,6 +1,7 @@
-import { createFileRoute, redirect, useRouter } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 
+import TextInput from "../components/TextInput";
 import { useAuth } from "../hooks/useAuth";
 import { useLoginMutation } from "../services/api/set";
 
@@ -18,10 +19,6 @@ function Login() {
   const { mutate: mutateLogin } = useLoginMutation();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
-  const router = useRouter();
-  const navigate = Route.useNavigate();
-
-  const search = Route.useSearch<{ redirect: string }>();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,19 +52,13 @@ function Login() {
     <div className="login-wrapper">
       <div className="login-container">
         <div className="login-form">
-          <h2 className="login-title">Login</h2>
+          <h3 className="login-title">Login</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="username" className="input-wrap active">
-                <span className="label">Username</span>
-                <input type="text" id="username" name="username" />
-              </label>
+              <TextInput name="username" label="Username" />
             </div>
             <div className="form-group">
-              <label htmlFor="password" className="input-wrap active">
-                <span className="label">Password</span>
-                <input type="password" id="password" name="password" />
-              </label>
+              <TextInput name="password" label="Password" type="password" />
             </div>
             <div className="form-group form-flex-row">
               <div className="checkbox-row form-flex-row">

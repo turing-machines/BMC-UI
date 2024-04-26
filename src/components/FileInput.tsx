@@ -23,15 +23,16 @@ export default function FileInput({ name, label, accept }: FileInputProps) {
   return (
     <label
       htmlFor={`${name}-file-id`}
-      className="input-wrap input-type-file-wrap active"
+      className="input-wrap input-type-file-wrap"
     >
-      <span className="label">{label}</span>
       <input
         type="text"
         name={`${name}-url`}
         className="file-upload-input"
+        placeholder=" "
         ref={inputRef}
       />
+      <span className="label">{label}</span>
 
       <button
         type="button"

@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import FileInput from "../../components/FileInput";
 import SelectInput from "../../components/SelectInput";
+import TextInput from "../../components/TextInput";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
 
@@ -154,18 +155,7 @@ function Flash() {
         </div>
 
         <div className="form-group row">
-          <label
-            htmlFor="node-upgrade-sha256"
-            className="input-wrap input-type-file-wrap active"
-          >
-            <span className="label">Sha256: (optional)</span>
-            <input
-              type="text"
-              name="sha256"
-              className="upgrade-sha256"
-              id="node-upgrade-sha256"
-            />
-          </label>
+          <TextInput name="sha256" label="Sha256: (optional)" className="input-type-file-wrap" />
         </div>
 
         <div className="form-group form-flex-row">

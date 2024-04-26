@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import FileInput from "../../components/FileInput";
 import RebootModal from "../../components/RebootModal";
+import TextInput from "../../components/TextInput";
 import { useFirmwareUpdateMutation } from "../../services/api/file";
 import { useFirmwareStatusQuery } from "../../services/api/get";
 import { useRebootBMCMutation } from "../../services/api/set";
@@ -127,18 +128,7 @@ function FirmwareUpgrade() {
           />
         </div>
         <div className="form-group row">
-          <label
-            htmlFor="firmware-upgrade-sha256"
-            className="input-wrap input-type-file-wrap active"
-          >
-            <span className="label">Sha256: (optional)</span>
-            <input
-              type="text"
-              name="sha256"
-              className="upgrade-sha256"
-              id="firmware-upgrade-sha256"
-            />
-          </label>
+          <TextInput name="sha256" label="Sha256: (optional)" className="input-type-file-wrap" />
         </div>
         <div className="form-group">
           <button

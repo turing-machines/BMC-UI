@@ -644,12 +644,13 @@
     }
   }
   
-  // Focus
-  &.focus {
-    label, .label {
-      top: 7px;
-      font-size: 12px;
-    }
+  // Refactored: Use the `:focus` and `:not(:placeholder-shown)` pseudo-classes
+  input:focus + label,
+  input:not(:placeholder-shown) + label,
+  input:focus + .label,
+  input:not(:placeholder-shown) + .label {
+    top: 7px;
+    font-size: 12px;
   }
   
   // Active
