@@ -52,7 +52,7 @@ function AppLayoutComponent() {
             >
               Firmware Upgrade
             </Link>
-            <Link to="/node-upgrade" className="tabs-header__list-item">
+            <Link to="/flash-node" className="tabs-header__list-item">
               Flash Node
             </Link>
             <Link to="/about" className="tabs-header__list-item">

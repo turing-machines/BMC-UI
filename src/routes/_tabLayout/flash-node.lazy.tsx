@@ -12,7 +12,7 @@ import TextInput from "../../components/TextInput";
 import { useNodeUpdateMutation } from "../../services/api/file";
 import { useFlashStatusQuery } from "../../services/api/get";
 
-export const Route = createLazyFileRoute("/_tabLayout/node-upgrade")({
+export const Route = createLazyFileRoute("/_tabLayout/flash-node")({
   component: Flash,
 });
 
@@ -122,7 +122,7 @@ function Flash() {
   return (
     <div
       data-tab="Flash Node"
-      id="node-upgrade-tab"
+      id="flash-node-tab"
       className="tabs-body__item force-tab-style "
     >
       <form ref={formRef} className="form">

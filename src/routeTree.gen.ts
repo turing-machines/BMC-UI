@@ -21,10 +21,8 @@ import { Route as TabLayoutImport } from './routes/_tabLayout'
 const IndexLazyImport = createFileRoute('/')()
 const TabLayoutUsbLazyImport = createFileRoute('/_tabLayout/usb')()
 const TabLayoutNodesLazyImport = createFileRoute('/_tabLayout/nodes')()
-const TabLayoutNodeUpgradeLazyImport = createFileRoute(
-  '/_tabLayout/node-upgrade',
-)()
 const TabLayoutInfoLazyImport = createFileRoute('/_tabLayout/info')()
+const TabLayoutFlashNodeLazyImport = createFileRoute('/_tabLayout/flash-node')()
 const TabLayoutFirmwareUpgradeLazyImport = createFileRoute(
   '/_tabLayout/firmware-upgrade',
 )()
@@ -61,18 +59,18 @@ const TabLayoutNodesLazyRoute = TabLayoutNodesLazyImport.update({
   import('./routes/_tabLayout/nodes.lazy').then((d) => d.Route),
 )
 
-const TabLayoutNodeUpgradeLazyRoute = TabLayoutNodeUpgradeLazyImport.update({
-  path: '/node-upgrade',
-  getParentRoute: () => TabLayoutRoute,
-} as any).lazy(() =>
-  import('./routes/_tabLayout/node-upgrade.lazy').then((d) => d.Route),
-)
-
 const TabLayoutInfoLazyRoute = TabLayoutInfoLazyImport.update({
   path: '/info',
   getParentRoute: () => TabLayoutRoute,
 } as any).lazy(() =>
   import('./routes/_tabLayout/info.lazy').then((d) => d.Route),
+)
+
+const TabLayoutFlashNodeLazyRoute = TabLayoutFlashNodeLazyImport.update({
+  path: '/flash-node',
+  getParentRoute: () => TabLayoutRoute,
+} as any).lazy(() =>
+  import('./routes/_tabLayout/flash-node.lazy').then((d) => d.Route),
 )
 
 const TabLayoutFirmwareUpgradeLazyRoute =
@@ -114,12 +112,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TabLayoutFirmwareUpgradeLazyImport
       parentRoute: typeof TabLayoutImport
     }
-    '/_tabLayout/info': {
-      preLoaderRoute: typeof TabLayoutInfoLazyImport
+    '/_tabLayout/flash-node': {
+      preLoaderRoute: typeof TabLayoutFlashNodeLazyImport
       parentRoute: typeof TabLayoutImport
     }
-    '/_tabLayout/node-upgrade': {
-      preLoaderRoute: typeof TabLayoutNodeUpgradeLazyImport
+    '/_tabLayout/info': {
+      preLoaderRoute: typeof TabLayoutInfoLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/nodes': {
@@ -140,8 +138,8 @@ export const routeTree = rootRoute.addChildren([
   TabLayoutRoute.addChildren([
     TabLayoutAboutLazyRoute,
     TabLayoutFirmwareUpgradeLazyRoute,
+    TabLayoutFlashNodeLazyRoute,
     TabLayoutInfoLazyRoute,
-    TabLayoutNodeUpgradeLazyRoute,
     TabLayoutNodesLazyRoute,
     TabLayoutUsbLazyRoute,
   ]),
