@@ -15,7 +15,6 @@ interface LoginResponse {
   username: string;
 }
 
-
 export function useLoginMutation() {
   const api = useAxiosWithAuth();
 
@@ -156,6 +155,24 @@ export function useUSBModeMutation() {
     },
     onSettled: () => {
       void queryClient.invalidateQueries({ queryKey: ["usbTabData"] });
+    },
+  });
+}
+
+export function useCoolingDeviceMutation() {
+  const api = useAxiosWithAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["coolingDeviceMutation"],
+    mutationFn: async (variables: { device: string; speed: number }) => {
+      const response = await api.get<APIResponse<string>>(
+        `/bmc?opt=set&type=cooling&device=${variables.device}&speed=${variables.speed}`
+      );
+      return response.data.response[0].result;
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["coolingDevices"] });
     },
   });
 }

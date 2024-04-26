@@ -47,6 +47,12 @@ interface InfoTabResponse {
   storage: { name: string; total_bytes: number; bytes_free: number }[];
 }
 
+interface CoolingDevice {
+  device: string;
+  max_speed: number;
+  speed: number;
+}
+
 export interface NodeInfoResponse {
   module_name: string | null;
   name: string | null;
@@ -152,5 +158,19 @@ export function useFirmwareStatusQuery(enabled: boolean) {
     },
     refetchInterval: 1000, // Refetch every 1 second
     enabled, // Enable/disable the query based on the provided boolean value
+  });
+}
+
+export function useCoolingDevicesQuery() {
+  const api = useAxiosWithAuth();
+
+  return useSuspenseQuery({
+    queryKey: ["coolingDevices"],
+    queryFn: async () => {
+      const response = await api.get<APIResponse<CoolingDevice[]>>(
+        "/bmc?opt=get&type=cooling"
+      );
+      return response.data.response[0].result;
+    },
   });
 }

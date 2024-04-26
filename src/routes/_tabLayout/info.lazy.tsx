@@ -5,8 +5,9 @@ import { toast } from "react-toastify";
 
 import RebootModal from "../../components/RebootModal";
 import { useBackupMutation } from "../../services/api/file";
-import { useInfoTabData } from "../../services/api/get";
+import { useCoolingDevicesQuery, useInfoTabData } from "../../services/api/get";
 import {
+  useCoolingDeviceMutation,
   useNetworkResetMutation,
   useRebootBMCMutation,
   useReloadBMCMutation,
@@ -40,7 +41,9 @@ export const Route = createLazyFileRoute("/_tabLayout/info")({
 function Info() {
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
+  const { data: coolingDevices } = useCoolingDevicesQuery();
   const { mutate: mutateResetNetwork } = useNetworkResetMutation();
+  const { mutate: mutateCoolingDevices } = useCoolingDeviceMutation();
   const { mutate: mutateRebootBMC, isPending: rebootPending } =
     useRebootBMCMutation();
   const { mutate: mutateReloadBMC } = useReloadBMCMutation();
@@ -150,6 +153,53 @@ function Info() {
         </div>
         <div className="form-group row"></div>
       </form>
+
+      {coolingDevices && (
+        <form className="form" id="form-storage">
+          <div className="form-group row">
+            <div className="text-content">
+              <p>Fan control</p>
+            </div>
+          </div>
+          <div className="form-group row">
+            <div id="tableStorageInfo" className="table-specification">
+              {coolingDevices.map((coolingDevice) => {
+                return (
+                  <div className="row" key={coolingDevice.device}>
+                    <div className="col">{coolingDevice.device}</div>
+                    <div className="col">
+                      <div className="slider-wrap">
+                        <input
+                          type="range"
+                          min="0"
+                          max={coolingDevice.max_speed}
+                          step="1"
+                          defaultValue={coolingDevice.speed}
+                          className="slider"
+                          readOnly
+                          onChange={(e) =>
+                            mutateCoolingDevices({
+                              device: coolingDevice.device,
+                              speed: parseInt(e.target.value),
+                            })
+                          }
+                        />
+                        <div className="slider-value">
+                          {(coolingDevice.speed / coolingDevice.max_speed) *
+                            100}
+                          %
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div className="form-group row"></div>
+        </form>
+      )}
+
       <form className="form" id="form-network">
         <div className="form-group row">
           <div className="text-content">
