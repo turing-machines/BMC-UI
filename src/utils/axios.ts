@@ -4,7 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 
 const host = import.meta.env.DEV ? "http://localhost:4460/api" : "/api";
 
-const useAxiosWithAuth = () => {
+export default function useAxiosWithAuth() {
   const { token, logout } = useAuth();
 
   const api = axios.create({
@@ -26,6 +26,4 @@ const useAxiosWithAuth = () => {
   );
 
   return api;
-};
-
-export default useAxiosWithAuth;
+}

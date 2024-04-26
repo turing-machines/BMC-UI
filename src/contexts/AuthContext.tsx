@@ -43,6 +43,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setStoredToken(null, false);
     setToken(null);
     setIsAuthenticated(false);
+
+    // Redirect to the login page
+    window.location.href = "/login";
   }, []);
 
   const login = React.useCallback((token: string, rememberMe: boolean) => {
