@@ -37,9 +37,13 @@ export function usePowerNodeMutation() {
   return useMutation({
     mutationKey: ["nodePowerMutation"],
     mutationFn: async (variables: { nodeId: number; powerOn: boolean }) => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=power&node${variables.nodeId}=${variables.powerOn ? "1" : "0"}`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "power",
+          [`node${variables.nodeId}`]: variables.powerOn ? "1" : "0",
+        },
+      });
       return response.data.response[0].result;
     },
     onSettled: () => {
@@ -68,10 +72,12 @@ export function useSetNodeInfoMutation() {
   return useMutation({
     mutationKey: ["setNodeInfoMutation"],
     mutationFn: async (nodeInfo: NodeInfoPayload) => {
-      const response = await api.post<APIResponse<string>>(
-        `/bmc?opt=set&type=node_info`,
-        nodeInfo
-      );
+      const response = await api.post<APIResponse<string>>("/bmc", nodeInfo, {
+        params: {
+          opt: "set",
+          type: "node_info",
+        },
+      });
       return response.data.response[0].result;
     },
     onSettled: () => {
@@ -87,9 +93,13 @@ export function useResetNodeMutation() {
   return useMutation({
     mutationKey: ["setResetNodeMutation"],
     mutationFn: async (nodeId: number) => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=reset&node=${nodeId}`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "reset",
+          node: nodeId,
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -102,9 +112,13 @@ export function useNetworkResetMutation() {
   return useMutation({
     mutationKey: ["networkResetMutation"],
     mutationFn: async () => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=network&cmd=reset`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "network",
+          cmd: "reset",
+        },
+      });
       return response.data.response[0].result;
     },
     onSuccess: () => {
@@ -119,9 +133,12 @@ export function useRebootBMCMutation() {
   return useMutation({
     mutationKey: ["rebootBMCMutation"],
     mutationFn: async () => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=reboot`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "reboot",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -133,9 +150,12 @@ export function useReloadBMCMutation() {
   return useMutation({
     mutationKey: ["reloadBMCMutation"],
     mutationFn: async () => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=reload`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "reload",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -148,9 +168,14 @@ export function useUSBModeMutation() {
   return useMutation({
     mutationKey: ["usbModeMutation"],
     mutationFn: async (variables: { node: number; mode: number }) => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=usb&mode=${variables.mode}&node=${variables.node}`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "usb",
+          mode: variables.mode,
+          node: variables.node,
+        },
+      });
       return response.data.response[0].result;
     },
     onSettled: () => {
@@ -166,9 +191,14 @@ export function useCoolingDeviceMutation() {
   return useMutation({
     mutationKey: ["coolingDeviceMutation"],
     mutationFn: async (variables: { device: string; speed: number }) => {
-      const response = await api.get<APIResponse<string>>(
-        `/bmc?opt=set&type=cooling&device=${variables.device}&speed=${variables.speed}`
-      );
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "cooling",
+          device: variables.device,
+          speed: variables.speed,
+        },
+      });
       return response.data.response[0].result;
     },
     onSettled: () => {

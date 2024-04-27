@@ -9,8 +9,7 @@ export function useBackupMutation() {
   return useMutation({
     mutationKey: ["backupMutation"],
     mutationFn: async () => {
-      const response = await api.get(`/bmc/backup`, {
-        method: "GET",
+      const response = await api.get("/bmc/backup", {
         responseType: "blob",
       });
       const contentDisposition = response.headers[
@@ -49,7 +48,7 @@ export function useFirmwareUpdateMutation(
           type: "firmware",
           file: variables.file?.name ?? variables.url,
           length: variables.file?.size ?? undefined,
-          sha256: variables.sha256,
+          sha256: variables.sha256 ?? undefined,
         },
       });
 
@@ -100,7 +99,7 @@ export function useNodeUpdateMutation(
           file: variables.file?.name ?? variables.url,
           length: variables.file?.size ?? undefined,
           skip_crc: variables.skipCRC,
-          sha256: variables.sha256,
+          sha256: variables.sha256 ?? undefined,
         },
       });
 

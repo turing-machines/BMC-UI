@@ -66,9 +66,12 @@ export function useUSBTabData() {
   return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<USBTabResponse>>(
-        "/bmc?opt=get&type=usb"
-      );
+      const response = await api.get<APIResponse<USBTabResponse>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "usb",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -80,9 +83,12 @@ export function usePowerTabData() {
   return useSuspenseQuery({
     queryKey: ["powerTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<PowerTabResponse>>(
-        `/bmc?opt=get&type=power`
-      );
+      const response = await api.get<APIResponse<PowerTabResponse>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "power",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -94,9 +100,12 @@ export function useAboutTabData() {
   return useSuspenseQuery({
     queryKey: ["aboutTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<AboutTabResponse>>(
-        `/bmc?opt=get&type=about`
-      );
+      const response = await api.get<APIResponse<AboutTabResponse>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "about",
+        },
+      });
       return {
         ...response.data.response[0].result,
         buildtime: new Date(response.data.response[0].result.buildtime),
@@ -111,9 +120,12 @@ export function useInfoTabData() {
   return useSuspenseQuery({
     queryKey: ["infoTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<InfoTabResponse>>(
-        `/bmc?opt=get&type=info`
-      );
+      const response = await api.get<APIResponse<InfoTabResponse>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "info",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -125,9 +137,12 @@ export function useNodesTabData() {
   return useSuspenseQuery({
     queryKey: ["nodesTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<NodeInfoResponse[]>>(
-        `/bmc?opt=get&type=node_info`
-      );
+      const response = await api.get<APIResponse<NodeInfoResponse[]>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "node_info",
+        },
+      });
       return response.data.response[0].result;
     },
   });
@@ -139,7 +154,12 @@ export function useFlashStatusQuery(enabled: boolean) {
   return useQuery({
     queryKey: ["flashStatus"],
     queryFn: async () => {
-      const response = await api.get<FlashStatus>("/bmc?opt=get&type=flash");
+      const response = await api.get<FlashStatus>("/bmc", {
+        params: {
+          opt: "get",
+          type: "flash",
+        },
+      });
       return response.data;
     },
     refetchInterval: 1000, // Refetch every 1 second
@@ -153,7 +173,12 @@ export function useFirmwareStatusQuery(enabled: boolean) {
   return useQuery({
     queryKey: ["firmwareStatus"],
     queryFn: async () => {
-      const response = await api.get<FlashStatus>("/bmc?opt=get&type=firmware");
+      const response = await api.get<FlashStatus>("/bmc", {
+        params: {
+          opt: "get",
+          type: "firmware",
+        },
+      });
       return response.data;
     },
     refetchInterval: 1000, // Refetch every 1 second
@@ -167,9 +192,12 @@ export function useCoolingDevicesQuery() {
   return useSuspenseQuery({
     queryKey: ["coolingDevices"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<CoolingDevice[]>>(
-        "/bmc?opt=get&type=cooling"
-      );
+      const response = await api.get<APIResponse<CoolingDevice[]>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "cooling",
+        },
+      });
       return response.data.response[0].result;
     },
   });
