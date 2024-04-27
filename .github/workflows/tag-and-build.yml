@@ -20,8 +20,7 @@ jobs:
 
       - name: Get current version from package.json
         id: version
-        run: |
-          echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+        run: echo "version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
 
       - name: Check if tag already exists
         id: check

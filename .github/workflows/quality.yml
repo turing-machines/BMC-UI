@@ -46,8 +46,7 @@ jobs:
         run: npm run build
 
       - name: Calculate /dist folder size in KB
-        run: |
-          echo "DIST_SIZE=$(du -sk dist | awk '{print $1 " KB"}')" >> $GITHUB_ENV
+        run: echo "DIST_SIZE=$(du -sk dist | awk '{print $1 " KB"}')" >> $GITHUB_ENV
 
       - name: Find Comment
         uses: peter-evans/find-comment@v3
