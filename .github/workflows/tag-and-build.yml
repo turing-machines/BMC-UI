@@ -1,4 +1,4 @@
-name: Tag new version
+name: Tag and Build
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   tag:
-    name: New release
+    name: Tag
     runs-on: ubuntu-latest
     outputs:
       new_tag: ${{ steps.tag.outputs.new_tag }}
@@ -62,14 +62,14 @@ jobs:
         run: npm run build
 
       - name: Compress dist as tar.gz
-        run: tar -czf dist.tar.gz dist
+        run: tar -czf bmc-ui-${{ needs.tag.outputs.new_tag }}.tar.gz dist
 
       - name: Release
         uses: ncipollo/release-action@v1
         with:
           name: BMC-UI ${{ needs.tag.outputs.new_tag }}
           tag: ${{ needs.tag.outputs.new_tag }}
-          artifacts: dist.tar.gz
+          artifacts: bmc-ui-${{ needs.tag.outputs.new_tag }}.tar.gz
           body: |
             This is an automated release build by GitHub Actions, intended to be used in the BMC-Firmware build process.
 
