@@ -69,16 +69,9 @@ function FirmwareUpgrade() {
     }
   }, [data]);
 
-  const handleRebootBMC = () => {
-    setRebootModalOpened(false);
-    mutateRebootBMC(undefined, {
-      onSuccess: () => {
-        toast.success("Rebooting BMC...");
-      },
-      onError: () => {
-        toast.error("Failed to reboot BMC");
-      },
-    });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setConfirmFlashModal(true);
   };
 
   const handleFirmwareUpload = () => {
@@ -88,12 +81,14 @@ function FirmwareUpgrade() {
       const form = formRef.current;
       const file = (form.elements.namedItem("file") as HTMLInputElement)
         .files?.[0];
+      const url = (form.elements.namedItem("file-url") as HTMLInputElement)
+        .value;
       const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
         .value;
 
       setStatusMessage("Uploading BMC firmware...");
       mutateFirmwareUpdate(
-        { file, sha256 },
+        { file, url, sha256 },
         {
           onSuccess: () => {
             void refetch();
@@ -108,13 +103,30 @@ function FirmwareUpgrade() {
     }
   };
 
+  const handleRebootBMC = () => {
+    setRebootModalOpened(false);
+    mutateRebootBMC(undefined, {
+      onSuccess: () => {
+        toast.success("Rebooting BMC...");
+      },
+      onError: () => {
+        toast.error("Failed to reboot BMC");
+      },
+    });
+  };
+
   return (
     <div
       data-tab="Firmware Upgrade"
       id="firmware-upgrade-tab"
       className="tabs-body__item "
     >
-      <form ref={formRef} className="form" id="firmware-upgrade-form">
+      <form
+        ref={formRef}
+        className="form"
+        id="firmware-upgrade-form"
+        onSubmit={handleSubmit}
+      >
         <div className="form-group row">
           <div className="text-content">
             <p>Upgrade BMC firmware:</p>
@@ -123,19 +135,22 @@ function FirmwareUpgrade() {
         <div className="form-group row">
           <FileInput
             name="file"
-            label=".tpu file"
+            label=".tpu file (remote or local):"
             accept=".tpu,.tpu.xz,application/octet-stream"
           />
         </div>
         <div className="form-group row">
-          <TextInput name="sha256" label="Sha256: (optional)" className="input-type-file-wrap" />
+          <TextInput
+            name="sha256"
+            label="Sha256: (optional)"
+            className="input-type-file-wrap"
+          />
         </div>
         <div className="form-group">
           <button
-            type="button"
+            type="submit"
             className={`btn btn-turing-small-yellow ${isPending || isUpgrading ? "loading" : ""}`}
             disabled={isPending || isUpgrading}
-            onClick={() => setConfirmFlashModal(true)}
           >
             <span className="caption">Upgrade</span>
           </button>

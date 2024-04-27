@@ -97,6 +97,8 @@ function Flash() {
       const nodeId = selectNodeRef.current!.state.selectValue[0].value;
       const file = (form.elements.namedItem("file") as HTMLInputElement)
         .files?.[0];
+      const url = (form.elements.namedItem("file-url") as HTMLInputElement)
+        .value;
       const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
         .value;
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
@@ -104,7 +106,7 @@ function Flash() {
 
       setStatusMessage(`Transferring image to node ${nodeId + 1}...`);
       mutateNodeUpdate(
-        { nodeId, file, sha256, skipCRC },
+        { nodeId, file, url, sha256, skipCRC },
         {
           onSuccess: () => {
             void refetch();
@@ -155,7 +157,11 @@ function Flash() {
         </div>
 
         <div className="form-group row">
-          <TextInput name="sha256" label="Sha256: (optional)" className="input-type-file-wrap" />
+          <TextInput
+            name="sha256"
+            label="Sha256: (optional)"
+            className="input-type-file-wrap"
+          />
         </div>
 
         <div className="form-group form-flex-row">
