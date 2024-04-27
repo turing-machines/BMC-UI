@@ -1,4 +1,5 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
+import { type AxiosError } from "axios";
 import { useState } from "react";
 
 import TextInput from "../components/TextInput";
@@ -42,7 +43,11 @@ function Login() {
           window.location.reload();
         },
         onError: (error) => {
-          setMessage(error.message);
+          const msg =
+            (error as AxiosError).code === "ERR_BAD_REQUEST"
+              ? "Invalid username or password"
+              : "An error has occurred. Please try again later.";
+          setMessage(msg);
         },
       }
     );
