@@ -142,7 +142,7 @@ function FirmwareUpgrade() {
         <div className="form-group row">
           <TextInput
             name="sha256"
-            label="Sha256: (optional)"
+            label="SHA-256 (optional):"
             className="input-type-file-wrap"
           />
         </div>
