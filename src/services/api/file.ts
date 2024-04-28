@@ -3,6 +3,41 @@ import type { AxiosProgressEvent } from "axios";
 
 import useAxiosWithAuth from "../../utils/axios";
 
+const handleParams = (variables: {
+  type: "firmware" | "flash";
+  file?: { name: string; size: number };
+  url?: string;
+  sha256?: string;
+  skipCRC?: boolean;
+  node?: number;
+}) => {
+  const params: Record<string, unknown> = {
+    opt: "set",
+    type: variables.type,
+  };
+
+  if (variables.file) {
+    params.file = variables.file.name;
+    params.length = variables.file.size;
+  } else {
+    params.file = variables.url;
+  }
+
+  if (variables.sha256) {
+    params.sha256 = variables.sha256;
+  }
+
+  if (variables.skipCRC !== undefined) {
+    params.skip_crc = variables.skipCRC;
+  }
+
+  if (variables.node !== undefined) {
+    params.node = variables.node;
+  }
+
+  return params;
+};
+
 export function useBackupMutation() {
   const api = useAxiosWithAuth();
 
@@ -43,13 +78,12 @@ export function useFirmwareUpdateMutation(
       const {
         data: { handle },
       } = await api.get<{ handle: number }>("/bmc", {
-        params: {
-          opt: "set",
+        params: handleParams({
           type: "firmware",
-          file: variables.file?.name ?? variables.url,
-          length: variables.file?.size ?? undefined,
-          sha256: variables.sha256 ?? undefined,
-        },
+          file: variables.file,
+          url: variables.url,
+          sha256: variables.sha256,
+        }),
       });
 
       // Step 2: Upload the file data
@@ -92,15 +126,14 @@ export function useNodeUpdateMutation(
       const {
         data: { handle },
       } = await api.get<{ handle: number }>("/bmc", {
-        params: {
-          opt: "set",
+        params: handleParams({
           type: "flash",
           node: variables.nodeId,
-          file: variables.file?.name ?? variables.url,
-          length: variables.file?.size ?? undefined,
-          skip_crc: variables.skipCRC,
-          sha256: variables.sha256 ?? undefined,
-        },
+          file: variables.file,
+          url: variables.url,
+          skipCRC: variables.skipCRC,
+          sha256: variables.sha256,
+        }),
       });
 
       // Step 2: Upload the file data
