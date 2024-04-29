@@ -66,13 +66,13 @@ export function useUSBTabData() {
   return useSuspenseQuery({
     queryKey: ["usbTabData"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<USBTabResponse>>("/bmc", {
+      const response = await api.get<APIResponse<USBTabResponse[]>>("/bmc", {
         params: {
           opt: "get",
           type: "usb",
         },
       });
-      return response.data.response[0].result;
+      return response.data.response[0].result[0];
     },
   });
 }
