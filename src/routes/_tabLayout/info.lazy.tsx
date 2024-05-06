@@ -154,7 +154,7 @@ function Info() {
         <div className="form-group row"></div>
       </form>
 
-      {coolingDevices && (
+      {coolingDevices.length > 0 && (
         <form className="form" id="form-storage">
           <div className="form-group row">
             <div className="text-content">
