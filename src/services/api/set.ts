@@ -72,13 +72,12 @@ export function useSetNodeInfoMutation() {
   return useMutation({
     mutationKey: ["setNodeInfoMutation"],
     mutationFn: async (nodeInfo: NodeInfoPayload) => {
-      const response = await api.post<APIResponse<string>>("/bmc", nodeInfo, {
+      await api.post<void>("/bmc", nodeInfo, {
         params: {
           opt: "set",
           type: "node_info",
         },
       });
-      return response.data.response[0].result;
     },
     onSettled: () => {
       // Invalidate the query for the power tab data
