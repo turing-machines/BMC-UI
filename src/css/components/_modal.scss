@@ -1,0 +1,38 @@
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 450px;
+
+  &__icon {
+    display: flex;
+    justify-content: center;
+    width: 100px;
+    height: auto;
+  }
+  
+  &__title {
+    font-size: 27px;
+    font-weight: 600;
+    color: rgba(0, 0, 0, .65);
+    margin: 15px;
+  }
+
+  &__text {
+    text-align: center;
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    width: 100%;
+    margin-top: 25px;
+  }
+}
+
+.modal-rounded {
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+}
