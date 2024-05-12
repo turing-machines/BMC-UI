@@ -12,4 +12,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      // proxy bmcd-api-mock during development
+      "/api": "http://127.0.0.1:4460",
+    },
+  },
 });
