@@ -1,18 +1,45 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { filesize } from "filesize";
 import { useState } from "react";
-import { toast } from "react-toastify";
 
-import RebootModal from "../../components/RebootModal";
-import { useBackupMutation } from "../../services/api/file";
-import { useCoolingDevicesQuery, useInfoTabData } from "../../services/api/get";
+import RebootModal from "@/components/RebootModal";
+import InfoSkeleton from "@/components/skeletons/info";
+import TableItem from "@/components/TableItem";
+import TabView from "@/components/TabView";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { useToast } from "@/components/ui/use-toast";
+import { useBackupMutation } from "@/lib/api/file";
+import { useCoolingDevicesQuery, useInfoTabData } from "@/lib/api/get";
 import {
   useCoolingDeviceMutation,
   useNetworkResetMutation,
   useRebootBMCMutation,
   useReloadBMCMutation,
-} from "../../services/api/set";
-import InfoSkeleton from "./-components/info.skeleton";
+} from "@/lib/api/set";
+
+const storageWarningPct = 75;
+const storageDangerPct = 90;
+
+const progressBarColor = (usedPct: number, darkMode = false) => {
+  if (darkMode) {
+    if (usedPct >= storageDangerPct) {
+      return "dark:bg-red-500";
+    } else if (usedPct >= storageWarningPct) {
+      return "dark:bg-amber-400";
+    } else {
+      return "dark:bg-zinc-400";
+    }
+  } else {
+    if (usedPct >= storageDangerPct) {
+      return "bg-red-500";
+    } else if (usedPct >= storageWarningPct) {
+      return "bg-amber-400";
+    } else {
+      return "bg-zinc-400";
+    }
+  }
+};
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -39,6 +66,7 @@ export const Route = createLazyFileRoute("/_tabLayout/info")({
 });
 
 function Info() {
+  const { toast } = useToast();
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
   const { data: coolingDevices } = useCoolingDevicesQuery();
@@ -62,10 +90,17 @@ function Info() {
         link.click();
         link.remove();
         window.URL.revokeObjectURL(url);
-        toast.success(`Successfully downloaded backup file: ${filename}`);
+        toast({
+          title: "Backup successful",
+          description: `Successfully downloaded backup file: ${filename}`,
+        });
       },
-      onError: () => {
-        toast.error("Failed to download backup file");
+      onError: (e) => {
+        toast({
+          title: "Backup failed",
+          description: e.message,
+          variant: "destructive",
+        });
       },
     });
   };
@@ -73,10 +108,17 @@ function Info() {
   const handleResetNetwork = () => {
     mutateResetNetwork(undefined, {
       onSuccess: () => {
-        toast.success("Network reset successfully");
+        toast({
+          title: "Network reset",
+          description: "Network reset successful",
+        });
       },
-      onError: () => {
-        toast.error("Failed to reset network");
+      onError: (e) => {
+        toast({
+          title: "Network reset failed",
+          description: e.message,
+          variant: "destructive",
+        });
       },
     });
   };
@@ -84,11 +126,15 @@ function Info() {
   const handleRebootBMC = () => {
     mutateRebootBMC(undefined, {
       onSuccess: () => {
-        toast.success("Rebooting BMC...");
+        toast({ title: "Rebooting BMC", description: "The BMC is rebooting" });
         setRebootModalOpened(false);
       },
-      onError: () => {
-        toast.error("Failed to reboot BMC");
+      onError: (e) => {
+        toast({
+          title: "Failed to reboot BMC",
+          description: e.message,
+          variant: "destructive",
+        });
       },
     });
   };
@@ -96,44 +142,90 @@ function Info() {
   const handleReloadBMC = () => {
     mutateReloadBMC(undefined, {
       onSuccess: () => {
-        toast.success("Reloading BMC daemon...");
+        toast({
+          title: "Reloading BMC daemon",
+          description: "The BMC daemon is reloading",
+        });
       },
-      onError: () => {
-        toast.error("Failed to reload BMC daemon");
+      onError: (e) => {
+        toast({
+          title: "Failed to reload BMC daemon",
+          description: e.message,
+          variant: "destructive",
+        });
       },
     });
   };
 
   return (
-    <div data-tab="Info" className="tabs-body__item ">
-      <form className="form" id="form-storage">
-        <div className="form-group row">
-          <div className="text-content">
-            <p>User Storage</p>
-          </div>
+    <TabView>
+      <div>
+        <div className="mb-6 text-lg font-bold">User Storage</div>
+        <div className="space-y-4">
+          {data.storage.map((storage) => {
+            const { usedPct, usedHuman, totalHuman } = progressData(
+              storage.total_bytes,
+              storage.bytes_free
+            );
+            return (
+              <div
+                key={storage.name}
+                className="flex items-center justify-between"
+              >
+                <div className="w-1/4 font-semibold">{storage.name}</div>
+                <div className="relative w-2/4 lg:w-3/4">
+                  <div className="flex h-5 overflow-hidden bg-zinc-200">
+                    <div
+                      className={`h-full ${progressBarColor(usedPct)} transition-all duration-500 ease-out ${progressBarColor(usedPct, true)}`}
+                      style={{ width: `${usedPct}%` }}
+                    />
+                  </div>
+                  <div className="absolute left-0 top-0 flex size-full items-center justify-center px-2 text-sm text-zinc-900">
+                    {usedHuman} / {totalHuman}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <div className="form-group row">
-          <div id="tableStorageInfo" className="table-specification">
-            {data.storage.map((storage) => {
-              const formattedStorage = progressData(
-                storage.total_bytes,
-                storage.bytes_free
-              );
+        <div className="mt-4">
+          <Button
+            onClick={() => handleBackupSubmit()}
+            disabled={backupPending}
+            isLoading={backupPending}
+          >
+            Backup user data
+          </Button>
+        </div>
+      </div>
+
+      {coolingDevices.length > 0 && (
+        <div>
+          <div className="mb-6 text-lg font-bold">Fan control</div>
+          <div className="space-y-4">
+            {coolingDevices.map((coolingDevice) => {
               return (
-                <div className="row" key={storage.name}>
-                  <div className="col">{storage.name}</div>
-                  <div className="col">
-                    <div className="progress-bar-group form-group active">
-                      <div className="progress-bar-wrap">
-                        <div
-                          className="progress-bar loaded"
-                          style={{ width: `${formattedStorage.usedPct}%` }}
-                        ></div>
-                        <div className="progress-bar-caption">
-                          {formattedStorage.usedHuman} /{" "}
-                          {formattedStorage.totalHuman}
-                        </div>
-                      </div>
+                <div
+                  key={coolingDevice.device}
+                  className="flex items-center justify-between"
+                >
+                  <div className="w-1/4 font-semibold">
+                    {coolingDevice.device}
+                  </div>
+                  <div className="flex w-2/4 items-center lg:w-3/4">
+                    <Slider
+                      defaultValue={[coolingDevice.speed]}
+                      min={0}
+                      max={coolingDevice.max_speed}
+                      onValueCommit={(value) =>
+                        mutateCoolingDevices({
+                          device: coolingDevice.device,
+                          speed: value[0],
+                        })
+                      }
+                    />
+                    <div className="flex w-1/5 justify-end font-semibold lg:w-1/12">
+                      {(coolingDevice.speed / coolingDevice.max_speed) * 100}%
                     </div>
                   </div>
                 </div>
@@ -141,125 +233,36 @@ function Info() {
             })}
           </div>
         </div>
-        <div className="form-group row">
-          <button
-            type="button"
-            className={`btn btn-turing-small-yellow ${backupPending ? "loading" : ""}`}
-            disabled={backupPending}
-            onClick={() => handleBackupSubmit()}
-          >
-            <span className="caption">Backup user data</span>
-          </button>
-        </div>
-        <div className="form-group row"></div>
-      </form>
-
-      {coolingDevices.length > 0 && (
-        <form className="form" id="form-storage">
-          <div className="form-group row">
-            <div className="text-content">
-              <p>Fan control</p>
-            </div>
-          </div>
-          <div className="form-group row">
-            <div id="tableStorageInfo" className="table-specification">
-              {coolingDevices.map((coolingDevice) => {
-                return (
-                  <div className="row" key={coolingDevice.device}>
-                    <div className="col">{coolingDevice.device}</div>
-                    <div className="col">
-                      <div className="slider-wrap">
-                        <input
-                          type="range"
-                          min="0"
-                          max={coolingDevice.max_speed}
-                          step="1"
-                          defaultValue={coolingDevice.speed}
-                          className="slider"
-                          readOnly
-                          onChange={(e) =>
-                            mutateCoolingDevices({
-                              device: coolingDevice.device,
-                              speed: parseInt(e.target.value),
-                            })
-                          }
-                        />
-                        <div className="slider-value">
-                          {(coolingDevice.speed / coolingDevice.max_speed) *
-                            100}
-                          %
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          <div className="form-group row"></div>
-        </form>
       )}
 
-      <form className="form" id="form-network">
-        <div className="form-group row">
-          <div className="text-content">
-            <p>Network interfaces</p>
-          </div>
-        </div>
-        <div className="form-group row">
+      <div>
+        <div className="mb-6 text-lg font-bold">Network interfaces</div>
+        <div className="space-y-4">
           {data.ip.map((ip) => (
-            <div
-              id="tableNetworkInfo"
-              className="table-specification"
-              key={ip.device}
-            >
-              <div className="row">
-                <div className="col">{ip.device}</div>
-                <div className="col"></div>
-              </div>
-              <div className="row">
-                <div className="col">ip</div>
-                <div className="col">{ip.ip}</div>
-              </div>
-              <div className="row">
-                <div className="col">mac</div>
-                <div className="col">{ip.mac}</div>
-              </div>
-            </div>
+            <dl key={ip.device}>
+              <TableItem term={ip.device} />
+              <TableItem term="ip">{ip.ip}</TableItem>
+              <TableItem term="mac">{ip.mac}</TableItem>
+            </dl>
           ))}
         </div>
-        <div className="form-group row">
-          <button
-            type="button"
-            className="btn btn-turing-small-yellow"
-            onClick={() => handleResetNetwork()}
-          >
-            <span className="caption">Reset network</span>
-          </button>
+        <div className="mt-4">
+          <Button onClick={() => handleResetNetwork()}>Reset network</Button>
         </div>
-        <div className="form-group row"></div>
-      </form>
-      <div className="form">
-        <div className="form-group row">
-          <div className="text-content">
-            <p>BMC</p>
-          </div>
-        </div>
-        <div className="form-group">
-          <button
-            type="button"
-            className="btn btn-turing-small-red"
+      </div>
+
+      <div>
+        <div className="mb-6 text-lg font-bold">BMC</div>
+        <div className="flex gap-4">
+          <Button
+            variant="destructive"
             onClick={() => setRebootModalOpened(true)}
           >
-            <span className="caption">Reboot</span>
-          </button>
-          <div
-            id="reload-btn"
-            className="btn btn-turing-small-dark"
-            onClick={() => handleReloadBMC()}
-          >
-            <span className="caption">Reload daemon</span>
-          </div>
+            Reboot
+          </Button>
+          <Button variant="bw" onClick={() => handleReloadBMC()}>
+            Reload daemon
+          </Button>
         </div>
       </div>
 
@@ -271,6 +274,6 @@ function Info() {
         message="Be aware that the nodes will lose power until booted."
         isPending={rebootPending}
       />
-    </div>
+    </TabView>
   );
 }

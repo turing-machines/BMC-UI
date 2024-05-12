@@ -1,24 +1,22 @@
-import { Link } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
+
+import { Button } from "@/components/ui/button";
 
 export default function FourOhFour() {
+  const navigate = useNavigate();
   return (
-    <div className="login-wrapper">
-      <div className="login-container">
-        <main className="page-template-404">
-          <div className="container">
-            <strong className="page-error">404</strong>
-            <h1 className="page-title">Sorry, Page Not Found</h1>
-            <div className="btn-wrap">
-              <Link to="/" className="btn btn-turing-small-yellow">
-                <span className="caption">Back to home</span>
-              </Link>
-            </div>
-          </div>
-        </main>
+    <main className="flex h-[55rem] w-full items-center justify-center">
+      <div className="flex flex-col items-center">
+        <h1 className="mb-4 text-center text-9xl font-bold text-zinc-400">
+          404
+        </h1>
+        <p className="mb-10 text-center text-4xl font-semibold text-zinc-900">
+          Sorry, Page Not Found
+        </p>
+        <Button size="lg" onClick={() => void navigate({ to: "/" })}>
+          Back to home
+        </Button>
       </div>
-      <div className="copyright-login">
-        <p className="copyright-login__text">© TURING MACHINES INC.</p>
-      </div>
-    </div>
+    </main>
   );
 }

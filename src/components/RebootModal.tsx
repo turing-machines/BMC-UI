@@ -1,4 +1,23 @@
-import { Modal } from "react-responsive-modal";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 
 interface RebootModalProps {
   isOpen: boolean;
@@ -17,35 +36,64 @@ export default function RebootModal({
   message,
   isPending = false,
 }: RebootModalProps) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent className={cn("modal-rounded", "p-6")}>
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            {typeof message === "string" ? (
+              <DialogDescription>{message}</DialogDescription>
+            ) : (
+              message
+            )}
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="bw" onClick={onClose}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={onReboot}
+              disabled={isPending}
+              isLoading={isPending}
+            >
+              Reboot
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      center
-      showCloseIcon={false}
-      classNames={{ modal: "modal-rounded" }}
-    >
-      <div className="modal">
-        <h2 className="modal__title">{title}</h2>
-        {typeof message === "string" ? (
-          <p className="modal__text">{message}</p>
-        ) : (
-          message
-        )}
-        <div className="modal__buttons">
-          <button className="btn btn-turing-small-dark" onClick={onClose}>
-            Cancel
-          </button>
-          <button
-            className={`reboot-btn btn btn-turing-small-red ${
-              isPending ? "loading" : ""
-            }`}
+    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle>{title}</DrawerTitle>
+          {typeof message === "string" ? (
+            <DrawerDescription>{message}</DrawerDescription>
+          ) : (
+            message
+          )}
+        </DrawerHeader>
+        <DrawerFooter className="pt-2">
+          <DrawerClose asChild>
+            <Button variant="bw" size="lg">Cancel</Button>
+          </DrawerClose>
+          <Button
+            variant="destructive"
+            size="lg"
             onClick={onReboot}
+            disabled={isPending}
+            isLoading={isPending}
           >
             Reboot
-          </button>
-        </div>
-      </div>
-    </Modal>
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
