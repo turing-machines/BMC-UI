@@ -118,7 +118,7 @@ function USB() {
           </Select>
         </div>
         <div className="mt-4 flex flex-row flex-wrap justify-between">
-          <Button type="submit" disabled={isPending}>
+          <Button type="submit" isLoading={isPending} disabled={isPending}>
             Change
           </Button>
 

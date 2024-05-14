@@ -110,7 +110,7 @@ function NodesTab() {
   const { toast } = useToast();
   const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
-  const { mutate } = useSetNodeInfoMutation();
+  const { mutate, isPending } = useSetNodeInfoMutation();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -178,10 +178,15 @@ function NodesTab() {
             type="button"
             variant="bw"
             onClick={() => setEditMode(!editMode)}
+            disabled={isPending}
           >
             {editMode ? "Cancel" : "Edit"}
           </Button>
-          <Button type="submit" disabled={!editMode}>
+          <Button
+            type="submit"
+            isLoading={isPending}
+            disabled={!editMode || isPending}
+          >
             Save
           </Button>
         </div>

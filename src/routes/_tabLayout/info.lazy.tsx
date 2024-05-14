@@ -48,11 +48,13 @@ function Info() {
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
   const { data: coolingDevices } = useCoolingDevicesQuery();
-  const { mutate: mutateResetNetwork } = useNetworkResetMutation();
+  const { mutate: mutateResetNetwork, isPending: resetNetworkPending } =
+    useNetworkResetMutation();
   const { mutate: mutateCoolingDevices } = useCoolingDeviceMutation();
   const { mutate: mutateRebootBMC, isPending: rebootPending } =
     useRebootBMCMutation();
-  const { mutate: mutateReloadBMC } = useReloadBMCMutation();
+  const { mutate: mutateReloadBMC, isPending: reloadPending } =
+    useReloadBMCMutation();
   const { mutate: mutateBackup, isPending: backupPending } =
     useBackupMutation();
 
@@ -107,10 +109,13 @@ function Info() {
   };
 
   const handleRebootBMC = () => {
+    setRebootModalOpened(false);
     mutateRebootBMC(undefined, {
       onSuccess: () => {
-        toast({ title: "Rebooting BMC", description: "The BMC is rebooting..." });
-        setRebootModalOpened(false);
+        toast({
+          title: "Rebooting BMC",
+          description: "The BMC is rebooting...",
+        });
       },
       onError: (e) => {
         toast({
@@ -172,8 +177,8 @@ function Info() {
           <Button
             type="button"
             onClick={() => handleBackupSubmit()}
-            disabled={backupPending}
             isLoading={backupPending}
+            disabled={backupPending}
           >
             Backup user data
           </Button>
@@ -228,7 +233,12 @@ function Info() {
           ))}
         </div>
         <div className="mt-4">
-          <Button type="button" onClick={() => handleResetNetwork()}>
+          <Button
+            type="button"
+            onClick={() => handleResetNetwork()}
+            isLoading={resetNetworkPending}
+            disabled={resetNetworkPending}
+          >
             Reset network
           </Button>
         </div>
@@ -241,10 +251,18 @@ function Info() {
             type="button"
             variant="destructive"
             onClick={() => setRebootModalOpened(true)}
+            isLoading={rebootPending}
+            disabled={rebootPending}
           >
             Reboot
           </Button>
-          <Button type="button" variant="bw" onClick={() => handleReloadBMC()}>
+          <Button
+            type="button"
+            variant="bw"
+            onClick={() => handleReloadBMC()}
+            isLoading={reloadPending}
+            disabled={reloadPending}
+          >
             Reload daemon
           </Button>
         </div>
@@ -256,7 +274,6 @@ function Info() {
         onReboot={handleRebootBMC}
         title="Do you want to reboot?"
         message="Be aware that the nodes will lose power until booted."
-        isPending={rebootPending}
       />
     </TabView>
   );
