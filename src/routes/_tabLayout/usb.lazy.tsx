@@ -136,10 +136,10 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16}>
-                    <div className="flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-wrap">
                       <p className="font-semibold">Host</p>
                       <p>Turns the USB_OTG port power on.</p>
-                      <p className="font-semibold">Usage</p>
+                      <p className="mt-1 font-semibold">Usage</p>
                       <p>
                         Use when you want to connect USB devices (like keyboard,
                         mouse, USB drive, etc) through the USB_OTG port to
@@ -159,10 +159,10 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
-                    <div className="flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-wrap">
                       <p className="font-semibold">Device</p>
                       <p>The default mode. Turns the USB_OTG power off.</p>
-                      <p className="font-semibold">Usage</p>
+                      <p className="mt-1 font-semibold">Usage</p>
                       <p>Use in any other case.</p>
                     </div>
                   </TooltipContent>
@@ -178,13 +178,13 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
-                    <div className="flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-wrap">
                       <p className="font-semibold">Flash</p>
                       <p>
                         Turns the module into flashing mode and sets the USB_OTG
                         into device mode.
                       </p>
-                      <p className="font-semibold">Usage</p>
+                      <p className="mt-1 font-semibold">Usage</p>
                       <p>Use to flash the module using USB_OTG port.</p>
                     </div>
                   </TooltipContent>
