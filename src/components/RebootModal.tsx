@@ -43,18 +43,19 @@ export default function RebootModal({
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent className={cn("modal-rounded", "p-6")}>
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="mb-4">{title}</DialogTitle>
             {typeof message === "string" ? (
               <DialogDescription>{message}</DialogDescription>
             ) : (
               message
             )}
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="bw" onClick={onClose}>
+          <DialogFooter className="mt-2">
+            <Button type="button" variant="bw" onClick={onClose}>
               Cancel
             </Button>
             <Button
+              type="button"
               variant="destructive"
               onClick={onReboot}
               disabled={isPending}
@@ -72,18 +73,21 @@ export default function RebootModal({
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerTitle className="mb-4">{title}</DrawerTitle>
           {typeof message === "string" ? (
             <DrawerDescription>{message}</DrawerDescription>
           ) : (
             message
           )}
         </DrawerHeader>
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className="mt-2">
           <DrawerClose asChild>
-            <Button variant="bw" size="lg">Cancel</Button>
+            <Button type="button" variant="bw" size="lg">
+              Cancel
+            </Button>
           </DrawerClose>
           <Button
+            type="button"
             variant="destructive"
             size="lg"
             onClick={onReboot}

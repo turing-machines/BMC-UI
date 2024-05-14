@@ -7,7 +7,7 @@ import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { type NodeInfoResponse, useNodesTabData } from "@/lib/api/get";
 import {
   usePowerNodeMutation,
@@ -61,7 +61,7 @@ const NodeRow = (
   };
 
   return (
-    <div className="border-b border-zinc-200 py-4">
+    <div className="border-b border-neutral-200 py-4 last:border-none dark:border-neutral-700">
       <div className="flex flex-col gap-4 md:flex-row">
         <div className="flex items-center gap-4">
           <Switch
@@ -74,6 +74,7 @@ const NodeRow = (
             offIcon={<PowerOff size={16} />}
           />
           <Button
+            type="button"
             variant="destructive"
             onClick={handleResetNode}
             disabled={props.power_on_time === null || isPendingReset}
@@ -174,8 +175,8 @@ function NodesTab() {
         ))}
         <div className="mt-6 flex justify-end gap-4">
           <Button
-            variant="bw"
             type="button"
+            variant="bw"
             onClick={() => setEditMode(!editMode)}
           >
             {editMode ? "Cancel" : "Edit"}

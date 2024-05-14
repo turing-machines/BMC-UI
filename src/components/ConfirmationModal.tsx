@@ -45,14 +45,16 @@ export default function ConfirmationModal({
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent className={cn("modal-rounded", "p-6")}>
           <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
+            <DialogTitle className="mb-4">{title}</DialogTitle>
             <DialogDescription>{message}</DialogDescription>
           </DialogHeader>
-          <DialogFooter>
-            <Button variant="bw" onClick={onClose}>
+          <DialogFooter className="mt-2">
+            <Button type="button" variant="bw" onClick={onClose}>
               {cancelText}
             </Button>
-            <Button onClick={onConfirm}>{confirmText}</Button>
+            <Button type="button" onClick={onConfirm}>
+              {confirmText}
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -63,14 +65,18 @@ export default function ConfirmationModal({
     <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>{title}</DrawerTitle>
+          <DrawerTitle className="mb-4">{title}</DrawerTitle>
           <DrawerDescription>{message}</DrawerDescription>
         </DrawerHeader>
-        <DrawerFooter className="pt-2">
+        <DrawerFooter className="mt-2">
           <DrawerClose asChild>
-            <Button variant="bw" size="lg">{cancelText}</Button>
+            <Button type="button" variant="bw" size="lg">
+              {cancelText}
+            </Button>
           </DrawerClose>
-          <Button size="lg" onClick={onConfirm}>{confirmText}</Button>
+          <Button type="button" size="lg" onClick={onConfirm}>
+            {confirmText}
+          </Button>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

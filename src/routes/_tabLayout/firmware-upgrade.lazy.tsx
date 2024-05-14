@@ -8,7 +8,8 @@ import RebootModal from "@/components/RebootModal";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
 import { useFirmwareUpdateMutation } from "@/lib/api/file";
 import { useFirmwareStatusQuery } from "@/lib/api/get";
 import { useRebootBMCMutation } from "@/lib/api/set";
@@ -153,21 +154,13 @@ function FirmwareUpgrade() {
           </Button>
         </div>
         {!isIdle && (
-          <div className="mt-4">
-            <div className="relative">
-              <div className="h-5 overflow-hidden bg-zinc-200">
-                <div
-                  className={`h-full bg-turing-btn-hover transition-all duration-500 ease-out ${
-                    !isPending && !isUpgrading ? "" : "animate-pulse"
-                  }`}
-                  style={{ width: `${progress.pct}%` }}
-                ></div>
-              </div>
-              <div className="absolute left-0 top-0 flex size-full items-center justify-center px-4 text-xs text-zinc-500">
-                {progress.transferred}
-                {progress.total ? ` / ${progress.total}` : ""}
-              </div>
-            </div>
+          <div className="mt-4 block">
+            <Progress
+              aria-label="Firmware upgrade progress"
+              value={progress.pct}
+              label={`${progress.transferred}${progress.total ? ` / ${progress.total}` : ""}`}
+              pulsing={isPending || isUpgrading}
+            />
             <div className="mt-2 text-sm">{statusMessage}</div>
           </div>
         )}
@@ -177,7 +170,7 @@ function FirmwareUpgrade() {
         onClose={() => setConfirmFlashModal(false)}
         onConfirm={handleFirmwareUpload}
         title="Upgrade Firmware?"
-        message="A reboot is required to finalise the upgrade process"
+        message="A reboot is required to finalise the upgrade process."
       />
       <RebootModal
         isOpen={rebootModalOpened}
@@ -185,11 +178,14 @@ function FirmwareUpgrade() {
         onReboot={handleRebootBMC}
         title="Upgrade Finished!"
         message={
-          <>
-            <p>To complete the upgrade a reboot is required.</p>
-            <p>Be aware that the nodes will lose power until booted.</p>
-            <p>Do you want to reboot?</p>
-          </>
+          <div className="text-neutral-900 opacity-60 dark:text-neutral-100">
+            <p>To finalize the upgrade, a system reboot is necessary.</p>
+            <p>Would you like to proceed with the reboot now?</p>
+            <p className="mt-4 text-xs italic">
+              The nodes will temporarily lose power until the reboot process is
+              complete.
+            </p>
+          </div>
         }
         isPending={isPending}
       />

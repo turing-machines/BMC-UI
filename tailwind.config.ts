@@ -26,6 +26,7 @@ const config = {
         "turing-btn": "#DCFE8E",
         "turing-btn-hover": "#D3F97D",
         "turing-bg": "#F7F7F7",
+        "turing-bg-dark": "#111",
       },
       keyframes: {
         "accordion-down": {

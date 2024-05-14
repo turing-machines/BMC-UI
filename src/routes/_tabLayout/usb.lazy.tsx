@@ -16,7 +16,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useUSBTabData } from "@/lib/api/get";
 import { useUSBModeMutation } from "@/lib/api/set";
 
@@ -123,14 +123,14 @@ function USB() {
           </Button>
 
           <div className="mt-8 flex items-center md:mt-0 lg:mt-0">
-            <p className="mr-4 text-base font-semibold text-zinc-500">
+            <p className="mr-4 text-base font-semibold opacity-60">
               USB mode definitions
             </p>
             <div className="flex gap-4">
               <div className="group relative cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold text-zinc-900">
+                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
                       <p>Host</p>
                       <InfoIcon className="size-4" />
                     </div>
@@ -153,7 +153,7 @@ function USB() {
               <div className="group relative cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold text-zinc-900">
+                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
                       <p>Device</p>
                       <InfoIcon className="size-4" />
                     </div>
@@ -172,7 +172,7 @@ function USB() {
               <div className="group relative cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold text-zinc-900">
+                    <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
                       <p>Flash</p>
                       <InfoIcon className="size-4" />
                     </div>

@@ -7,8 +7,9 @@ import InfoSkeleton from "@/components/skeletons/info";
 import TableItem from "@/components/TableItem";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { Slider } from "@/components/ui/slider";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useBackupMutation } from "@/lib/api/file";
 import { useCoolingDevicesQuery, useInfoTabData } from "@/lib/api/get";
 import {
@@ -17,29 +18,6 @@ import {
   useRebootBMCMutation,
   useReloadBMCMutation,
 } from "@/lib/api/set";
-
-const storageWarningPct = 75;
-const storageDangerPct = 90;
-
-const progressBarColor = (usedPct: number, darkMode = false) => {
-  if (darkMode) {
-    if (usedPct >= storageDangerPct) {
-      return "dark:bg-red-500";
-    } else if (usedPct >= storageWarningPct) {
-      return "dark:bg-amber-400";
-    } else {
-      return "dark:bg-zinc-400";
-    }
-  } else {
-    if (usedPct >= storageDangerPct) {
-      return "bg-red-500";
-    } else if (usedPct >= storageWarningPct) {
-      return "bg-amber-400";
-    } else {
-      return "bg-zinc-400";
-    }
-  }
-};
 
 /**
  * Calculates the progress data based on the total bytes and free bytes.
@@ -92,7 +70,12 @@ function Info() {
         window.URL.revokeObjectURL(url);
         toast({
           title: "Backup successful",
-          description: `Successfully downloaded backup file: ${filename}`,
+          description: (
+            <>
+              <p>Successfully downloaded backup file.</p>
+              <p className="mt-4 text-xs italic">{filename}</p>
+            </>
+          ),
         });
       },
       onError: (e) => {
@@ -110,7 +93,7 @@ function Info() {
       onSuccess: () => {
         toast({
           title: "Network reset",
-          description: "Network reset successful",
+          description: "Network reset successful.",
         });
       },
       onError: (e) => {
@@ -126,7 +109,7 @@ function Info() {
   const handleRebootBMC = () => {
     mutateRebootBMC(undefined, {
       onSuccess: () => {
-        toast({ title: "Rebooting BMC", description: "The BMC is rebooting" });
+        toast({ title: "Rebooting BMC", description: "The BMC is rebooting..." });
         setRebootModalOpened(false);
       },
       onError: (e) => {
@@ -144,7 +127,7 @@ function Info() {
       onSuccess: () => {
         toast({
           title: "Reloading BMC daemon",
-          description: "The BMC daemon is reloading",
+          description: "The BMC daemon is reloading...",
         });
       },
       onError: (e) => {
@@ -174,15 +157,12 @@ function Info() {
               >
                 <div className="w-1/4 font-semibold">{storage.name}</div>
                 <div className="relative w-2/4 lg:w-3/4">
-                  <div className="flex h-5 overflow-hidden bg-zinc-200">
-                    <div
-                      className={`h-full ${progressBarColor(usedPct)} transition-all duration-500 ease-out ${progressBarColor(usedPct, true)}`}
-                      style={{ width: `${usedPct}%` }}
-                    />
-                  </div>
-                  <div className="absolute left-0 top-0 flex size-full items-center justify-center px-2 text-sm text-zinc-900">
-                    {usedHuman} / {totalHuman}
-                  </div>
+                  <Progress
+                    aria-label="Storage utilization"
+                    value={usedPct}
+                    label={`${usedHuman} / ${totalHuman}`}
+                    variant="info"
+                  />
                 </div>
               </div>
             );
@@ -190,6 +170,7 @@ function Info() {
         </div>
         <div className="mt-4">
           <Button
+            type="button"
             onClick={() => handleBackupSubmit()}
             disabled={backupPending}
             isLoading={backupPending}
@@ -247,7 +228,9 @@ function Info() {
           ))}
         </div>
         <div className="mt-4">
-          <Button onClick={() => handleResetNetwork()}>Reset network</Button>
+          <Button type="button" onClick={() => handleResetNetwork()}>
+            Reset network
+          </Button>
         </div>
       </div>
 
@@ -255,12 +238,13 @@ function Info() {
         <div className="mb-6 text-lg font-bold">BMC</div>
         <div className="flex gap-4">
           <Button
+            type="button"
             variant="destructive"
             onClick={() => setRebootModalOpened(true)}
           >
             Reboot
           </Button>
-          <Button variant="bw" onClick={() => handleReloadBMC()}>
+          <Button type="button" variant="bw" onClick={() => handleReloadBMC()}>
             Reload daemon
           </Button>
         </div>

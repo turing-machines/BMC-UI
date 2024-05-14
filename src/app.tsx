@@ -1,4 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
 
@@ -23,14 +24,16 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <AuthProvider>
-        <QueryClientProvider client={queryClient}>
-          <TooltipProvider delayDuration={0}>
-            <InnerApp />
-            <Toaster />
-          </TooltipProvider>
-        </QueryClientProvider>
-      </AuthProvider>
+      <ThemeProvider attribute="class">
+        <AuthProvider>
+          <QueryClientProvider client={queryClient}>
+            <TooltipProvider delayDuration={0}>
+              <InnerApp />
+              <Toaster />
+            </TooltipProvider>
+          </QueryClientProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </StrictMode>
   );
 }

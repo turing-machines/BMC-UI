@@ -8,6 +8,7 @@ import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
 import {
   Select,
   SelectContent,
@@ -15,7 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useNodeUpdateMutation } from "@/lib/api/file";
 import { useFlashStatusQuery } from "@/lib/api/get";
 
@@ -181,27 +182,26 @@ function Flash() {
           </Button>
           <label className="flex cursor-pointer items-center pl-4">
             <Checkbox id="skipCrc" name="skipCrc" aria-label="Skip CRC" />
-            <label htmlFor="skipCrc" className="not-sr-only ml-2 text-sm font-semibold">Skip CRC</label>
+            <label
+              htmlFor="skipCrc"
+              className="not-sr-only ml-2 text-sm font-semibold"
+            >
+              Skip CRC
+            </label>
           </label>
         </div>
 
-        <div className={`mt-4 ${isIdle ? "hidden" : "block"}`}>
-          <div className="relative">
-            <div className="h-5 overflow-hidden bg-zinc-200">
-              <div
-                className={`h-full bg-turing-btn-hover transition-all duration-500 ease-out ${
-                  !isPending && !isFlashing ? "" : "animate-pulse"
-                }`}
-                style={{ width: `${progress.pct}%` }}
-              ></div>
-            </div>
-            <div className="absolute left-0 top-0 flex size-full items-center justify-center px-4 text-xs text-zinc-500">
-              {progress.transferred}
-              {progress.total ? ` / ${progress.total}` : ""}
-            </div>
+        {!isIdle && (
+          <div className="mt-4 block">
+            <Progress
+              aria-label="Flashing progress"
+              value={progress.pct}
+              label={`${progress.transferred}${progress.total ? ` / ${progress.total}` : ""}`}
+              pulsing={isPending || isFlashing}
+            />
+            <div className="mt-2 text-sm">{statusMessage}</div>
           </div>
-          <div className="mt-2 text-sm">{statusMessage}</div>
-        </div>
+        )}
       </form>
       <ConfirmationModal
         isOpen={confirmFlashModal}

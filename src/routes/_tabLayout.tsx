@@ -6,8 +6,10 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
-import Logo from "@/assets/logo.svg?react";
+import LogoDark from "@/assets/logo-dark.svg?react";
+import LogoLight from "@/assets/logo-light.svg?react";
 import BasicInfo from "@/components/BasicInfo";
+import ThemeToggle from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/_tabLayout")({
   beforeLoad: ({ context, location }) => {
@@ -29,9 +31,10 @@ function TabLink({ to, children }: LinkProps) {
     <Link
       to={to}
       viewTransition
-      className="w-full py-3.5 text-center text-base font-semibold text-zinc-900 hover:bg-white"
+      className="w-full py-3.5 text-center text-base font-semibold hover:bg-white dark:hover:bg-neutral-800"
       activeProps={{
-        className: "border-t-2 border-zinc-300 bg-white outline-none",
+        className:
+          "border-t-2 border-neutral-300 bg-white outline-none dark:border-neutral-700 dark:bg-neutral-900 hover:bg-white dark:hover:bg-neutral-900",
       }}
     >
       {children}
@@ -42,13 +45,17 @@ function TabLink({ to, children }: LinkProps) {
 function AppLayoutComponent() {
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <header className="flex w-full py-8 lg:w-[75rem]">
-        <Logo className="mr-4 size-16" />
-        <BasicInfo />
+      <header className="flex w-full items-center justify-between px-5 py-8 lg:w-[75rem] lg:px-0">
+        <div className="flex">
+          <LogoLight className="mr-4 size-16 dark:hidden" />
+          <LogoDark className="mr-4 hidden size-16 dark:block" />
+          <BasicInfo />
+        </div>
+        <ThemeToggle />
       </header>
 
-      <main className="w-full overflow-hidden border border-zinc-300 bg-white shadow lg:w-[75rem]">
-        <nav className="flex justify-around bg-turing-bg">
+      <main className="w-full overflow-hidden border border-neutral-300 bg-white shadow dark:border-neutral-700 dark:bg-neutral-900 lg:w-[75rem]">
+        <nav className="flex justify-around bg-turing-bg dark:bg-turing-bg-dark">
           <TabLink to="/info">Info</TabLink>
           <TabLink to="/nodes">Nodes</TabLink>
           <TabLink to="/usb">USB</TabLink>

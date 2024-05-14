@@ -53,12 +53,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           onChange={isFileInput || isPasswordInput ? undefined : onChange}
           placeholder=" "
-          className="peer block w-full appearance-none rounded-md border border-zinc-200 px-4 pb-1.5 pt-5 text-sm font-semibold text-zinc-900 transition-all placeholder:text-transparent focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black disabled:pb-3.5 disabled:pt-3"
+          className="peer block w-full appearance-none rounded-md border border-neutral-200 px-4 pb-1.5 pt-5 text-sm font-semibold placeholder:text-transparent focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black disabled:border-white disabled:bg-white disabled:pb-3.5 disabled:pt-3 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white dark:disabled:border-neutral-800 dark:disabled:bg-neutral-900"
           ref={ref ?? inputRef}
           {...props}
         />
 
-        <span className="absolute left-0 top-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold text-zinc-500 transition-all duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2 peer-disabled:hidden">
+        <span className="absolute left-0 top-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold opacity-60 duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2 peer-disabled:hidden">
           {label}
         </span>
         {disabled && <span className="sr-only">{label}</span>}
@@ -73,7 +73,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 fileInputRef.current?.click();
               }}
             >
-              <FileUp className="size-6 opacity-50" />
+              <FileUp className="size-6 opacity-60" />
             </button>
             <input
               type="file"
@@ -95,9 +95,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff className="size-6 opacity-50" />
+              <EyeOff className="size-6 opacity-60" />
             ) : (
-              <Eye className="size-6 opacity-50" />
+              <Eye className="size-6 opacity-60" />
             )}
           </button>
         )}

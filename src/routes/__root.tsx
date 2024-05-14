@@ -32,9 +32,9 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
     return (
       <>
-        <div className="flex min-h-screen w-full flex-col justify-between bg-turing-bg antialiased">
+        <div className="flex min-h-screen w-full flex-col justify-between bg-turing-bg text-neutral-900 antialiased transition-all dark:bg-turing-bg-dark dark:text-neutral-100">
           <Outlet />
-          <footer className="py-4 text-center text-xs uppercase text-zinc-600">
+          <footer className="py-4 text-center text-xs uppercase opacity-60">
             <p>© Turing Machines Inc.</p>
           </footer>
         </div>

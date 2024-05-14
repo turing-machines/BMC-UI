@@ -15,12 +15,12 @@ const Slider = forwardRef<
     )}
     {...props}
   >
-    <Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-      <Range className="absolute h-full bg-zinc-900 dark:bg-zinc-50" />
+    <Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-neutral-100 dark:bg-neutral-800">
+      <Range className="absolute h-full bg-neutral-950 dark:bg-neutral-100" />
     </Track>
     <Thumb
       aria-label="slider thumb"
-      className="block size-5 rounded-full border-2 border-zinc-900 bg-white ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-50 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:focus-visible:ring-zinc-300"
+      className="block size-5 rounded-full border-2 border-neutral-900 bg-white ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 dark:border-neutral-100 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300"
     />
   </Root>
 ));

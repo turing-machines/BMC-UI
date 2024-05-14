@@ -33,7 +33,7 @@ const SelectTrigger = forwardRef<
     <Trigger
       ref={ref}
       className={cn(
-        "flex h-12 w-full items-center justify-between rounded-md border border-zinc-200 bg-white px-4 pt-5 pb-2 text-sm font-semibold ring-offset-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 dark:placeholder:text-zinc-400 dark:focus:ring-zinc-300",
+        "flex h-12 w-full items-center justify-between rounded-md border border-neutral-200 bg-white px-4 pt-5 pb-2 text-sm font-semibold ring-offset-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-neutral-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 [&>span]:line-clamp-1 dark:border-neutral-700 dark:bg-neutral-900 dark:ring-offset-neutral-800 dark:focus:ring-neutral-300",
         className
       )}
       aria-label={label}
@@ -41,10 +41,10 @@ const SelectTrigger = forwardRef<
     >
       {children}
       <Icon asChild>
-        <ChevronDown className="absolute right-4 top-1/2 size-6 -translate-y-1/2 opacity-50" />
+        <ChevronDown className="absolute right-4 top-1/2 size-6 -translate-y-1/2 opacity-60" />
       </Icon>
     </Trigger>
-    <span className="absolute left-0 top-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold text-zinc-500 transition-all duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2">
+    <span className="absolute left-0 top-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold opacity-60 duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2">
       {label}
     </span>
   </label>
@@ -93,7 +93,7 @@ const SelectContent = forwardRef<
     <Content
       ref={ref}
       className={cn(
-        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-zinc-200 bg-white text-zinc-950 shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50",
+        "relative z-50 max-h-96 min-w-[8rem] overflow-hidden rounded-md border border-neutral-200 bg-white text-neutral-950 shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-100",
         position === "popper" &&
           "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
         className
@@ -136,7 +136,7 @@ const SelectItem = forwardRef<
   <Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm font-semibold outline-none focus:bg-zinc-100 focus:text-zinc-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-50 dark:focus:bg-zinc-800 dark:focus:text-zinc-50",
+      "relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm font-semibold outline-none focus:bg-neutral-100 focus:text-neutral-900 data-[disabled]:pointer-events-none data-[disabled]:opacity-60 dark:focus:bg-neutral-900 dark:focus:text-neutral-100",
       className
     )}
     {...props}
@@ -158,7 +158,10 @@ const SelectSeparator = forwardRef<
 >(({ className, ...props }, ref) => (
   <Separator
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-zinc-100 dark:bg-zinc-800", className)}
+    className={cn(
+      "-mx-1 my-1 h-px bg-neutral-100 dark:bg-neutral-900",
+      className
+    )}
     {...props}
   />
 ));
