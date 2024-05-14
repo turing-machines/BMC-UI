@@ -48,6 +48,15 @@ function Info() {
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
   const { data: coolingDevices } = useCoolingDevicesQuery();
+  const [coolingDeviceSpeeds, setCoolingDeviceSpeeds] = useState(
+    coolingDevices.reduce(
+      (acc, device) => {
+        acc[device.device] = device.speed;
+        return acc;
+      },
+      {} as Record<string, number>
+    )
+  );
   const { mutate: mutateResetNetwork, isPending: resetNetworkPending } =
     useNetworkResetMutation();
   const { mutate: mutateCoolingDevices } = useCoolingDeviceMutation();
@@ -166,7 +175,7 @@ function Info() {
                     aria-label="Storage utilization"
                     value={usedPct}
                     label={`${usedHuman} / ${totalHuman}`}
-                    variant="info"
+                    warningOnHigh
                   />
                 </div>
               </div>
@@ -203,6 +212,12 @@ function Info() {
                       defaultValue={[coolingDevice.speed]}
                       min={0}
                       max={coolingDevice.max_speed}
+                      onValueChange={(value) =>
+                        setCoolingDeviceSpeeds((prevSpeeds) => ({
+                          ...prevSpeeds,
+                          [coolingDevice.device]: value[0],
+                        }))
+                      }
                       onValueCommit={(value) =>
                         mutateCoolingDevices({
                           device: coolingDevice.device,
@@ -211,7 +226,10 @@ function Info() {
                       }
                     />
                     <div className="flex w-1/5 justify-end font-semibold lg:w-1/12">
-                      {(coolingDevice.speed / coolingDevice.max_speed) * 100}%
+                      {(coolingDeviceSpeeds[coolingDevice.device] /
+                        coolingDevice.max_speed) *
+                        100}
+                      %
                     </div>
                   </div>
                 </div>
