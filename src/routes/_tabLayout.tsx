@@ -6,8 +6,7 @@ import {
   redirect,
 } from "@tanstack/react-router";
 
-import LogoDark from "@/assets/logo-dark.svg?react";
-import LogoLight from "@/assets/logo-light.svg?react";
+import Logo from "@/assets/logo-light.svg?react";
 import BasicInfo from "@/components/BasicInfo";
 import ThemeToggle from "@/components/theme-toggle";
 
@@ -45,16 +44,15 @@ function TabLink({ to, children }: LinkProps) {
 function AppLayoutComponent() {
   return (
     <div className="flex w-full flex-col items-center justify-center">
-      <header className="flex w-full items-center justify-between px-5 py-8 lg:w-[75rem] lg:px-0">
-        <div className="flex">
-          <LogoLight className="mr-4 size-16 dark:hidden" />
-          <LogoDark className="mr-4 hidden size-16 dark:block" />
+      <header className="flex w-full items-center justify-between px-5 py-8 xl:w-[75rem] xl:px-0">
+        <div className="flex items-center">
+          <Logo className="mr-4 size-16 dark:fill-neutral-100" />
           <BasicInfo />
         </div>
         <ThemeToggle />
       </header>
 
-      <main className="w-full overflow-hidden border border-neutral-300 bg-white shadow dark:border-neutral-700 dark:bg-neutral-900 lg:w-[75rem]">
+      <main className="w-full overflow-hidden border border-neutral-300 bg-white shadow dark:border-neutral-700 dark:bg-neutral-900 xl:w-[75rem]">
         <nav className="flex justify-around bg-turing-bg dark:bg-turing-bg-dark">
           <TabLink to="/info">Info</TabLink>
           <TabLink to="/nodes">Nodes</TabLink>
@@ -63,7 +61,7 @@ function AppLayoutComponent() {
           <TabLink to="/flash-node">Flash Node</TabLink>
           <TabLink to="/about">About</TabLink>
         </nav>
-        <div className="p-12">
+        <div className="px-3 py-6 md:p-12">
           <Outlet />
         </div>
       </main>

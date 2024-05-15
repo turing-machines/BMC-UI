@@ -108,12 +108,8 @@ function Flash() {
         .selectedOptions[0].value;
       const file = (form.elements.namedItem("file") as HTMLInputElement)
         .files?.[0];
-
-      console.log("file", file);
       const url = (form.elements.namedItem("file-url") as HTMLInputElement)
         .value;
-
-      console.log("url", url);
       const sha256 = (form.elements.namedItem("sha256") as HTMLInputElement)
         .value;
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)

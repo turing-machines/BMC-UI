@@ -170,7 +170,7 @@ function Info() {
                 className="flex items-center justify-between"
               >
                 <div className="w-1/4 font-semibold">{storage.name}</div>
-                <div className="relative w-2/4 lg:w-3/4">
+                <div className="relative w-1/2 lg:w-3/4">
                   <Progress
                     aria-label="Storage utilization"
                     value={usedPct}
@@ -209,6 +209,7 @@ function Info() {
                   </div>
                   <div className="flex w-2/4 items-center lg:w-3/4">
                     <Slider
+                      className="mr-4 md:mr-0"
                       defaultValue={[coolingDevice.speed]}
                       min={0}
                       max={coolingDevice.max_speed}

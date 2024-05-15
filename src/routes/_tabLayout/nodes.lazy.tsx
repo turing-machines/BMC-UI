@@ -1,6 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Power, PowerOff } from "lucide-react";
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import NodesSkeleton from "@/components/skeletons/nodes";
 import TabView from "@/components/TabView";
@@ -108,6 +108,7 @@ const NodeRow = (
 
 function NodesTab() {
   const { toast } = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
   const [editMode, setEditMode] = useState(false);
   const { data } = useNodesTabData();
   const { mutate, isPending } = useSetNodeInfoMutation();
@@ -164,7 +165,7 @@ function NodesTab() {
 
   return (
     <TabView title="Control the power supply of connected nodes">
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} ref={formRef}>
         {data.map((node, index) => (
           <NodeRow
             key={index}
@@ -177,7 +178,12 @@ function NodesTab() {
           <Button
             type="button"
             variant="bw"
-            onClick={() => setEditMode(!editMode)}
+            onClick={() => {
+              if (editMode) {
+                formRef.current?.reset();
+              }
+              setEditMode(!editMode)
+            }}
             disabled={isPending}
           >
             {editMode ? "Cancel" : "Edit"}

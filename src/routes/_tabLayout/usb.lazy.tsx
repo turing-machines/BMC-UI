@@ -122,11 +122,11 @@ function USB() {
             Change
           </Button>
 
-          <div className="mt-8 flex items-center md:mt-0 lg:mt-0">
+          <div className="mt-8 flex flex-col items-start md:mt-0 md:flex-row md:items-center lg:mt-0">
             <p className="mr-4 text-base font-semibold opacity-60">
               USB mode definitions
             </p>
-            <div className="flex gap-4">
+            <div className="mt-4 flex gap-4 md:mt-0">
               <div className="group relative cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
@@ -136,7 +136,7 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16}>
-                    <div className="my-1 flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-pretty">
                       <p className="font-semibold">Host</p>
                       <p>Turns the USB_OTG port power on.</p>
                       <p className="mt-1 font-semibold">Usage</p>
@@ -159,7 +159,7 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
-                    <div className="my-1 flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-pretty">
                       <p className="font-semibold">Device</p>
                       <p>The default mode. Turns the USB_OTG power off.</p>
                       <p className="mt-1 font-semibold">Usage</p>
@@ -178,7 +178,7 @@ function USB() {
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
-                    <div className="my-1 flex max-w-sm flex-col text-wrap">
+                    <div className="my-1 flex max-w-sm flex-col text-pretty">
                       <p className="font-semibold">Flash</p>
                       <p>
                         Turns the module into flashing mode and sets the USB_OTG
