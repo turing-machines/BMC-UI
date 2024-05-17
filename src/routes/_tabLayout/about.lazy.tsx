@@ -23,6 +23,7 @@ function About() {
   return (
     <TabView>
       <dl className="flex flex-col">
+        <TableItem term="Board model">{data.model}</TableItem>
         <TableItem term="Host name">{data.hostname}</TableItem>
         <TableItem term="Daemon version">{`v${data.version}`}</TableItem>
         <TableItem term="Build time">
