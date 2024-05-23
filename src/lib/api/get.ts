@@ -22,7 +22,8 @@ interface PowerTabResponse {
 }
 
 interface AboutTabResponse {
-  model: string;
+  board_model: string;
+  board_revision: string;
   hostname: string;
   api: string;
   version: string;

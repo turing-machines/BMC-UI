@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { Cpu } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
 import TabView from "@/components/TabView";
@@ -7,39 +8,37 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Toggle } from "@/components/ui/toggle";
 import { useFlash } from "@/hooks/use-flash";
-import { useToast } from "@/hooks/use-toast";
+import { useAboutTabData } from "@/lib/api/get";
 
 export const Route = createLazyFileRoute("/_tabLayout/flash-node")({
   component: FlashNode,
 });
 
-interface SelectOption {
-  value: string;
-  label: string;
-}
-
-const nodeOptions: SelectOption[] = [
-  { value: "0", label: "Node 1" },
-  { value: "1", label: "Node 2" },
-  { value: "2", label: "Node 3" },
-  { value: "3", label: "Node 4" },
+const nodeOptions = [
+  { value: 0, label: "Node 1" },
+  { value: 1, label: "Node 2" },
+  { value: 2, label: "Node 3" },
+  { value: 3, label: "Node 4" },
 ];
 
+const isSemverGreaterOrEqual = (a: string, b: string) => {
+  return a.localeCompare(b, undefined, { numeric: true }) >= 0;
+};
+
 function FlashNode() {
-  const { toast } = useToast();
+  const { data: aboutData } = useAboutTabData();
+  const batchFlashingSupport = useMemo(
+    () => isSemverGreaterOrEqual(aboutData.board_revision, "2.5"),
+    [aboutData]
+  );
+
+  const [selectedNodes, setSelectedNodes] = useState<number[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
   const [confirmFlashModal, setConfirmFlashModal] = useState(false);
   const {
     flashType,
-    setFlashType,
     isFlashing,
     statusMessage: _statusMessage,
     nodeUpdateMutation,
@@ -58,8 +57,6 @@ function FlashNode() {
       setConfirmFlashModal(false);
       const form = formRef.current;
 
-      const nodeId = (form.elements.namedItem("node") as HTMLSelectElement)
-        .selectedOptions[0].value;
       const file = (form.elements.namedItem("file") as HTMLInputElement)
         .files?.[0];
       const url = (form.elements.namedItem("file-url") as HTMLInputElement)
@@ -69,10 +66,13 @@ function FlashNode() {
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
         .checked;
 
-      const parsedNodeId = Number.parseInt(nodeId);
+      // If more than one node is selected, batch flashing is enabled
+      const batch =
+        selectedNodes.length > 1 ? selectedNodes.slice(1) : undefined;
 
       void handleNodeUpdate({
-        nodeId: parsedNodeId,
+        nodeId: selectedNodes[0],
+        batch,
         file,
         url,
         sha256,
@@ -82,21 +82,48 @@ function FlashNode() {
   };
 
   return (
-    <TabView title="Install an OS image on a selected node">
+    <TabView
+      title={
+        batchFlashingSupport
+          ? "Install an OS image on selected nodes"
+          : "Install an OS image on a selected node"
+      }
+    >
       <form ref={formRef}>
         <div className="mb-4">
-          <Select name="node">
-            <SelectTrigger label="Selected node">
-              <SelectValue placeholder="Select..." />
-            </SelectTrigger>
-            <SelectContent>
+          <div className="mb-2 flex flex-wrap items-center gap-4">
+            <span className="text-sm font-semibold">
+              {batchFlashingSupport
+                ? "Select the nodes to flash:"
+                : "Select a node to flash:"}
+            </span>
+            <div className="flex gap-2">
               {nodeOptions.map((option) => (
-                <SelectItem key={option.value} value={option.value}>
+                <Toggle
+                  key={option.value}
+                  aria-label={`Toggle flash node ${option.value}`}
+                  className="text-xs md:text-sm"
+                  pressed={selectedNodes.includes(option.value)}
+                  onPressedChange={(pressed) =>
+                    setSelectedNodes((prevNodes) => {
+                      if (pressed) {
+                        return batchFlashingSupport
+                          ? [...prevNodes, option.value].sort()
+                          : [option.value];
+                      } else {
+                        return prevNodes.filter(
+                          (nodeValue) => nodeValue !== option.value
+                        );
+                      }
+                    })
+                  }
+                >
+                  <Cpu className="mr-2 size-4" />
                   {option.label}
-                </SelectItem>
+                </Toggle>
               ))}
-            </SelectContent>
-          </Select>
+            </div>
+          </div>
         </div>
 
         <div className="mb-4">
