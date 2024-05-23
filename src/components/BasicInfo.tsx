@@ -1,24 +1,22 @@
-import "react-loading-skeleton/dist/skeleton.css";
-
 import { Suspense } from "react";
-import Skeleton from "react-loading-skeleton";
 
-import { useAboutTabData } from "../services/api/get";
+import BasicInfoSkeleton from "@/components/skeletons/basic-info";
+import { useAboutTabData } from "@/lib/api/get";
 
 function BasicInfoContent() {
   const { data } = useAboutTabData();
 
   return (
-    <div className="app-info">
-      <h1 className="h3 app-title">Turing PI</h1>
-      <div className="app-version">
-        <div className="app-version-item">
-          <div className="label">hostname</div>
-          <div className="hostname">{data.hostname}</div>
+    <div className="flex flex-col">
+      <h1 className="text-3xl font-bold">Turing Pi</h1>
+      <div className="mt-2 flex flex-row flex-wrap gap-x-4">
+        <div className="flex items-center">
+          <span className="text-sm font-semibold opacity-60">hostname</span>
+          <span className="ml-2 text-sm font-semibold">{data.hostname}</span>
         </div>
-        <div className="app-version-item">
-          <div className="label">daemon</div>
-          <div className="daemon-version">v{data.version}</div>
+        <div className="flex items-center">
+          <span className="text-sm font-semibold opacity-60">daemon</span>
+          <span className="ml-2 text-sm font-semibold">v{data.version}</span>
         </div>
       </div>
     </div>
@@ -27,27 +25,7 @@ function BasicInfoContent() {
 
 export default function BasicInfo() {
   return (
-    <Suspense
-      fallback={
-        <div className="app-info">
-          <h1 className="h3 app-title">Turing PI</h1>
-          <div className="app-version">
-            <div className="app-version-item">
-              <div className="label">hostname</div>
-              <div className="hostname">
-                <Skeleton width={100} />
-              </div>
-            </div>
-            <div className="app-version-item">
-              <div className="label">daemon</div>
-              <div className="daemon-version">
-                <Skeleton width={80} />
-              </div>
-            </div>
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={BasicInfoSkeleton()}>
       <BasicInfoContent />
     </Suspense>
   );

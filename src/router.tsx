@@ -1,7 +1,7 @@
 import { createRouter } from "@tanstack/react-router";
 
-import FourOhFour from "./components/404";
-import { routeTree } from "./routeTree.gen";
+import FourOhFour from "@/components/404";
+import { routeTree } from "@/routeTree.gen";
 
 // Create a new router instance
 export const router = createRouter({

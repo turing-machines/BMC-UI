@@ -2,9 +2,11 @@ import { createFileRoute, redirect } from "@tanstack/react-router";
 import { type AxiosError } from "axios";
 import { useState } from "react";
 
-import TextInput from "../components/TextInput";
-import { useAuth } from "../hooks/useAuth";
-import { useLoginMutation } from "../services/api/set";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
+import { useLoginMutation } from "@/lib/api/set";
 
 export const Route = createFileRoute("/login")({
   beforeLoad: ({ context, search }) => {
@@ -17,7 +19,7 @@ export const Route = createFileRoute("/login")({
 });
 
 function Login() {
-  const { mutate: mutateLogin } = useLoginMutation();
+  const { mutate: mutateLogin, isPending } = useLoginMutation();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
 
@@ -54,43 +56,58 @@ function Login() {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="login-container">
-        <div className="login-form">
-          <h3 className="login-title">Login</h3>
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <TextInput name="username" label="Username" />
-            </div>
-            <div className="form-group">
-              <TextInput name="password" label="Password" type="password" />
-            </div>
-            <div className="form-group form-flex-row">
-              <div className="checkbox-row form-flex-row">
-                <div className="checkbox-item">
-                  <input type="checkbox" id="rememberMe" name="rememberMe" />
-                </div>
-                <label htmlFor="rememberMe" className="label">
-                  Remember me
-                </label>
-              </div>
-            </div>
-            <div className="form-group">
-              <button type="submit" className="btn btn-turing-small-yellow">
-                <span className="caption">Login</span>
-              </button>
-            </div>
-            <div className="form-group">
-              <p className="error-message" id="responseMessage">
-                {message}
-              </p>
-            </div>
-          </form>
-        </div>
-      </div>
-      <div className="copyright-login">
-        <p className="copyright-login__text">© TURING MACHINES INC.</p>
-      </div>
+    <div className="flex h-[32rem] w-full items-center justify-center md:h-[55rem]">
+      <main className="size-full rounded-md bg-white p-10 pt-20 shadow-md dark:bg-neutral-900 md:h-auto md:w-96 md:pt-10">
+        <h3 className="mb-8 text-center text-3xl font-bold">Login</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <Input
+              type="text"
+              autoCorrect="off"
+              autoCapitalize="off"
+              name="username"
+              label="Username"
+            />
+          </div>
+          <div className="mb-4">
+            <Input
+              type="password"
+              autoCorrect="off"
+              autoCapitalize="off"
+              name="password"
+              label="Password"
+            />
+          </div>
+          <div className="mb-4 flex items-center">
+            <Checkbox
+              id="rememberMe"
+              name="rememberMe"
+              aria-label="Remember me"
+            />
+            <label
+              htmlFor="rememberMe"
+              className="not-sr-only ml-2 text-sm font-semibold"
+            >
+              Remember me
+            </label>
+          </div>
+          <div className="mb-4">
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={isPending}
+              isLoading={isPending}
+            >
+              Login
+            </Button>
+          </div>
+          <div className="mb-4">
+            <p className="text-sm text-red-500" id="responseMessage">
+              {message}
+            </p>
+          </div>
+        </form>
+      </main>
     </div>
   );
 }

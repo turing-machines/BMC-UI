@@ -2,21 +2,24 @@ import { createLazyFileRoute } from "@tanstack/react-router";
 import type { AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 
-import ConfirmationModal from "../../components/ConfirmationModal";
-import FileInput from "../../components/FileInput";
-import RebootModal from "../../components/RebootModal";
-import TextInput from "../../components/TextInput";
-import { useFirmwareUpdateMutation } from "../../services/api/file";
-import { useFirmwareStatusQuery } from "../../services/api/get";
-import { useRebootBMCMutation } from "../../services/api/set";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import RebootModal from "@/components/RebootModal";
+import TabView from "@/components/TabView";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Progress } from "@/components/ui/progress";
+import { useToast } from "@/hooks/use-toast";
+import { useFirmwareUpdateMutation } from "@/lib/api/file";
+import { useFirmwareStatusQuery } from "@/lib/api/get";
+import { useRebootBMCMutation } from "@/lib/api/set";
 
 export const Route = createLazyFileRoute("/_tabLayout/firmware-upgrade")({
   component: FirmwareUpgrade,
 });
 
 function FirmwareUpgrade() {
+  const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const [isUpgrading, setIsUpgrading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
@@ -45,11 +48,15 @@ function FirmwareUpgrade() {
   const { data, refetch } = useFirmwareStatusQuery(isUpgrading);
 
   useEffect(() => {
-    if (data?.Error) {
+    if (isUpgrading && data?.Error) {
       setStatusMessage(data.Error);
-      toast.error(data.Error);
+      toast({
+        title: "An error has occurred",
+        description: data.Error,
+        variant: "destructive",
+      });
       setIsUpgrading(false);
-    } else if (data?.Transferring) {
+    } else if (!isUpgrading && data?.Transferring) {
       setIsUpgrading(true);
       setStatusMessage("Writing firmware to BMC...");
 
@@ -60,11 +67,11 @@ function FirmwareUpgrade() {
         total: undefined,
         pct: 100,
       });
-    } else if (data?.Done) {
+    } else if (isUpgrading && data?.Done) {
       setIsUpgrading(false);
       const msg = "Firmware upgrade completed successfully";
       setStatusMessage(msg);
-      toast.success(msg);
+      toast({ title: "Upgrade successful", description: msg });
       setRebootModalOpened(true);
     }
   }, [data]);
@@ -93,10 +100,14 @@ function FirmwareUpgrade() {
           onSuccess: () => {
             void refetch();
           },
-          onError: () => {
-            const msg = "Failed to upgrade firmware";
+          onError: (e) => {
+            const msg = "Upgrade failed";
             setStatusMessage(msg);
-            toast.error(msg);
+            toast({
+              title: msg,
+              description: e.message,
+              variant: "destructive",
+            });
           },
         }
       );
@@ -107,77 +118,59 @@ function FirmwareUpgrade() {
     setRebootModalOpened(false);
     mutateRebootBMC(undefined, {
       onSuccess: () => {
-        toast.success("Rebooting BMC...");
+        toast({ title: "Rebooting BMC", description: "The BMC is rebooting" });
       },
-      onError: () => {
-        toast.error("Failed to reboot BMC");
+      onError: (e) => {
+        toast({
+          title: "Failed to reboot BMC",
+          description: e.message,
+          variant: "destructive",
+        });
       },
     });
   };
 
   return (
-    <div
-      data-tab="Firmware Upgrade"
-      id="firmware-upgrade-tab"
-      className="tabs-body__item "
-    >
-      <form
-        ref={formRef}
-        className="form"
-        id="firmware-upgrade-form"
-        onSubmit={handleSubmit}
-      >
-        <div className="form-group row">
-          <div className="text-content">
-            <p>Upgrade BMC firmware:</p>
-          </div>
-        </div>
-        <div className="form-group row">
-          <FileInput
+    <TabView title="Upgrade BMC firmware">
+      <form ref={formRef} onSubmit={handleSubmit}>
+        <div className="mb-4">
+          <Input
+            type="file"
             name="file"
             label=".tpu file (remote or local):"
             accept=".tpu,.tpu.xz,application/octet-stream"
           />
         </div>
-        <div className="form-group row">
-          <TextInput
-            name="sha256"
-            label="SHA-256 (optional):"
-            className="input-type-file-wrap"
-          />
+        <div className="mb-4">
+          <Input type="text" name="sha256" label="SHA-256 (optional):" />
         </div>
-        <div className="form-group">
-          <button
+        <div>
+          <Button
             type="submit"
-            className={`btn btn-turing-small-yellow ${isPending || isUpgrading ? "loading" : ""}`}
             disabled={isPending || isUpgrading}
+            isLoading={isPending || isUpgrading}
           >
-            <span className="caption">Upgrade</span>
-          </button>
+            Upgrade
+          </Button>
         </div>
-        <div
-          id="firmware-progress-group"
-          className={`progress-bar-group form-group row ${isIdle || "active"}`}
-        >
-          <div className="progress-bar-wrap">
-            <div
-              className={`progress-bar ${!isPending && !isUpgrading ? "loaded" : ""}`}
-              style={{ width: `${progress.pct}%` }}
-            ></div>
-            <div className="progress-bar-caption">
-              {progress.transferred}
-              {progress.total ? ` / ${progress.total}` : ""}
-            </div>
+        {!isIdle && (
+          <div className="mt-4 block">
+            <Progress
+              aria-label="Firmware upgrade progress"
+              value={progress.pct}
+              label={`${progress.transferred}${progress.total ? ` / ${progress.total}` : ""}`}
+              pulsing={isPending || isUpgrading}
+            />
+            <div className="mt-2 text-sm">{statusMessage}</div>
           </div>
-          <div className="update-text">{statusMessage}</div>
-        </div>
+        )}
       </form>
       <ConfirmationModal
         isOpen={confirmFlashModal}
         onClose={() => setConfirmFlashModal(false)}
         onConfirm={handleFirmwareUpload}
         title="Upgrade Firmware?"
-        message="A reboot is required to finalise the upgrade process"
+        message="A reboot is required to finalise the upgrade process."
       />
       <RebootModal
         isOpen={rebootModalOpened}
@@ -185,14 +178,17 @@ function FirmwareUpgrade() {
         onReboot={handleRebootBMC}
         title="Upgrade Finished!"
         message={
-          <>
-            <p>To complete the upgrade a reboot is required.</p>
-            <p>Be aware that the nodes will lose power until booted.</p>
-            <p>Do you want to reboot?</p>
-          </>
+          <div className="text-neutral-900 opacity-60 dark:text-neutral-100">
+            <p>To finalize the upgrade, a system reboot is necessary.</p>
+            <p>Would you like to proceed with the reboot now?</p>
+            <p className="mt-4 text-xs italic">
+              The nodes will temporarily lose power until the reboot process is
+              complete.
+            </p>
+          </div>
         }
         isPending={isPending}
       />
-    </div>
+    </TabView>
   );
 }

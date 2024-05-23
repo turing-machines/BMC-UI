@@ -1,4 +1,23 @@
-import { Modal } from "react-responsive-modal";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "@/components/ui/drawer";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { cn } from "@/lib/utils";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -19,30 +38,47 @@ export default function ConfirmationModal({
   confirmText = "Continue",
   cancelText = "Cancel",
 }: ConfirmationModalProps) {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  if (isDesktop) {
+    return (
+      <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+        <DialogContent className={cn("modal-rounded", "p-6")}>
+          <DialogHeader>
+            <DialogTitle className="mb-4">{title}</DialogTitle>
+            <DialogDescription>{message}</DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-2">
+            <Button type="button" variant="bw" onClick={onClose}>
+              {cancelText}
+            </Button>
+            <Button type="button" onClick={onConfirm}>
+              {confirmText}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+
   return (
-    <Modal
-      open={isOpen}
-      onClose={onClose}
-      center
-      showCloseIcon={false}
-      classNames={{ modal: "modal-rounded" }}
-    >
-      <div className="modal">
-        <h2 className="modal__title">{title}</h2>
-        <p className="modal__text">{message}</p>
-        <div className="modal__buttons">
-          <button className="btn btn-turing-small-dark" onClick={onClose}>
-            {cancelText}
-          </button>
-          <button
-            type="submit"
-            className="continue-btn btn btn-turing-small-yellow"
-            onClick={onConfirm}
-          >
+    <Drawer open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DrawerContent>
+        <DrawerHeader className="text-left">
+          <DrawerTitle className="mb-4">{title}</DrawerTitle>
+          <DrawerDescription>{message}</DrawerDescription>
+        </DrawerHeader>
+        <DrawerFooter className="mt-2">
+          <DrawerClose asChild>
+            <Button type="button" variant="bw" size="lg">
+              {cancelText}
+            </Button>
+          </DrawerClose>
+          <Button type="button" size="lg" onClick={onConfirm}>
             {confirmText}
-          </button>
-        </div>
-      </div>
-    </Modal>
+          </Button>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }

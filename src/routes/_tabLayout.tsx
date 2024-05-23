@@ -1,13 +1,14 @@
 import {
   createFileRoute,
   Link,
+  type LinkProps,
   Outlet,
   redirect,
 } from "@tanstack/react-router";
-import { ToastContainer } from "react-toastify";
 
-import Logo from "../assets/logo.svg?react";
-import BasicInfo from "../components/BasicInfo";
+import Logo from "@/assets/logo-light.svg?react";
+import BasicInfo from "@/components/BasicInfo";
+import ThemeToggle from "@/components/theme-toggle";
 
 export const Route = createFileRoute("/_tabLayout")({
   beforeLoad: ({ context, location }) => {
@@ -24,50 +25,46 @@ export const Route = createFileRoute("/_tabLayout")({
   component: AppLayoutComponent,
 });
 
+function TabLink({ to, children }: LinkProps) {
+  return (
+    <Link
+      to={to}
+      viewTransition
+      className="w-full py-3.5 text-center text-base font-semibold hover:bg-white dark:hover:bg-neutral-800"
+      activeProps={{
+        className:
+          "border-t-2 border-neutral-300 bg-white outline-none dark:border-neutral-700 dark:bg-neutral-900 hover:bg-white dark:hover:bg-neutral-900",
+      }}
+    >
+      {children}
+    </Link>
+  );
+}
+
 function AppLayoutComponent() {
   return (
-    <div className="app-wrapper">
-      <div>
-        <div className="app-header">
-          <div className="logo">
-            <Logo />
-          </div>
+    <div className="flex w-full flex-col items-center justify-center">
+      <header className="flex w-full items-center justify-between px-5 py-8 xl:w-[75rem] xl:px-0">
+        <div className="flex items-center">
+          <Logo className="mr-4 size-16 dark:fill-neutral-100" />
           <BasicInfo />
         </div>
+        <ThemeToggle />
+      </header>
 
-        <div className="tabs-wrapper">
-          <div className="tabs-header tabs-header__list">
-            <Link to="/info" className="tabs-header__list-item">
-              Info
-            </Link>
-            <Link to="/nodes" className="tabs-header__list-item">
-              Nodes
-            </Link>
-            <Link to="/usb" className="tabs-header__list-item">
-              USB
-            </Link>
-            <Link
-              to="/firmware-upgrade"
-              className="tabs-header__list-item large"
-            >
-              Firmware Upgrade
-            </Link>
-            <Link to="/flash-node" className="tabs-header__list-item">
-              Flash Node
-            </Link>
-            <Link to="/about" className="tabs-header__list-item">
-              About
-            </Link>
-          </div>
-          <div className="tabs-body">
-            <Outlet />
-          </div>
-          <ToastContainer position="bottom-right" stacked />
+      <main className="w-full overflow-hidden border border-neutral-300 bg-white shadow dark:border-neutral-700 dark:bg-neutral-900 xl:w-[75rem]">
+        <nav className="flex justify-around bg-turing-bg dark:bg-turing-bg-dark">
+          <TabLink to="/info">Info</TabLink>
+          <TabLink to="/nodes">Nodes</TabLink>
+          <TabLink to="/usb">USB</TabLink>
+          <TabLink to="/firmware-upgrade">Firmware Upgrade</TabLink>
+          <TabLink to="/flash-node">Flash Node</TabLink>
+          <TabLink to="/about">About</TabLink>
+        </nav>
+        <div className="px-3 py-6 md:p-12">
+          <Outlet />
         </div>
-      </div>
-      <div className="copyright">
-        <p className="copyright__text">© TURING MACHINES INC.</p>
-      </div>
+      </main>
     </div>
   );
 }

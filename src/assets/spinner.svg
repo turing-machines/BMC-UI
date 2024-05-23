@@ -1,0 +1,12 @@
+<svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <circle cx="14" cy="2.625" r="2.625" fill="inherit" fill-opacity="0.1" />
+        <circle opacity="0.45" cx="14" cy="25.375" r="2.625" fill="inherit" fill-opacity="0.65" />
+        <circle cx="2.625" cy="14" r="2.625" fill="inherit" fill-opacity="0.85" />
+        <circle cx="25.375" cy="14" r="2.625" fill="inherit" fill-opacity="0.35" />
+        <circle cx="22.75" cy="6.125" r="2.625" fill="inherit" fill-opacity="0.25" />
+        <circle cx="22.75" cy="21.875" r="2.625" fill="inherit" fill-opacity="0.45" />
+        <circle cx="5.25" cy="21.875" r="2.625" fill="inherit" fill-opacity="0.75" />
+        <circle cx="5.25" cy="6.125" r="2.625" fill="inherit" />
+    </g>
+</svg>

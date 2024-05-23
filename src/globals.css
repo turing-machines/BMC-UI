@@ -1,0 +1,7 @@
+@import "@fontsource/inter/400";
+@import "@fontsource/inter/600";
+@import "@fontsource/inter/700";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

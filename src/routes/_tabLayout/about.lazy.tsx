@@ -1,72 +1,39 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import TimeAgo from 'javascript-time-ago'
-import en from 'javascript-time-ago/locale/en'
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+import AboutSkeleton from "@/components/skeletons/about";
+import TableItem from "@/components/TableItem";
+import TabView from "@/components/TabView";
+import { useAboutTabData } from "@/lib/api/get";
 
 import { version } from "../../../package.json";
-import { useAboutTabData } from "../../services/api/get";
-import AboutSkeleton from "./-components/about.skeleton";
 
 export const Route = createLazyFileRoute("/_tabLayout/about")({
   component: About,
   pendingComponent: AboutSkeleton,
 });
 
-TimeAgo.addDefaultLocale(en)
-const timeAgo = new TimeAgo('en-US')
+TimeAgo.addDefaultLocale(en);
+const timeAgo = new TimeAgo("en-US");
 
 function About() {
   const { data } = useAboutTabData();
 
   return (
-    <div data-tab="About" className="tabs-body__item">
-      <form className="form" id="form-about">
-        <div className="form-group row">
-          <div className="table-specification">
-            <div className="row">
-              <div className="col">Host name:</div>
-              <div id="aboutHostname" className="col">
-                {data.hostname}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">Daemon version:</div>
-              <div id="aboutVer" className="col">
-                v{data.version}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">Build time:</div>
-              <div id="aboutBuildtime" className="col">
-                {data.buildtime.toLocaleString()} ({timeAgo.format(new Date(data.buildtime))})
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">Build version:</div>
-              <div id="aboutBuildVer" className="col">
-                {data.build_version}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">Buildroot release:</div>
-              <div id="aboutBuildroot" className="col">
-                {data.buildroot}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">API version:</div>
-              <div id="aboutApi" className="col">
-                v{data.api}
-              </div>
-            </div>
-            <div className="row">
-              <div className="col">BMC UI:</div>
-              <div id="aboutUi" className="col">
-                v{version}
-              </div>
-            </div>
-          </div>
-        </div>
-      </form>
-    </div>
+    <TabView>
+      <dl className="flex flex-col">
+        <TableItem term="Host name">{data.hostname}</TableItem>
+        <TableItem term="Daemon version">{`v${data.version}`}</TableItem>
+        <TableItem term="Build time">
+          {data.buildtime.toLocaleString()} (
+          {timeAgo.format(new Date(data.buildtime))})
+        </TableItem>
+        <TableItem term="Build version">{`v${data.build_version}`}</TableItem>
+        <TableItem term="Buildroot release">{data.buildroot}</TableItem>
+        <TableItem term="API version">{`v${data.api}`}</TableItem>
+        <TableItem term="BMC UI">{`v${version}`}</TableItem>
+      </dl>
+    </TabView>
   );
 }

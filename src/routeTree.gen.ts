@@ -93,38 +93,65 @@ const TabLayoutAboutLazyRoute = TabLayoutAboutLazyImport.update({
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/_tabLayout': {
+      id: '/_tabLayout'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof TabLayoutImport
       parentRoute: typeof rootRoute
     }
     '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
       preLoaderRoute: typeof LoginImport
       parentRoute: typeof rootRoute
     }
     '/_tabLayout/about': {
+      id: '/_tabLayout/about'
+      path: '/about'
+      fullPath: '/about'
       preLoaderRoute: typeof TabLayoutAboutLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/firmware-upgrade': {
+      id: '/_tabLayout/firmware-upgrade'
+      path: '/firmware-upgrade'
+      fullPath: '/firmware-upgrade'
       preLoaderRoute: typeof TabLayoutFirmwareUpgradeLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/flash-node': {
+      id: '/_tabLayout/flash-node'
+      path: '/flash-node'
+      fullPath: '/flash-node'
       preLoaderRoute: typeof TabLayoutFlashNodeLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/info': {
+      id: '/_tabLayout/info'
+      path: '/info'
+      fullPath: '/info'
       preLoaderRoute: typeof TabLayoutInfoLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/nodes': {
+      id: '/_tabLayout/nodes'
+      path: '/nodes'
+      fullPath: '/nodes'
       preLoaderRoute: typeof TabLayoutNodesLazyImport
       parentRoute: typeof TabLayoutImport
     }
     '/_tabLayout/usb': {
+      id: '/_tabLayout/usb'
+      path: '/usb'
+      fullPath: '/usb'
       preLoaderRoute: typeof TabLayoutUsbLazyImport
       parentRoute: typeof TabLayoutImport
     }
@@ -133,17 +160,17 @@ declare module '@tanstack/react-router' {
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren([
+export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  TabLayoutRoute.addChildren([
+  TabLayoutRoute: TabLayoutRoute.addChildren({
     TabLayoutAboutLazyRoute,
     TabLayoutFirmwareUpgradeLazyRoute,
     TabLayoutFlashNodeLazyRoute,
     TabLayoutInfoLazyRoute,
     TabLayoutNodesLazyRoute,
     TabLayoutUsbLazyRoute,
-  ]),
+  }),
   LoginRoute,
-])
+})
 
 /* prettier-ignore-end */

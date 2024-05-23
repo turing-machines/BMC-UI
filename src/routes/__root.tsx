@@ -1,11 +1,10 @@
 /// <reference types="vite-plugin-svgr/client" />
-import "../css/app.scss";
-import "react-responsive-modal/styles.css";
+import "@/globals.css";
 
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { lazy, Suspense } from "react";
 
-import { type AuthContext } from "../contexts/AuthContext";
+import { type AuthContext } from "@/contexts/AuthContext";
 
 interface RouterContext {
   auth: AuthContext;
@@ -33,7 +32,12 @@ export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => {
     return (
       <>
-        <Outlet />
+        <div className="flex min-h-screen w-full flex-col justify-between bg-turing-bg text-neutral-900 antialiased transition-all dark:bg-turing-bg-dark dark:text-neutral-100">
+          <Outlet />
+          <footer className="py-4 text-center text-xs uppercase opacity-60">
+            <p>© Turing Machines Inc.</p>
+          </footer>
+        </div>
         <Suspense>
           <ReactQueryDevtools />
           <TanStackRouterDevtools initialIsOpen={false} />

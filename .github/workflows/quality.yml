@@ -45,25 +45,6 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Calculate /dist folder size in KB
-        run: echo "DIST_SIZE=$(du -sk dist | awk '{print $1 " KB"}')" >> $GITHUB_ENV
-
-      - name: Find Comment
-        uses: peter-evans/find-comment@v3
-        id: fc
-        with:
-          issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: The current size
-
-      - name: Create or update comment
-        uses: peter-evans/create-or-update-comment@v4
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.pull_request.number }}
-          body: The current size of the `/dist` folder for this pull request is `${{ env.DIST_SIZE }}`.
-          edit-mode: replace
-
   test:
     name: Tests
     runs-on: ubuntu-latest
