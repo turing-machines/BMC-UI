@@ -3,6 +3,7 @@ import { Cpu } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
+import FlashNodeSkeleton from "@/components/skeletons/flash-node";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -14,6 +15,7 @@ import { useAboutTabData } from "@/lib/api/get";
 
 export const Route = createLazyFileRoute("/_tabLayout/flash-node")({
   component: FlashNode,
+  pendingComponent: FlashNodeSkeleton,
 });
 
 const nodeOptions = [
