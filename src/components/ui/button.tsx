@@ -13,6 +13,8 @@ const buttonVariants = cva(
         "turing-green":
           "border-black bg-turing-btn fill-neutral-900 text-neutral-900 hover:bg-turing-btn-hover",
         bw: "border-black bg-white fill-neutral-900 hover:bg-black hover:text-white dark:border-white dark:bg-black dark:fill-white dark:text-white dark:hover:bg-white dark:hover:text-black",
+        bwSquare:
+          "rounded-lg border-black bg-white fill-neutral-900 hover:bg-black hover:text-white dark:border-white dark:bg-black dark:fill-white dark:text-white dark:hover:bg-white dark:hover:text-black",
         destructive:
           "border-red-700 bg-red-50 text-red-700 hover:bg-red-700 hover:text-neutral-100 dark:border-red-100 dark:bg-red-700 dark:text-neutral-100 dark:hover:bg-red-100 dark:hover:text-red-700",
       },

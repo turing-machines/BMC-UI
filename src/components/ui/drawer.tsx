@@ -34,19 +34,25 @@ DrawerOverlay.displayName = DrawerPrimitive.Overlay.displayName;
 
 const DrawerContent = forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> & {
+    direction?: "top" | "bottom" | "left" | "right";
+  }
+>(({ className, direction = "bottom", children, ...props }, ref) => (
   <DrawerPortal>
     <DrawerOverlay />
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950",
+        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col border border-neutral-200 bg-white focus:outline-none dark:border-neutral-800 dark:bg-neutral-950",
+        direction === "right" && "rounded-none",
+        direction === "bottom" && "rounded-t-xl",
         className
       )}
       {...props}
     >
-      <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-neutral-100 dark:bg-neutral-900" />
+      {direction === "bottom" && (
+        <div className="mx-auto mt-4 h-2 w-[100px] rounded-full bg-neutral-100 dark:bg-neutral-900" />
+      )}
       {children}
     </DrawerPrimitive.Content>
   </DrawerPortal>
@@ -58,7 +64,10 @@ const DrawerHeader = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("grid gap-1.5 p-4 text-center sm:text-left", className)}
+    className={cn(
+      "flex flex-col overflow-y-scroll overflow-x-hidden gap-1.5 p-4 text-center sm:text-left",
+      className
+    )}
     {...props}
   />
 );
