@@ -1,6 +1,4 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import type { AxiosProgressEvent } from "axios";
-import { filesize } from "filesize";
 import { useEffect, useRef, useState } from "react";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
@@ -16,12 +14,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useFlash } from "@/hooks/use-flash";
 import { useToast } from "@/hooks/use-toast";
-import { useNodeUpdateMutation } from "@/lib/api/file";
-import { useFlashStatusQuery } from "@/lib/api/get";
 
 export const Route = createLazyFileRoute("/_tabLayout/flash-node")({
-  component: Flash,
+  component: FlashNode,
 });
 
 interface SelectOption {
@@ -36,68 +33,25 @@ const nodeOptions: SelectOption[] = [
   { value: "3", label: "Node 4" },
 ];
 
-function Flash() {
+function FlashNode() {
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const [confirmFlashModal, setConfirmFlashModal] = useState(false);
-
-  const [isFlashing, setIsFlashing] = useState(false);
-  const [statusMessage, setStatusMessage] = useState("");
-  const [progress, setProgress] = useState<{
-    transferred: string;
-    total?: string;
-    pct: number;
-  }>({ transferred: "", total: "", pct: 0 });
-  const uploadProgressCallback = (progressEvent: AxiosProgressEvent) => {
-    setProgress({
-      transferred: filesize(progressEvent.loaded ?? 0, { standard: "jedec" }),
-      total: progressEvent.total
-        ? filesize(progressEvent.total, { standard: "jedec" })
-        : undefined,
-      pct: progressEvent.total
-        ? Math.round((progressEvent.loaded / (progressEvent.total ?? 1)) * 100)
-        : 100,
-    });
-  };
   const {
-    mutate: mutateNodeUpdate,
-    isIdle,
-    isPending,
-  } = useNodeUpdateMutation(uploadProgressCallback);
-  const { data, refetch } = useFlashStatusQuery(isFlashing);
+    flashType,
+    setFlashType,
+    isFlashing,
+    statusMessage: _statusMessage,
+    nodeUpdateMutation,
+    uploadProgress,
+    handleNodeUpdate,
+  } = useFlash();
+
+  const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
-    if (isFlashing && data?.Error) {
-      setStatusMessage(data.Error);
-      toast({
-        title: "An error has occurred",
-        description: data.Error,
-        variant: "destructive",
-      });
-      setIsFlashing(false);
-    } else if (!isFlashing && data?.Transferring) {
-      setIsFlashing(true);
-      const msg = (
-        formRef.current?.elements.namedItem("skipCrc") as HTMLInputElement
-      ).checked
-        ? "Transferring image to the node..."
-        : "Checking CRC and transferring image to the node...";
-      setStatusMessage(msg);
-
-      // Update progress bar using bytes_written from Transferring data
-      const bytesWritten = data.Transferring.bytes_written ?? 0;
-      setProgress({
-        transferred: `${filesize(bytesWritten, { standard: "jedec" })} written`,
-        total: undefined,
-        pct: 100,
-      });
-    } else if (isFlashing && data?.Done) {
-      setIsFlashing(false);
-      const msg = "Image flashed successfully to the node";
-      setStatusMessage(msg);
-      toast({ title: "Flashing successful", description: msg });
-    }
-  }, [data]);
+    _statusMessage && setStatusMessage(_statusMessage);
+  }, [_statusMessage]);
 
   const handleSubmit = () => {
     if (formRef.current) {
@@ -115,24 +69,15 @@ function Flash() {
       const skipCRC = (form.elements.namedItem("skipCrc") as HTMLInputElement)
         .checked;
 
-      setStatusMessage(`Transferring image to node ${nodeId + 1}...`);
-      mutateNodeUpdate(
-        { nodeId: Number.parseInt(nodeId), file, url, sha256, skipCRC },
-        {
-          onSuccess: () => {
-            void refetch();
-          },
-          onError: () => {
-            const msg = `Failed to transfer the image to node ${nodeId + 1}`;
-            setStatusMessage(msg);
-            toast({
-              title: "Flashing failed",
-              description: msg,
-              variant: "destructive",
-            });
-          },
-        }
-      );
+      const parsedNodeId = Number.parseInt(nodeId);
+
+      void handleNodeUpdate({
+        nodeId: parsedNodeId,
+        file,
+        url,
+        sha256,
+        skipCRC,
+      });
     }
   };
 
@@ -171,8 +116,11 @@ function Flash() {
           <Button
             type="button"
             onClick={() => setConfirmFlashModal(true)}
-            disabled={isPending || isFlashing}
-            isLoading={isPending || isFlashing}
+            disabled={nodeUpdateMutation.isPending || isFlashing}
+            isLoading={
+              nodeUpdateMutation.isPending ||
+              (isFlashing && flashType === "node")
+            }
           >
             Install OS
           </Button>
@@ -187,16 +135,17 @@ function Flash() {
           </label>
         </div>
 
-        {!isIdle && (
-          <div className="mt-4 block">
-            <Progress
-              aria-label="Flashing progress"
-              value={progress.pct}
-              label={`${progress.transferred}${progress.total ? ` / ${progress.total}` : ""}`}
-              pulsing={isPending || isFlashing}
-            />
-            <div className="mt-2 text-sm">{statusMessage}</div>
-          </div>
+        {uploadProgress && flashType === "node" && (
+          <Progress
+            aria-label="Flashing progress"
+            className="mt-4"
+            value={uploadProgress.pct}
+            label={`${uploadProgress.transferred}${uploadProgress.total ? ` / ${uploadProgress.total}` : ""}`}
+            pulsing={nodeUpdateMutation.isPending || isFlashing}
+          />
+        )}
+        {flashType === "node" && statusMessage && (
+          <div className="mt-2 text-sm">{statusMessage}</div>
         )}
       </form>
       <ConfirmationModal

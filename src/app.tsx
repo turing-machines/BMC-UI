@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { FlashProvider } from "@/contexts/FlashContext";
 import InnerApp from "@/innerApp";
 import { type router } from "@/router";
 
@@ -27,10 +28,12 @@ if (!rootElement.innerHTML) {
       <ThemeProvider attribute="class">
         <AuthProvider>
           <QueryClientProvider client={queryClient}>
-            <TooltipProvider delayDuration={0}>
-              <InnerApp />
-              <Toaster />
-            </TooltipProvider>
+            <FlashProvider>
+              <TooltipProvider delayDuration={0}>
+                <InnerApp />
+                <Toaster />
+              </TooltipProvider>
+            </FlashProvider>
           </QueryClientProvider>
         </AuthProvider>
       </ThemeProvider>
