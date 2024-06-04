@@ -30,7 +30,7 @@ interface AboutTabResponse {
   version: string;
 }
 
-interface FlashStatus {
+export interface FlashStatus {
   Transferring?: {
     id: number;
     process_name: string;
@@ -99,6 +99,7 @@ export function useAboutTabData() {
 
   return useSuspenseQuery({
     queryKey: ["aboutTabData"],
+    staleTime: 1000 * 60 * 60, // Valid for 1 hour
     queryFn: async () => {
       const response = await api.get<APIResponse<AboutTabResponse>>("/bmc", {
         params: {
@@ -153,6 +154,7 @@ export function useFlashStatusQuery(enabled: boolean) {
 
   return useQuery({
     queryKey: ["flashStatus"],
+    staleTime: 1000, // Valid for 1 second
     queryFn: async () => {
       const response = await api.get<FlashStatus>("/bmc", {
         params: {
@@ -172,6 +174,7 @@ export function useFirmwareStatusQuery(enabled: boolean) {
 
   return useQuery({
     queryKey: ["firmwareStatus"],
+    staleTime: 1000, // Valid for 1 second
     queryFn: async () => {
       const response = await api.get<FlashStatus>("/bmc", {
         params: {
