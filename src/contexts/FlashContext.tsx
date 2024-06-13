@@ -40,6 +40,7 @@ interface FlashContextValue {
   }) => Promise<void>;
   handleNodeUpdate: (variables: {
     nodeId: number;
+    batch?: number[];
     file?: File;
     url?: string;
     sha256?: string;
@@ -133,27 +134,29 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
 
   const handleNodeUpdate = async (variables: {
     nodeId: number;
+    batch?: number[];
     file?: File;
     url?: string;
     sha256?: string;
     skipCRC: boolean;
   }) => {
+    const nodeWord = variables.batch?.length ? "nodes" : "node";
     setFlashType("node");
     setIsUploading(true);
-    setStatusMessage(`Transferring image to node ${variables.nodeId + 1}...`);
+    setStatusMessage(`Transferring image to selected ${nodeWord}...`);
     await nodeUpdateMutation.mutateAsync(variables, {
       onSuccess: () => {
         setIsUploading(false);
         setIsFlashing(true);
         const msg = variables.skipCRC
-          ? "Transferring image to the node..."
-          : "Checking CRC and transferring image to the node...";
+          ? `Transferring image to the ${nodeWord}...`
+          : `Checking CRC and transferring image to the ${nodeWord}...`;
         setStatusMessage(msg);
         void flashStatus.refetch();
       },
       onError: (error) => {
         setIsUploading(false);
-        const msg = `Failed to transfer the image to node ${variables.nodeId + 1}`;
+        const msg = `Failed to transfer the image to selected ${nodeWord}`;
         setStatusMessage(msg);
         toast({
           title: msg,
@@ -203,7 +206,7 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
         } else if (flashStatus.data?.Done) {
           handleSuccess(
             "Flashing successful",
-            "Image flashed successfully to the node"
+            "Image flashed successfully to the target node(s)"
           );
         }
       }
