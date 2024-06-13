@@ -5,6 +5,7 @@ BMC-UI is a web-based user interface for managing and configuring the BMC of a T
 ## Technologies Used
 
 - [React](https://reactjs.org/) - JavaScript library for building user interfaces
+- [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework
 - [TanStack Router](https://tanstack.com/router) - Routing library for React applications
   - Handles route management and route protection
 - [TanStack Query](https://tanstack.com/query) - Data fetching and caching library for React

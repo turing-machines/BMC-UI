@@ -174,3 +174,59 @@ export const routeTree = rootRoute.addChildren({
 })
 
 /* prettier-ignore-end */
+
+/* ROUTE_MANIFEST_START
+{
+  "routes": {
+    "__root__": {
+      "filePath": "__root.tsx",
+      "children": [
+        "/",
+        "/_tabLayout",
+        "/login"
+      ]
+    },
+    "/": {
+      "filePath": "index.lazy.tsx"
+    },
+    "/_tabLayout": {
+      "filePath": "_tabLayout.tsx",
+      "children": [
+        "/_tabLayout/about",
+        "/_tabLayout/firmware-upgrade",
+        "/_tabLayout/flash-node",
+        "/_tabLayout/info",
+        "/_tabLayout/nodes",
+        "/_tabLayout/usb"
+      ]
+    },
+    "/login": {
+      "filePath": "login.tsx"
+    },
+    "/_tabLayout/about": {
+      "filePath": "_tabLayout/about.lazy.tsx",
+      "parent": "/_tabLayout"
+    },
+    "/_tabLayout/firmware-upgrade": {
+      "filePath": "_tabLayout/firmware-upgrade.lazy.tsx",
+      "parent": "/_tabLayout"
+    },
+    "/_tabLayout/flash-node": {
+      "filePath": "_tabLayout/flash-node.lazy.tsx",
+      "parent": "/_tabLayout"
+    },
+    "/_tabLayout/info": {
+      "filePath": "_tabLayout/info.lazy.tsx",
+      "parent": "/_tabLayout"
+    },
+    "/_tabLayout/nodes": {
+      "filePath": "_tabLayout/nodes.lazy.tsx",
+      "parent": "/_tabLayout"
+    },
+    "/_tabLayout/usb": {
+      "filePath": "_tabLayout/usb.lazy.tsx",
+      "parent": "/_tabLayout"
+    }
+  }
+}
+ROUTE_MANIFEST_END */
