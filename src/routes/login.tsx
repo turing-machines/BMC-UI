@@ -69,6 +69,7 @@ function Login() {
               type="text"
               autoCorrect="off"
               autoCapitalize="off"
+              autoComplete="username"
               name="username"
               label={t("login.username")}
             />
@@ -78,6 +79,7 @@ function Login() {
               type="password"
               autoCorrect="off"
               autoCapitalize="off"
+              autoComplete="current-password"
               name="password"
               label={t("login.password")}
             />

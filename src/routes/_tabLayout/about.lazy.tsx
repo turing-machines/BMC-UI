@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import TimeAgo from "javascript-time-ago";
+import de from "javascript-time-ago/locale/de";
 import en from "javascript-time-ago/locale/en";
 import es from "javascript-time-ago/locale/es";
 import { useMemo } from "react";
@@ -18,6 +19,7 @@ export const Route = createLazyFileRoute("/_tabLayout/about")({
 });
 
 TimeAgo.addDefaultLocale(en);
+TimeAgo.addLocale(de);
 TimeAgo.addLocale(es);
 
 function About() {
