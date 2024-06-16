@@ -1,5 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
+import { useTranslation } from "react-i18next";
 
 import { Switch } from "@/components/ui/switch";
 
@@ -8,11 +9,12 @@ const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
   : "light";
 
 export default function ThemeToggle() {
+  const { t } = useTranslation();
   const { theme, setTheme } = useTheme();
 
   return (
     <Switch
-      aria-label="Toggle theme"
+      aria-label={t("ui.ariaThemeToggle")}
       onIcon={<Moon />}
       offIcon={<Sun />}
       checked={

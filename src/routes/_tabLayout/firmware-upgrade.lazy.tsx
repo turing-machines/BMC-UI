@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
 import TabView from "@/components/TabView";
@@ -13,6 +14,7 @@ export const Route = createLazyFileRoute("/_tabLayout/firmware-upgrade")({
 });
 
 function FirmwareUpgrade() {
+  const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [confirmFlashModal, setConfirmFlashModal] = useState(false);
@@ -51,18 +53,22 @@ function FirmwareUpgrade() {
   };
 
   return (
-    <TabView title="Upgrade BMC firmware">
+    <TabView title={t("firmwareUpgrade.header")}>
       <form ref={formRef} onSubmit={handleSubmit}>
         <div className="mb-4">
           <Input
             type="file"
             name="file"
-            label=".tpu file (remote or local):"
+            label={t("firmwareUpgrade.fileInput")}
             accept=".tpu,.tpu.xz,application/octet-stream"
           />
         </div>
         <div className="mb-4">
-          <Input type="text" name="sha256" label="SHA-256 (optional):" />
+          <Input
+            type="text"
+            name="sha256"
+            label={t("firmwareUpgrade.shaInput")}
+          />
         </div>
         <div>
           <Button
@@ -73,12 +79,12 @@ function FirmwareUpgrade() {
               (isFlashing && flashType === "firmware")
             }
           >
-            Upgrade
+            {t("firmwareUpgrade.submitButton")}
           </Button>
         </div>
         {uploadProgress && flashType === "firmware" && (
           <Progress
-            aria-label="Firmware upgrade progress"
+            aria-label={t("firmwareUpgrade.ariaProgress")}
             className="mt-4"
             value={uploadProgress.pct}
             label={`${uploadProgress.transferred}${
@@ -95,8 +101,8 @@ function FirmwareUpgrade() {
         isOpen={confirmFlashModal}
         onClose={() => setConfirmFlashModal(false)}
         onConfirm={handleUpload}
-        title="Upgrade Firmware?"
-        message="A reboot is required to finalise the upgrade process."
+        title={t("firmwareUpgrade.flashModalTitle")}
+        message={t("firmwareUpgrade.flashModalDescription")}
       />
     </TabView>
   );

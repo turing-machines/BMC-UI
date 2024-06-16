@@ -1,5 +1,6 @@
 import { Eye, EyeOff, FileUp } from "lucide-react";
 import { forwardRef, type InputHTMLAttributes, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -24,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
+    const { t } = useTranslation();
     const inputRef = useRef<HTMLInputElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [showPassword, setShowPassword] = useState(false);
@@ -67,7 +69,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <>
             <button
               type="button"
-              aria-label="Upload file"
+              aria-label={t("ui.ariaUploadFile")}
               className="absolute right-4 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center"
               onClick={() => {
                 fileInputRef.current?.click();
@@ -90,7 +92,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         {isPasswordInput && (
           <button
             type="button"
-            aria-label="Toggle password visibility"
+            aria-label={t("ui.ariaPasswordVisibility")}
             className="absolute right-4 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center"
             onClick={() => setShowPassword(!showPassword)}
           >

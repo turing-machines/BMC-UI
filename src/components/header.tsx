@@ -1,6 +1,7 @@
 import { MenuIcon } from "lucide-react";
 import { XIcon } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import Logo from "@/assets/logo-light.svg?react";
 import BasicInfo from "@/components/BasicInfo";
@@ -19,6 +20,7 @@ import { useMediaQuery } from "@/hooks/use-media-query";
 import NavigationLinks from "./navigation-links";
 
 export default function Header() {
+  const { t } = useTranslation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -58,7 +60,7 @@ export default function Header() {
           <DrawerHeader className="text-left">
             <DrawerTitle className="mb-4 mt-1 flex items-center justify-between">
               <span className="text-xl text-neutral-900 dark:text-neutral-200">
-                Navigation
+                {t("ui.navigation")}
               </span>
               <DrawerClose asChild>
                 <Button type="button" variant="bwSquare" size="icon">

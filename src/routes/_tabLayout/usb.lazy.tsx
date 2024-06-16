@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import USBSkeleton from "@/components/skeletons/usb";
 import TabView from "@/components/TabView";
@@ -28,12 +29,13 @@ export const Route = createLazyFileRoute("/_tabLayout/usb")({
 interface SelectOption {
   value: string;
   label: string;
+  serverValue?: string;
 }
 
 const modeOptions: SelectOption[] = [
-  { value: "0", label: "Host" },
-  { value: "1", label: "Device" },
-  { value: "2", label: "Flash" },
+  { value: "0", label: "usb.mode.host", serverValue: "Host" },
+  { value: "1", label: "usb.mode.device", serverValue: "Device" },
+  { value: "2", label: "usb.mode.flash", serverValue: "Flash" },
 ];
 
 const nodeOptions: SelectOption[] = [
@@ -44,6 +46,7 @@ const nodeOptions: SelectOption[] = [
 ];
 
 function USB() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const { data } = useUSBTabData();
   const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
@@ -63,13 +66,13 @@ function USB() {
       {
         onSuccess: () => {
           toast({
-            title: "USB mode changed",
-            description: "USB mode changed successfully",
+            title: t("usb.changeSuccessTitle"),
+            description: t("usb.changeSuccessMessage"),
           });
         },
         onError: (e) => {
           toast({
-            title: "USB mode change failed",
+            title: t("usb.changeFailedTitle"),
             description: e.message,
             variant: "destructive",
           });
@@ -79,22 +82,23 @@ function USB() {
   };
 
   return (
-    <TabView title="USB route">
+    <TabView title={t("usb.header")}>
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <Select
             name="mode"
             defaultValue={
-              modeOptions.find((option) => option.label === data.mode)?.value
+              modeOptions.find((option) => option.serverValue === data.mode)
+                ?.value
             }
           >
-            <SelectTrigger label="USB mode">
-              <SelectValue placeholder="Select..." />
+            <SelectTrigger label={t("usb.modeSelect")}>
+              <SelectValue placeholder={t("ui.selectPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {modeOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {t(option.label)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -105,13 +109,15 @@ function USB() {
               nodeOptions.find((option) => option.label === data.node)?.value
             }
           >
-            <SelectTrigger label="Connected node">
-              <SelectValue placeholder="Select..." />
+            <SelectTrigger label={t("usb.nodeSelect")}>
+              <SelectValue placeholder={t("ui.selectPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {nodeOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {t("nodes.node", {
+                    nodeId: Number.parseInt(option.value) + 1,
+                  })}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -119,32 +125,30 @@ function USB() {
         </div>
         <div className="mt-4 flex flex-row flex-wrap justify-between">
           <Button type="submit" isLoading={isPending} disabled={isPending}>
-            Change
+            {t("usb.submitButton")}
           </Button>
 
           <div className="mt-8 flex flex-col items-start md:mt-0 md:flex-row md:items-center lg:mt-0">
             <p className="mr-4 text-base font-semibold opacity-60">
-              USB mode definitions
+              {t("usb.mode.definitionsTitle")}
             </p>
             <div className="mt-4 flex gap-4 md:mt-0">
               <div className="group relative cursor-pointer">
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
-                      <p>Host</p>
+                      <p>{t("usb.mode.host")}</p>
                       <InfoIcon className="size-4" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16}>
                     <div className="my-1 flex max-w-sm flex-col text-pretty">
-                      <p className="font-semibold">Host</p>
-                      <p>Turns the USB_OTG port power on.</p>
-                      <p className="mt-1 font-semibold">Usage</p>
-                      <p>
-                        Use when you want to connect USB devices (like keyboard,
-                        mouse, USB drive, etc) through the USB_OTG port to
-                        supported modules.
+                      <p className="font-semibold">{t("usb.mode.host")}</p>
+                      <p>{t("usb.mode.hostDefinition")}</p>
+                      <p className="mt-1 font-semibold">
+                        {t("usb.mode.usageWord")}
                       </p>
+                      <p>{t("usb.mode.hostUsage")}</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -154,16 +158,18 @@ function USB() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
-                      <p>Device</p>
+                      <p>{t("usb.mode.device")}</p>
                       <InfoIcon className="size-4" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
                     <div className="my-1 flex max-w-sm flex-col text-pretty">
-                      <p className="font-semibold">Device</p>
-                      <p>The default mode. Turns the USB_OTG power off.</p>
-                      <p className="mt-1 font-semibold">Usage</p>
-                      <p>Use in any other case.</p>
+                      <p className="font-semibold">{t("usb.mode.device")}</p>
+                      <p>{t("usb.mode.deviceDefinition")}</p>
+                      <p className="mt-1 font-semibold">
+                        {t("usb.mode.usageWord")}
+                      </p>
+                      <p>{t("usb.mode.deviceUsage")}</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>
@@ -173,19 +179,18 @@ function USB() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center justify-between gap-1 rounded-full bg-turing-bg px-4 py-1 text-sm font-semibold dark:bg-turing-bg-dark">
-                      <p>Flash</p>
+                      <p>{t("usb.mode.flash")}</p>
                       <InfoIcon className="size-4" />
                     </div>
                   </TooltipTrigger>
                   <TooltipContent sideOffset={16} align="end">
                     <div className="my-1 flex max-w-sm flex-col text-pretty">
-                      <p className="font-semibold">Flash</p>
-                      <p>
-                        Turns the module into flashing mode and sets the USB_OTG
-                        into device mode.
+                      <p className="font-semibold">{t("usb.mode.flash")}</p>
+                      <p>{t("usb.mode.flashDefinition")}</p>
+                      <p className="mt-1 font-semibold">
+                        {t("usb.mode.usageWord")}
                       </p>
-                      <p className="mt-1 font-semibold">Usage</p>
-                      <p>Use to flash the module using USB_OTG port.</p>
+                      <p>{t("usb.mode.flashUsage")}</p>
                     </div>
                   </TooltipContent>
                 </Tooltip>

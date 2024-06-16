@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
 import TabView from "@/components/TabView";
@@ -15,7 +16,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useFlash } from "@/hooks/use-flash";
-import { useToast } from "@/hooks/use-toast";
 
 export const Route = createLazyFileRoute("/_tabLayout/flash-node")({
   component: FlashNode,
@@ -34,12 +34,11 @@ const nodeOptions: SelectOption[] = [
 ];
 
 function FlashNode() {
-  const { toast } = useToast();
+  const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const [confirmFlashModal, setConfirmFlashModal] = useState(false);
   const {
     flashType,
-    setFlashType,
     isFlashing,
     statusMessage: _statusMessage,
     nodeUpdateMutation,
@@ -82,17 +81,19 @@ function FlashNode() {
   };
 
   return (
-    <TabView title="Install an OS image on a selected node">
+    <TabView title={t("flashNode.header")}>
       <form ref={formRef}>
         <div className="mb-4">
           <Select name="node">
-            <SelectTrigger label="Selected node">
-              <SelectValue placeholder="Select..." />
+            <SelectTrigger label={t("flashNode.nodeSelect")}>
+              <SelectValue placeholder={t("ui.selectPlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {nodeOptions.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
-                  {option.label}
+                  {t("nodes.node", {
+                    nodeId: Number.parseInt(option.value) + 1,
+                  })}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -103,13 +104,13 @@ function FlashNode() {
           <Input
             type="file"
             name="file"
-            label="File (remote or local):"
+            label={t("flashNode.fileInput")}
             accept=".img,.bin,.xz,application/octet-stream"
           />
         </div>
 
         <div className="mb-4">
-          <Input name="sha256" label="SHA-256 (optional):" />
+          <Input name="sha256" label={t("flashNode.shaInput")} />
         </div>
 
         <div className="mb-4 flex flex-wrap items-center">
@@ -122,22 +123,26 @@ function FlashNode() {
               (isFlashing && flashType === "node")
             }
           >
-            Install OS
+            {t("flashNode.submitButton")}
           </Button>
           <label className="flex cursor-pointer items-center pl-4">
-            <Checkbox id="skipCrc" name="skipCrc" aria-label="Skip CRC" />
+            <Checkbox
+              id="skipCrc"
+              name="skipCrc"
+              aria-label={t("flashNode.skipCrc")}
+            />
             <label
               htmlFor="skipCrc"
               className="not-sr-only ml-2 text-sm font-semibold"
             >
-              Skip CRC
+              {t("flashNode.skipCrc")}
             </label>
           </label>
         </div>
 
         {uploadProgress && flashType === "node" && (
           <Progress
-            aria-label="Flashing progress"
+            aria-label={t("flashNode.ariaProgress")}
             className="mt-4"
             value={uploadProgress.pct}
             label={`${uploadProgress.transferred}${uploadProgress.total ? ` / ${uploadProgress.total}` : ""}`}
@@ -152,10 +157,8 @@ function FlashNode() {
         isOpen={confirmFlashModal}
         onClose={() => setConfirmFlashModal(false)}
         onConfirm={handleSubmit}
-        title="Install OS Image"
-        message="You are about to overwrite a new image to the selected node."
-        confirmText="Continue"
-        cancelText="Cancel"
+        title={t("flashNode.flashModalTitle")}
+        message={t("flashNode.flashModalDescription")}
       />
     </TabView>
   );
