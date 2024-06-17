@@ -3,6 +3,9 @@ import TimeAgo from "javascript-time-ago";
 import de from "javascript-time-ago/locale/de";
 import en from "javascript-time-ago/locale/en";
 import es from "javascript-time-ago/locale/es";
+import nl from "javascript-time-ago/locale/nl";
+import pl from "javascript-time-ago/locale/pl";
+import zh from "javascript-time-ago/locale/zh";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,6 +24,9 @@ export const Route = createLazyFileRoute("/_tabLayout/about")({
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(de);
 TimeAgo.addLocale(es);
+TimeAgo.addLocale(nl);
+TimeAgo.addLocale(pl);
+TimeAgo.addLocale(zh);
 
 function About() {
   const {
