@@ -1,17 +1,18 @@
 import { Link, type LinkProps } from "@tanstack/react-router";
 import { ArrowRightIcon } from "lucide-react";
 import { type ReactNode, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 
 import { useFlash } from "@/hooks/use-flash";
 import { cn } from "@/lib/utils";
 
 const navigationLinks = [
-  { to: "/info", label: "Info" },
-  { to: "/nodes", label: "Nodes" },
-  { to: "/usb", label: "USB" },
-  { to: "/firmware-upgrade", label: "Firmware Upgrade" },
-  { to: "/flash-node", label: "Flash Node" },
-  { to: "/about", label: "About" },
+  { to: "/info", label: "navigation.info" },
+  { to: "/nodes", label: "navigation.nodes" },
+  { to: "/usb", label: "navigation.usb" },
+  { to: "/firmware-upgrade", label: "navigation.firmwareUpgrade" },
+  { to: "/flash-node", label: "navigation.flashNode" },
+  { to: "/about", label: "navigation.about" },
 ] as const;
 
 interface FlashingLinkProps {
@@ -69,6 +70,7 @@ export default function NavigationLinks({
   isDesktop: boolean;
   onClick?: () => void;
 }) {
+  const { t } = useTranslation();
   const { flashType, isFlashing } = useFlash();
 
   const renderLinks = useMemo(
@@ -85,11 +87,11 @@ export default function NavigationLinks({
             to={to}
             isFlashing={isNodeFlashing || isFirmwareFlashing}
           >
-            {label}
+            {t(label)}
           </TabLink>
         );
       }),
-    [isFlashing, flashType]
+    [isFlashing, flashType, t]
   );
 
   const renderMobileLinks = useMemo(
@@ -107,11 +109,11 @@ export default function NavigationLinks({
             onClick={onClick}
             isFlashing={isNodeFlashing || isFirmwareFlashing}
           >
-            {label}
+            {t(label)}
           </MobileLink>
         );
       }),
-    [isFlashing, flashType, onClick]
+    [isFlashing, flashType, onClick, t]
   );
 
   if (isDesktop)

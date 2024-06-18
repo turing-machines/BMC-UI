@@ -9,12 +9,14 @@ BMC-UI is a web-based user interface for managing and configuring the BMC of a T
 - [TanStack Router](https://tanstack.com/router) - Routing library for React applications
   - Handles route management and route protection
 - [TanStack Query](https://tanstack.com/query) - Data fetching and caching library for React
+- [react-i18next](https://react.i18next.com/) - Internationalization library for React
 - [Vite](https://vitejs.dev/) - Fast build tool and development server
 - [TypeScript](https://www.typescriptlang.org/) - Typed superset of JavaScript
 
 ## Getting Started
 
 1. Set up `bmcd-api-mock` for development:
+
    - Clone the [bmcd-api-mock](https://github.com/barrenechea/bmcd-api-mock) repository.
    - Follow the instructions in the `bmcd-api-mock` repository to set up and run the mock server.
 

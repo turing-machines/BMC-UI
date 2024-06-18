@@ -7,6 +7,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { Trans, useTranslation } from "react-i18next";
 
 import RebootModal from "@/components/RebootModal";
 import { toast } from "@/hooks/use-toast";
@@ -54,6 +55,7 @@ interface FlashProviderProps {
 }
 
 export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
+  const { t } = useTranslation();
   const [flashType, setFlashType] = useState<FlashType>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
@@ -91,11 +93,14 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
     setRebootModalOpened(false);
     mutateRebootBMC(undefined, {
       onSuccess: () => {
-        toast({ title: "Rebooting BMC", description: "The BMC is rebooting" });
+        toast({
+          title: t("info.rebootButton"),
+          description: t("info.rebootSuccess"),
+        });
       },
       onError: (error) => {
         toast({
-          title: "Failed to reboot BMC",
+          title: t("info.rebootFailed"),
           description: error.message,
           variant: "destructive",
         });
@@ -110,17 +115,17 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
   }) => {
     setFlashType("firmware");
     setIsUploading(true);
-    setStatusMessage("Uploading BMC firmware...");
+    setStatusMessage(t("firmwareUpgrade.uploading"));
     await firmwareUpdateMutation.mutateAsync(variables, {
       onSuccess: () => {
         setIsUploading(false);
         setIsFlashing(true);
-        setStatusMessage("Writing firmware to BMC...");
+        setStatusMessage(t("firmwareUpgrade.writing"));
         void firmwareStatus.refetch();
       },
       onError: (error) => {
         setIsUploading(false);
-        const msg = "Failed to upload the BMC firmware";
+        const msg = t("firmwareUpgrade.uploadFailed");
         setStatusMessage(msg);
         toast({
           title: msg,
@@ -138,22 +143,23 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
     sha256?: string;
     skipCRC: boolean;
   }) => {
+    const nodeId = variables.nodeId + 1;
     setFlashType("node");
     setIsUploading(true);
-    setStatusMessage(`Transferring image to node ${variables.nodeId + 1}...`);
+    setStatusMessage(t("flashNode.uploading", { nodeId }));
     await nodeUpdateMutation.mutateAsync(variables, {
       onSuccess: () => {
         setIsUploading(false);
         setIsFlashing(true);
         const msg = variables.skipCRC
-          ? "Transferring image to the node..."
-          : "Checking CRC and transferring image to the node...";
+          ? t("flashNode.flashing", { nodeId })
+          : t("flashNode.flashingCrc", { nodeId });
         setStatusMessage(msg);
         void flashStatus.refetch();
       },
       onError: (error) => {
         setIsUploading(false);
-        const msg = `Failed to transfer the image to node ${variables.nodeId + 1}`;
+        const msg = t("flashNode.transferFailed", { nodeId });
         setStatusMessage(msg);
         toast({
           title: msg,
@@ -175,14 +181,19 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
     });
   }, []);
 
-  const handleTransferProgress = useCallback((data: FlashStatus) => {
-    const bytesWritten = data.Transferring?.bytes_written ?? 0;
-    setUploadProgress({
-      transferred: `${filesize(bytesWritten, { standard: "jedec" })} written`,
-      total: null,
-      pct: 100,
-    });
-  }, []);
+  const handleTransferProgress = useCallback(
+    (data: FlashStatus) => {
+      const bytesWritten = data.Transferring?.bytes_written ?? 0;
+      setUploadProgress({
+        transferred: t("firmwareUpgrade.writtenData", {
+          written: filesize(bytesWritten, { standard: "jedec" }),
+        }),
+        total: null,
+        pct: 100,
+      });
+    },
+    [t]
+  );
 
   const handleSuccess = useCallback((title: string, message: string) => {
     setIsFlashing(false);
@@ -197,26 +208,23 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
     if (flashType === "node") {
       if (!flashStatus.isStale) {
         if (flashStatus.data?.Error) {
-          handleError(flashStatus.data.Error, "An error has occurred");
+          handleError(flashStatus.data.Error, t("firmwareUpgrade.error"));
         } else if (flashStatus.data?.Transferring) {
           handleTransferProgress(flashStatus.data);
         } else if (flashStatus.data?.Done) {
-          handleSuccess(
-            "Flashing successful",
-            "Image flashed successfully to the node"
-          );
+          handleSuccess(t("flashNode.success"), t("flashNode.successMessage"));
         }
       }
     } else if (flashType === "firmware") {
       if (!firmwareStatus.isStale) {
         if (firmwareStatus.data?.Error) {
-          handleError(firmwareStatus.data.Error, "An error has occurred");
+          handleError(firmwareStatus.data.Error, t("firmwareUpgrade.error"));
         } else if (firmwareStatus.data?.Transferring) {
           handleTransferProgress(firmwareStatus.data);
         } else if (firmwareStatus.data?.Done) {
           handleSuccess(
-            "Flashing successful",
-            "Firmware upgrade completed successfully"
+            t("firmwareUpgrade.success"),
+            t("firmwareUpgrade.successMessage")
           );
           setRebootModalOpened(true);
         }
@@ -232,6 +240,7 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
     handleError,
     handleTransferProgress,
     handleSuccess,
+    t,
   ]);
 
   return (
@@ -256,15 +265,17 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
           isOpen={rebootModalOpened}
           onClose={() => setRebootModalOpened(false)}
           onReboot={handleRebootBMC}
-          title="Upgrade Finished!"
+          title={t("firmwareUpgrade.finishModalTitle")}
           message={
             <div className="text-neutral-900 opacity-60 dark:text-neutral-100">
-              <p>To finalize the upgrade, a system reboot is necessary.</p>
-              <p>Would you like to proceed with the reboot now?</p>
-              <p className="mt-4 text-xs italic">
-                The nodes will temporarily lose power until the reboot process
-                is complete.
-              </p>
+              <Trans i18nKey="firmwareUpgrade.finishModalDescription">
+                <p>To finalize the upgrade, a system reboot is necessary.</p>
+                <p>Would you like to proceed with the reboot now?</p>
+                <p className="mt-4 text-xs italic">
+                  The nodes will temporarily lose power until the reboot process
+                  is complete.
+                </p>
+              </Trans>
             </div>
           }
         />

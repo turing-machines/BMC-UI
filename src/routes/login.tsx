@@ -1,6 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
 import { type AxiosError } from "axios";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/login")({
 });
 
 function Login() {
+  const { t } = useTranslation();
   const { mutate: mutateLogin, isPending } = useLoginMutation();
   const [message, setMessage] = useState("");
   const { login } = useAuth();
@@ -39,7 +41,7 @@ function Login() {
       {
         onSuccess: (data) => {
           setMessage("");
-          login(data.id, rememberMe);
+          login(username, data.id, rememberMe);
 
           // force refresh the same page, natively
           window.location.reload();
@@ -47,8 +49,8 @@ function Login() {
         onError: (error) => {
           const msg =
             (error as AxiosError).code === "ERR_BAD_REQUEST"
-              ? "Invalid username or password"
-              : "An error has occurred. Please try again later.";
+              ? t("login.errorCredentials")
+              : t("login.errorUnknown");
           setMessage(msg);
         },
       }
@@ -58,15 +60,18 @@ function Login() {
   return (
     <div className="flex h-[32rem] w-full items-center justify-center md:h-[55rem]">
       <main className="size-full rounded-md bg-white p-10 pt-20 shadow-md dark:bg-neutral-900 md:h-auto md:w-96 md:pt-10">
-        <h3 className="mb-8 text-center text-3xl font-bold">Login</h3>
+        <h3 className="mb-8 text-center text-3xl font-bold">
+          {t("login.header")}
+        </h3>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <Input
               type="text"
               autoCorrect="off"
               autoCapitalize="off"
+              autoComplete="username"
               name="username"
-              label="Username"
+              label={t("login.username")}
             />
           </div>
           <div className="mb-4">
@@ -74,21 +79,22 @@ function Login() {
               type="password"
               autoCorrect="off"
               autoCapitalize="off"
+              autoComplete="current-password"
               name="password"
-              label="Password"
+              label={t("login.password")}
             />
           </div>
           <div className="mb-4 flex items-center">
             <Checkbox
               id="rememberMe"
               name="rememberMe"
-              aria-label="Remember me"
+              aria-label={t("login.remember")}
             />
             <label
               htmlFor="rememberMe"
               className="not-sr-only ml-2 text-sm font-semibold"
             >
-              Remember me
+              {t("login.remember")}
             </label>
           </div>
           <div className="mb-4">
@@ -98,7 +104,7 @@ function Login() {
               disabled={isPending}
               isLoading={isPending}
             >
-              Login
+              {t("login.submit")}
             </Button>
           </div>
           <div className="mb-4">
