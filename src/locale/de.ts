@@ -9,6 +9,14 @@ const translations = {
     flashNode: "Knoten flashen",
     about: "Über",
   },
+  userNav: {
+    language: "Sprache",
+    theme: "Thema",
+    themeSystem: "System",
+    themeLight: "Hell",
+    themeDark: "Dunkel",
+    logout: "Abmelden",
+  },
   login: {
     header: "Einloggen",
     username: "Benutzername",
@@ -139,7 +147,6 @@ const translations = {
     reboot: "Neu starten",
     selectPlaceholder: "Auswählen...",
     navigation: "Navigation",
-    ariaThemeToggle: "Theme umschalten",
     pageNotFound: "Seite nicht gefunden",
     backToHome: "Zurück zur Startseite",
     ariaPasswordVisibility: "Passwort-Sichtbarkeit umschalten",

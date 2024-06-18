@@ -41,7 +41,7 @@ function Login() {
       {
         onSuccess: (data) => {
           setMessage("");
-          login(data.id, rememberMe);
+          login(username, data.id, rememberMe);
 
           // force refresh the same page, natively
           window.location.reload();

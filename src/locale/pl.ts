@@ -10,6 +10,14 @@ const translations = {
     flashNode: "Flashowanie węzła",
     about: "O programie",
   },
+  userNav: {
+    language: "Język",
+    theme: "Motyw",
+    themeSystem: "Systemowy",
+    themeLight: "Jasny",
+    themeDark: "Ciemny",
+    logout: "Wyloguj",
+  },
   login: {
     header: "Logowanie",
     username: "Nazwa użytkownika",
@@ -134,7 +142,6 @@ const translations = {
     reboot: "Uruchom ponownie",
     selectPlaceholder: "Wybierz...",
     navigation: "Nawigacja",
-    ariaThemeToggle: "Przełącz motyw",
     pageNotFound: "Nie znaleziono strony",
     backToHome: "Powrót do strony głównej",
     ariaPasswordVisibility: "Przełącz widoczność hasła",

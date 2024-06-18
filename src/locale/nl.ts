@@ -9,6 +9,14 @@ const translations = {
     flashNode: "Flash-node",
     about: "Over",
   },
+  userNav: {
+    language: "Taal",
+    theme: "Thema",
+    themeSystem: "Systeem",
+    themeLight: "Licht",
+    themeDark: "Donker",
+    logout: "Uitloggen",
+  },
   login: {
     header: "Inloggen",
     username: "Gebruikersnaam",
@@ -134,7 +142,6 @@ const translations = {
     reboot: "Herstarten",
     selectPlaceholder: "Selecteer...",
     navigation: "Navigatie",
-    ariaThemeToggle: "Thema wisselen",
     pageNotFound: "Pagina niet gevonden",
     backToHome: "Terug naar startpagina",
     ariaPasswordVisibility: "Wachtwoordzichtbaarheid wisselen",

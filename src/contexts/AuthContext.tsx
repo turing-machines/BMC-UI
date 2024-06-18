@@ -8,7 +8,7 @@ import React, {
 export interface AuthContext {
   isAuthenticated: boolean;
   token: string | null;
-  login: (token: string, rememberMe: boolean) => void;
+  login: (username: string, token: string, rememberMe: boolean) => void;
   logout: () => void;
 }
 
@@ -48,11 +48,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = "/login";
   }, []);
 
-  const login = React.useCallback((token: string, rememberMe: boolean) => {
-    setStoredToken(token, rememberMe);
-    setToken(token);
-    setIsAuthenticated(true);
-  }, []);
+  const login = React.useCallback(
+    (username: string, token: string, rememberMe: boolean) => {
+      localStorage.setItem("username", username);
+      setStoredToken(token, rememberMe);
+      setToken(token);
+      setIsAuthenticated(true);
+    },
+    []
+  );
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>

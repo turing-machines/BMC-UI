@@ -9,6 +9,14 @@ const translations = {
     flashNode: "Instalar SO",
     about: "Acerca de",
   },
+  userNav: {
+    language: "Lenguaje",
+    theme: "Tema",
+    themeSystem: "Sistema",
+    themeLight: "Claro",
+    themeDark: "Oscuro",
+    logout: "Cerrar Sesión",
+  },
   login: {
     header: "Iniciar Sesión",
     username: "Nombre de usuario",
@@ -135,7 +143,6 @@ const translations = {
     reboot: "Reiniciar",
     selectPlaceholder: "Seleccionar...",
     navigation: "Navegación",
-    ariaThemeToggle: "Alternar tema",
     pageNotFound: "Página no encontrada",
     backToHome: "Volver a la página de inicio",
     ariaPasswordVisibility: "Alternar visibilidad de contraseña",

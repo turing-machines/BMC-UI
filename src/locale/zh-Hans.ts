@@ -9,6 +9,14 @@ const translations = {
     flashNode: "刷写节点",
     about: "关于",
   },
+  userNav: {
+    language: "语言",
+    theme: "主题",
+    themeSystem: "系统",
+    themeLight: "亮",
+    themeDark: "暗",
+    logout: "登出",
+  },
   login: {
     header: "登录",
     username: "用户名",
@@ -130,7 +138,6 @@ const translations = {
     reboot: "重启",
     selectPlaceholder: "选择...",
     navigation: "导航",
-    ariaThemeToggle: "切换主题",
     pageNotFound: "找不到页面",
     backToHome: "返回首页",
     ariaPasswordVisibility: "切换密码可见性",

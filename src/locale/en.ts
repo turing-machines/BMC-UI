@@ -7,6 +7,14 @@ const translations = {
     flashNode: "Flash Node",
     about: "About",
   },
+  userNav: {
+    language: "Language",
+    theme: "Theme",
+    themeSystem: "System",
+    themeLight: "Light",
+    themeDark: "Dark",
+    logout: "Logout",
+  },
   login: {
     header: "Login",
     username: "Username",
@@ -132,7 +140,6 @@ const translations = {
     reboot: "Reboot",
     selectPlaceholder: "Select...",
     navigation: "Navigation",
-    ariaThemeToggle: "Toggle theme",
     pageNotFound: "Page Not Found",
     backToHome: "Back to home",
     ariaPasswordVisibility: "Toggle password visibility",
