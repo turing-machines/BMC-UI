@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -36,6 +38,7 @@ export default function RebootModal({
   message,
   isPending = false,
 }: RebootModalProps) {
+  const { t } = useTranslation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
@@ -52,7 +55,7 @@ export default function RebootModal({
           </DialogHeader>
           <DialogFooter className="mt-2">
             <Button type="button" variant="bw" onClick={onClose}>
-              Cancel
+              {t("ui.cancel")}
             </Button>
             <Button
               type="button"
@@ -61,7 +64,7 @@ export default function RebootModal({
               disabled={isPending}
               isLoading={isPending}
             >
-              Reboot
+              {t("ui.reboot")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -83,7 +86,7 @@ export default function RebootModal({
         <DrawerFooter className="mt-2">
           <DrawerClose asChild>
             <Button type="button" variant="bw" size="lg">
-              Cancel
+              {t("ui.cancel")}
             </Button>
           </DrawerClose>
           <Button
@@ -94,7 +97,7 @@ export default function RebootModal({
             disabled={isPending}
             isLoading={isPending}
           >
-            Reboot
+            {t("ui.reboot")}
           </Button>
         </DrawerFooter>
       </DrawerContent>

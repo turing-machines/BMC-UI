@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Power, PowerOff } from "lucide-react";
 import { useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import NodesSkeleton from "@/components/skeletons/nodes";
 import TabView from "@/components/TabView";
@@ -26,6 +27,7 @@ const NodeRow = (
     editMode: boolean;
   }
 ) => {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
   const { mutate: mutatePowerNode, isPending: isPendingPower } =
@@ -37,8 +39,10 @@ const NodeRow = (
     mutatePowerNode({ nodeId: props.nodeId, powerOn: !powerOn });
     setPowerOn(!powerOn);
     toast({
-      title: "Power",
-      description: `Node ${props.nodeId} was ${powerOn ? "turned off" : "turned on"}`,
+      title: t("nodes.powerManagement"),
+      description: powerOn
+        ? t("nodes.nodeOff", { nodeId: props.nodeId })
+        : t("nodes.nodeOn", { nodeId: props.nodeId }),
     });
   };
 
@@ -46,13 +50,13 @@ const NodeRow = (
     mutateResetNode(props.nodeId - 1, {
       onSuccess: () => {
         toast({
-          title: "Power Cycle",
-          description: `Node ${props.nodeId} was restarted`,
+          title: t("nodes.powerManagement"),
+          description: t("nodes.nodeRestarted", { nodeId: props.nodeId }),
         });
       },
       onError: (e) => {
         toast({
-          title: "Error",
+          title: t("nodes.pmError"),
           description: e.message,
           variant: "destructive",
         });
@@ -66,7 +70,9 @@ const NodeRow = (
         <div className="flex items-center gap-4">
           <Switch
             name={`node-${props.nodeId}-power`}
-            aria-label={`Node ${props.nodeId} power switch`}
+            aria-label={t("nodes.ariaNodePowerToggle", {
+              nodeId: props.nodeId,
+            })}
             disabled={!props.editMode || isPendingPower}
             checked={powerOn}
             onCheckedChange={handlePowerNode}
@@ -80,23 +86,27 @@ const NodeRow = (
             disabled={props.power_on_time === null || isPendingReset}
             isLoading={isPendingReset}
           >
-            Restart
+            {t("nodes.restartButton")}
           </Button>
         </div>
         <div className="flex flex-1 flex-wrap gap-4">
           <Input
             type="text"
             name={`node-${props.nodeId}-name`}
-            label="Name"
-            defaultValue={props.name ?? `My Node ${props.nodeId}`}
+            label={t("nodes.nodeName")}
+            defaultValue={
+              props.name ?? t("nodes.node", { nodeId: props.nodeId })
+            }
             disabled={!props.editMode}
             className="flex-1"
           />
           <Input
             type="text"
             name={`node-${props.nodeId}-module-name`}
-            label="Module Name"
-            defaultValue={props.module_name ?? `Module ${props.nodeId}`}
+            label={t("nodes.moduleName")}
+            defaultValue={
+              props.module_name ?? t("nodes.module", { moduleId: props.nodeId })
+            }
             disabled={!props.editMode}
             className="flex-1"
           />
@@ -107,6 +117,7 @@ const NodeRow = (
 };
 
 function NodesTab() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const formRef = useRef<HTMLFormElement>(null);
   const [editMode, setEditMode] = useState(false);
@@ -151,11 +162,14 @@ function NodesTab() {
     mutate(nodeInfo, {
       onSuccess: () => {
         setEditMode(false);
-        toast({ title: "Success", description: "Nodes information saved" });
+        toast({
+          title: t("nodes.saveButton"),
+          description: t("nodes.persistSuccess"),
+        });
       },
       onError: (e) => {
         toast({
-          title: "Error",
+          title: t("nodes.saveButton"),
           description: e.message,
           variant: "destructive",
         });
@@ -164,7 +178,7 @@ function NodesTab() {
   };
 
   return (
-    <TabView title="Control the power supply of connected nodes">
+    <TabView title={t("nodes.header")}>
       <form onSubmit={handleSubmit} ref={formRef}>
         {data.map((node, index) => (
           <NodeRow
@@ -182,18 +196,18 @@ function NodesTab() {
               if (editMode) {
                 formRef.current?.reset();
               }
-              setEditMode(!editMode)
+              setEditMode(!editMode);
             }}
             disabled={isPending}
           >
-            {editMode ? "Cancel" : "Edit"}
+            {editMode ? t("ui.cancel") : t("nodes.editButton")}
           </Button>
           <Button
             type="submit"
             isLoading={isPending}
             disabled={!editMode || isPending}
           >
-            Save
+            {t("nodes.saveButton")}
           </Button>
         </div>
       </form>
