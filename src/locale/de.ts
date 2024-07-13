@@ -113,9 +113,12 @@ const translations = {
       "<0>Um die Aktualisierung abzuschließen, ist ein Systemneustart erforderlich.</0><1>Möchten Sie jetzt mit dem Neustart fortfahren?</1><2>Die Knoten verlieren vorübergehend die Stromversorgung, bis der Neustart abgeschlossen ist.</2>",
   },
   flashNode: {
-    header:
-      "Installieren Sie ein Betriebssystemabbild auf einem ausgewählten Knoten",
-    nodeSelect: "Ausgewählter Knoten:",
+    header_one:
+      "Installiere ein Betriebssystemabbild auf einem ausgewählten Knoten",
+    header_other:
+      "Installiere ein Betriebssystemabbild auf ausgewählten Knoten",
+    nodeSelect_one: "Ausgewählter Knoten:",
+    nodeSelect_other: "Ausgewählte Knoten:",
     fileInput: "Datei (Remote oder lokal):",
     shaInput: "SHA-256 (optional):",
     skipCrc: "CRC überspringen",
@@ -124,15 +127,19 @@ const translations = {
     flashModalTitle: "Betriebssystemabbild installieren",
     flashModalDescription:
       "Sie sind dabei, ein neues Image auf den ausgewählten Knoten zu überschreiben.",
-    uploading: "Übertrage Image auf Knoten {{nodeId}}...",
-    flashing: "Flashe Image auf Knoten {{nodeId}}...",
-    flashingCrc: "Prüfe CRC und flashe Image auf Knoten {{nodeId}}...",
-    transferFailed:
-      "Übertragung des Images auf Knoten {{nodeId}} fehlgeschlagen",
+    uploading_one: "Übertrage Image auf Knoten...",
+    uploading_other: "Übertrage Image auf Knoten...",
+    flashing_one: "Flashe Image auf Knoten...",
+    flashing_other: "Flashe Image auf Knoten...",
+    flashingCrc_one: "Prüfe CRC und flashe Image auf Knoten...",
+    flashingCrc_other: "Prüfe CRC und flashe Image auf Knoten...",
+    transferFailed_one: "Übertragung des Images auf Knoten fehlgeschlagen",
+    transferFailed_other: "Übertragung des Images auf Knoten fehlgeschlagen",
     success: "Flashen erfolgreich",
     successMessage: "Image erfolgreich auf den Knoten geflasht",
   },
   about: {
+    boardModel: "Board-Modell",
     hostname: "Hostname",
     daemonVersion: "Daemon-Version",
     buildTime: "Build-Zeit",
