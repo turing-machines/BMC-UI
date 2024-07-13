@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { Cpu } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import ConfirmationModal from "@/components/ConfirmationModal";
 import FlashNodeSkeleton from "@/components/skeletons/flash-node";
@@ -30,6 +31,7 @@ const isSemverGreaterOrEqual = (a: string, b: string) => {
 };
 
 function FlashNode() {
+  const { t } = useTranslation();
   const { data: aboutData } = useAboutTabData();
   const batchFlashingSupport = useMemo(
     () => isSemverGreaterOrEqual(aboutData.board_revision, "2.5"),
@@ -85,25 +87,23 @@ function FlashNode() {
 
   return (
     <TabView
-      title={
-        batchFlashingSupport
-          ? "Install an OS image on selected nodes"
-          : "Install an OS image on a selected node"
-      }
+      title={t("flashNode.header", { count: batchFlashingSupport ? 4 : 1 })}
     >
       <form ref={formRef}>
         <div className="mb-4">
           <div className="mb-2 flex flex-wrap items-center gap-4">
             <span className="text-sm font-semibold">
-              {batchFlashingSupport
-                ? "Select the nodes to flash:"
-                : "Select a node to flash:"}
+              {t("flashNode.nodeSelect", {
+                count: batchFlashingSupport ? 4 : 1,
+              })}
             </span>
             <div className="flex gap-2">
               {nodeOptions.map((option) => (
                 <Toggle
                   key={option.value}
-                  aria-label={`Toggle flash node ${option.value}`}
+                  aria-label={t("flashNode.ariaToggleNode", {
+                    nodeId: option.value + 1,
+                  })}
                   className="text-xs md:text-sm"
                   pressed={selectedNodes.includes(option.value)}
                   onPressedChange={(pressed) =>
@@ -121,7 +121,9 @@ function FlashNode() {
                   }
                 >
                   <Cpu className="mr-2 size-4" />
-                  {option.label}
+                  {t("nodes.node", {
+                    nodeId: option.value + 1,
+                  })}
                 </Toggle>
               ))}
             </div>
@@ -132,13 +134,13 @@ function FlashNode() {
           <Input
             type="file"
             name="file"
-            label="File (remote or local):"
+            label={t("flashNode.fileInput")}
             accept=".img,.bin,.xz,application/octet-stream"
           />
         </div>
 
         <div className="mb-4">
-          <Input name="sha256" label="SHA-256 (optional):" />
+          <Input name="sha256" label={t("flashNode.shaInput")} />
         </div>
 
         <div className="mb-4 flex flex-wrap items-center">
@@ -151,22 +153,26 @@ function FlashNode() {
               (isFlashing && flashType === "node")
             }
           >
-            Install OS
+            {t("flashNode.submitButton")}
           </Button>
           <label className="flex cursor-pointer items-center pl-4">
-            <Checkbox id="skipCrc" name="skipCrc" aria-label="Skip CRC" />
+            <Checkbox
+              id="skipCrc"
+              name="skipCrc"
+              aria-label={t("flashNode.skipCrc")}
+            />
             <label
               htmlFor="skipCrc"
               className="not-sr-only ml-2 text-sm font-semibold"
             >
-              Skip CRC
+              {t("flashNode.skipCrc")}
             </label>
           </label>
         </div>
 
         {uploadProgress && flashType === "node" && (
           <Progress
-            aria-label="Flashing progress"
+            aria-label={t("flashNode.ariaProgress")}
             className="mt-4"
             value={uploadProgress.pct}
             label={`${uploadProgress.transferred}${uploadProgress.total ? ` / ${uploadProgress.total}` : ""}`}
@@ -181,10 +187,8 @@ function FlashNode() {
         isOpen={confirmFlashModal}
         onClose={() => setConfirmFlashModal(false)}
         onConfirm={handleSubmit}
-        title="Install OS Image"
-        message="You are about to overwrite a new image to the selected node."
-        confirmText="Continue"
-        cancelText="Cancel"
+        title={t("flashNode.flashModalTitle")}
+        message={t("flashNode.flashModalDescription")}
       />
     </TabView>
   );

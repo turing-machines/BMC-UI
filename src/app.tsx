@@ -1,3 +1,5 @@
+import "@/i18n.ts";
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "next-themes";
 import { StrictMode } from "react";

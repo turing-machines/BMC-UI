@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,8 +27,6 @@ interface ConfirmationModalProps {
   onConfirm: () => void;
   title: string;
   message: string;
-  confirmText?: string;
-  cancelText?: string;
 }
 
 export default function ConfirmationModal({
@@ -35,9 +35,8 @@ export default function ConfirmationModal({
   onConfirm,
   title,
   message,
-  confirmText = "Continue",
-  cancelText = "Cancel",
 }: ConfirmationModalProps) {
+  const { t } = useTranslation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
@@ -50,10 +49,10 @@ export default function ConfirmationModal({
           </DialogHeader>
           <DialogFooter className="mt-2">
             <Button type="button" variant="bw" onClick={onClose}>
-              {cancelText}
+              {t("ui.cancel")}
             </Button>
             <Button type="button" onClick={onConfirm}>
-              {confirmText}
+              {t("ui.continue")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -71,11 +70,11 @@ export default function ConfirmationModal({
         <DrawerFooter className="mt-2">
           <DrawerClose asChild>
             <Button type="button" variant="bw" size="lg">
-              {cancelText}
+              {t("ui.cancel")}
             </Button>
           </DrawerClose>
           <Button type="button" size="lg" onClick={onConfirm}>
-            {confirmText}
+            {t("ui.continue")}
           </Button>
         </DrawerFooter>
       </DrawerContent>

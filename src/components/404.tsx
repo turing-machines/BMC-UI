@@ -1,8 +1,10 @@
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 
 export default function FourOhFour() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <main className="flex h-[55rem] w-full items-center justify-center">
@@ -11,14 +13,14 @@ export default function FourOhFour() {
           404
         </h1>
         <p className="mb-10 text-center text-4xl font-semibold">
-          Sorry, Page Not Found
+          {t("ui.pageNotFound")}
         </p>
         <Button
           type="button"
           size="lg"
           onClick={() => void navigate({ to: "/" })}
         >
-          Back to home
+          {t("ui.backToHome")}
         </Button>
       </div>
     </main>

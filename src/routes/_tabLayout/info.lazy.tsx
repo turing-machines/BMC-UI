@@ -1,6 +1,7 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { filesize } from "filesize";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import RebootModal from "@/components/RebootModal";
 import InfoSkeleton from "@/components/skeletons/info";
@@ -44,6 +45,7 @@ export const Route = createLazyFileRoute("/_tabLayout/info")({
 });
 
 function Info() {
+  const { t } = useTranslation();
   const { toast } = useToast();
   const [rebootModalOpened, setRebootModalOpened] = useState(false);
   const { data } = useInfoTabData();
@@ -80,10 +82,10 @@ function Info() {
         link.remove();
         window.URL.revokeObjectURL(url);
         toast({
-          title: "Backup successful",
+          title: t("info.backupButton"),
           description: (
             <>
-              <p>Successfully downloaded backup file.</p>
+              <p>{t("info.backupSuccess")}</p>
               <p className="mt-4 text-xs italic">{filename}</p>
             </>
           ),
@@ -91,7 +93,7 @@ function Info() {
       },
       onError: (e) => {
         toast({
-          title: "Backup failed",
+          title: t("info.backupFailed"),
           description: e.message,
           variant: "destructive",
         });
@@ -103,13 +105,13 @@ function Info() {
     mutateResetNetwork(undefined, {
       onSuccess: () => {
         toast({
-          title: "Network reset",
-          description: "Network reset successful.",
+          title: t("info.resetNetworkButton"),
+          description: t("info.resetNetworkSuccess"),
         });
       },
       onError: (e) => {
         toast({
-          title: "Network reset failed",
+          title: t("info.resetNetworkButton"),
           description: e.message,
           variant: "destructive",
         });
@@ -122,13 +124,13 @@ function Info() {
     mutateRebootBMC(undefined, {
       onSuccess: () => {
         toast({
-          title: "Rebooting BMC",
-          description: "The BMC is rebooting...",
+          title: t("info.rebootButton"),
+          description: t("info.rebootSuccess"),
         });
       },
       onError: (e) => {
         toast({
-          title: "Failed to reboot BMC",
+          title: t("info.rebootFailed"),
           description: e.message,
           variant: "destructive",
         });
@@ -140,13 +142,13 @@ function Info() {
     mutateReloadBMC(undefined, {
       onSuccess: () => {
         toast({
-          title: "Reloading BMC daemon",
-          description: "The BMC daemon is reloading...",
+          title: t("info.reloadDaemonButton"),
+          description: t("info.reloadDaemonSuccess"),
         });
       },
       onError: (e) => {
         toast({
-          title: "Failed to reload BMC daemon",
+          title: t("info.reloadDaemonFailed"),
           description: e.message,
           variant: "destructive",
         });
@@ -157,7 +159,7 @@ function Info() {
   return (
     <TabView>
       <div>
-        <div className="mb-6 text-lg font-bold">User Storage</div>
+        <div className="mb-6 text-lg font-bold">{t("info.userStorage")}</div>
         <div className="space-y-4">
           {data.storage.map((storage) => {
             const { usedPct, usedHuman, totalHuman } = progressData(
@@ -172,7 +174,7 @@ function Info() {
                 <div className="w-1/4 font-semibold">{storage.name}</div>
                 <div className="relative w-1/2 lg:w-3/4">
                   <Progress
-                    aria-label="Storage utilization"
+                    aria-label={t("info.ariaStorageUtilization")}
                     value={usedPct}
                     label={`${usedHuman} / ${totalHuman}`}
                     warningOnHigh
@@ -189,14 +191,14 @@ function Info() {
             isLoading={backupPending}
             disabled={backupPending}
           >
-            Backup user data
+            {t("info.backupButton")}
           </Button>
         </div>
       </div>
 
       {coolingDevices.length > 0 && (
         <div>
-          <div className="mb-6 text-lg font-bold">Fan control</div>
+          <div className="mb-6 text-lg font-bold">{t("info.fanControl")}</div>
           <div className="space-y-4">
             {coolingDevices.map((coolingDevice) => {
               return (
@@ -241,7 +243,9 @@ function Info() {
       )}
 
       <div>
-        <div className="mb-6 text-lg font-bold">Network interfaces</div>
+        <div className="mb-6 text-lg font-bold">
+          {t("info.networkInterfaces")}
+        </div>
         <div className="space-y-4">
           {data.ip.map((ip) => (
             <dl key={ip.device}>
@@ -258,13 +262,13 @@ function Info() {
             isLoading={resetNetworkPending}
             disabled={resetNetworkPending}
           >
-            Reset network
+            {t("info.resetNetworkButton")}
           </Button>
         </div>
       </div>
 
       <div>
-        <div className="mb-6 text-lg font-bold">BMC</div>
+        <div className="mb-6 text-lg font-bold">{t("info.bmc")}</div>
         <div className="flex gap-4">
           <Button
             type="button"
@@ -273,7 +277,7 @@ function Info() {
             isLoading={rebootPending}
             disabled={rebootPending}
           >
-            Reboot
+            {t("info.rebootButton")}
           </Button>
           <Button
             type="button"
@@ -282,7 +286,7 @@ function Info() {
             isLoading={reloadPending}
             disabled={reloadPending}
           >
-            Reload daemon
+            {t("info.reloadDaemonButton")}
           </Button>
         </div>
       </div>
@@ -291,8 +295,8 @@ function Info() {
         isOpen={rebootModalOpened}
         onClose={() => setRebootModalOpened(false)}
         onReboot={handleRebootBMC}
-        title="Do you want to reboot?"
-        message="Be aware that the nodes will lose power until booted."
+        title={t("info.rebootModalTitle")}
+        message={t("info.rebootModalDescription")}
       />
     </TabView>
   );
