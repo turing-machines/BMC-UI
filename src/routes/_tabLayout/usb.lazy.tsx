@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import USBSkeleton from "@/components/skeletons/usb";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -18,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { useUSBTabData } from "@/lib/api/get";
+import { useUSBNode1Query, useUSBTabData } from "@/lib/api/get";
 import { useUSBModeMutation } from "@/lib/api/set";
 
 export const Route = createLazyFileRoute("/_tabLayout/usb")({
@@ -50,6 +51,7 @@ function USB() {
   const { toast } = useToast();
   const { data } = useUSBTabData();
   const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
+  const { data: usbNode1 } = useUSBNode1Query();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -122,6 +124,36 @@ function USB() {
               ))}
             </SelectContent>
           </Select>
+          {data.bus_type === "Usb hub" && (
+            <div className="mb-4 flex items-center">
+              <Checkbox
+                id="usbHub"
+                name="usbHub"
+                aria-label={t("usb.mode.usbNode1")}
+              />
+              <label
+                htmlFor="usbHub"
+                className="not-sr-only ml-2 text-sm font-semibold"
+              >
+                {t("usb.mode.usbNode1")}
+              </label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <InfoIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent sideOffset={16}>
+                  <div className="my-1 flex max-w-sm flex-col text-pretty">
+                    <p className="font-semibold">{t("usb.mode.usbNode1")}</p>
+                    <p>{t("usb.mode.usbNode1Definition")}</p>
+                    <p className="mt-1 font-semibold">
+                      {t("usb.mode.usageWord")}
+                    </p>
+                    <p>{t("usb.mode.usbNode1Usage")}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <div className="mt-4 flex flex-row flex-wrap justify-between">
           <Button type="submit" isLoading={isPending} disabled={isPending}>

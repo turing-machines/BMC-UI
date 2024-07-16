@@ -9,6 +9,7 @@ interface APIResponse<T> {
 }
 
 interface USBTabResponse {
+  bus_type: "Single bus" | "Usb hub";
   mode: "Host" | "Device" | "Flash";
   node: "Node 1" | "Node 2" | "Node 3" | "Node 4";
   route: "Bmc" | "AlternativePort";
@@ -201,6 +202,26 @@ export function useCoolingDevicesQuery() {
           type: "cooling",
         },
       });
+      return response.data.response[0].result;
+    },
+  });
+}
+
+type USBNode1Response = "" | false;
+
+export function useUSBNode1Query() {
+  const api = useAxiosWithAuth();
+
+  return useSuspenseQuery({
+    queryKey: ["usbNode1"],
+    queryFn: async () => {
+      const response = await api.get<APIResponse<USBNode1Response>>("/bmc", {
+        params: {
+          opt: "get",
+          type: "usb_node1",
+        },
+      });
+
       return response.data.response[0].result;
     },
   });
