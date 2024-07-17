@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { useUSBNode1Query, useUSBTabData } from "@/lib/api/get";
-import { useUSBModeMutation } from "@/lib/api/set";
+import { useUSBModeMutation, useUSBNode1Mutation } from "@/lib/api/set";
 
 export const Route = createLazyFileRoute("/_tabLayout/usb")({
   component: USB,
@@ -50,42 +50,48 @@ function USB() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { data } = useUSBTabData();
-  const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
+  const { isPending: isPendingUSBMode, mutateAsync: mutateUSBMode } =
+    useUSBModeMutation();
   const { data: usbNode1 } = useUSBNode1Query();
+  const { isPending: isPendingUSBNode1, mutateAsync: mutateUSBNode1 } =
+    useUSBNode1Mutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
 
+    const usbNode1Checked = (
+      form.elements.namedItem("usbHub") as HTMLInputElement
+    )?.checked;
     const node = Number.parseInt(
       (form.elements.namedItem("node") as HTMLInputElement).value
     );
     const mode = Number.parseInt(
       (form.elements.namedItem("mode") as HTMLInputElement).value
     );
-    mutateUSBMode(
-      { node, mode },
-      {
-        onSuccess: () => {
-          toast({
-            title: t("usb.changeSuccessTitle"),
-            description: t("usb.changeSuccessMessage"),
-          });
-        },
-        onError: (e) => {
-          toast({
-            title: t("usb.changeFailedTitle"),
-            description: e.message,
-            variant: "destructive",
-          });
-        },
+
+    try {
+      if (usbNode1 !== usbNode1Checked) {
+        await mutateUSBNode1({ alternative_port: usbNode1Checked });
       }
-    );
+      await mutateUSBMode({ node, mode });
+
+      toast({
+        title: t("usb.changeSuccessTitle"),
+        description: t("usb.changeSuccessMessage"),
+      });
+    } catch (e) {
+      toast({
+        title: t("usb.changeFailedTitle"),
+        description: (e as Error).message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
     <TabView title={t("usb.header")}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => void handleSubmit(e)}>
         <div className="space-y-4">
           <Select
             name="mode"
@@ -156,7 +162,11 @@ function USB() {
           )}
         </div>
         <div className="mt-4 flex flex-row flex-wrap justify-between">
-          <Button type="submit" isLoading={isPending} disabled={isPending}>
+          <Button
+            type="submit"
+            isLoading={isPendingUSBMode || isPendingUSBNode1}
+            disabled={isPendingUSBMode || isPendingUSBNode1}
+          >
             {t("usb.submitButton")}
           </Button>
 

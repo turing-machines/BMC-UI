@@ -207,15 +207,13 @@ export function useCoolingDevicesQuery() {
   });
 }
 
-type USBNode1Response = "" | false;
-
 export function useUSBNode1Query() {
   const api = useAxiosWithAuth();
 
   return useSuspenseQuery({
     queryKey: ["usbNode1"],
     queryFn: async () => {
-      const response = await api.get<APIResponse<USBNode1Response>>("/bmc", {
+      const response = await api.get<APIResponse<boolean>>("/bmc", {
         params: {
           opt: "get",
           type: "usb_node1",
