@@ -1,5 +1,6 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import USBSkeleton from "@/components/skeletons/usb";
@@ -56,25 +57,32 @@ function USB() {
   const { isPending: isPendingUSBNode1, mutateAsync: mutateUSBNode1 } =
     useUSBNode1Mutation();
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
+  const [selectedMode, setSelectedMode] = useState(
+    modeOptions.find((option) => option.serverValue === data.mode)?.value ?? ""
+  );
+  const [selectedNode, setSelectedNode] = useState(
+    nodeOptions.find((option) => option.label === data.node)?.value ?? ""
+  );
+  const [isUsbNode1Checked, setIsUsbNode1Checked] = useState(usbNode1);
 
-    const usbNode1Checked = (
-      form.elements.namedItem("usbHub") as HTMLInputElement
-    )?.checked;
-    const node = Number.parseInt(
-      (form.elements.namedItem("node") as HTMLInputElement).value
-    );
-    const mode = Number.parseInt(
-      (form.elements.namedItem("mode") as HTMLInputElement).value
-    );
+  useEffect(() => {
+    // When the user chooses flash mode for node 1, the checkbox needs to be unchecked.
+    if (selectedMode === "2" && selectedNode === "0") {
+      setIsUsbNode1Checked(false);
+    }
+  }, [selectedMode, selectedNode]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
 
     try {
-      if (usbNode1 !== usbNode1Checked) {
-        await mutateUSBNode1({ alternative_port: usbNode1Checked });
+      if (usbNode1 !== isUsbNode1Checked) {
+        await mutateUSBNode1({ alternative_port: isUsbNode1Checked });
       }
-      await mutateUSBMode({ node, mode });
+      await mutateUSBMode({
+        node: Number.parseInt(selectedNode),
+        mode: Number.parseInt(selectedMode),
+      });
 
       toast({
         title: t("usb.changeSuccessTitle"),
@@ -95,10 +103,8 @@ function USB() {
         <div className="space-y-4">
           <Select
             name="mode"
-            defaultValue={
-              modeOptions.find((option) => option.serverValue === data.mode)
-                ?.value
-            }
+            value={selectedMode}
+            onValueChange={(value) => setSelectedMode(value)}
           >
             <SelectTrigger label={t("usb.modeSelect")}>
               <SelectValue placeholder={t("ui.selectPlaceholder")} />
@@ -113,9 +119,8 @@ function USB() {
           </Select>
           <Select
             name="node"
-            defaultValue={
-              nodeOptions.find((option) => option.label === data.node)?.value
-            }
+            value={selectedNode}
+            onValueChange={(value) => setSelectedNode(value)}
           >
             <SelectTrigger label={t("usb.nodeSelect")}>
               <SelectValue placeholder={t("ui.selectPlaceholder")} />
@@ -135,6 +140,11 @@ function USB() {
               <Checkbox
                 id="usbHub"
                 name="usbHub"
+                checked={isUsbNode1Checked}
+                onCheckedChange={(checked) =>
+                  setIsUsbNode1Checked(checked as boolean)
+                }
+                disabled={selectedMode === "2" && selectedNode === "0"}
                 aria-label={t("usb.mode.usbNode1")}
               />
               <label
