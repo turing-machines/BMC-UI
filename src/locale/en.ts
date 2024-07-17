@@ -87,7 +87,7 @@ const translations = {
       flashUsage: "Use to flash the module using USB_OTG port.",
       usbNode1: "Node 1 USB-A compatibility mode",
       usbNode1Definition:
-        "By selecting this option the primary USB interface of Node 1 gets routed to the USB-A port. Some modules dont have a secondary interface, such as Raspberry Pi CM4's and will therefore not work.",
+        "By selecting this option the primary USB interface of Node 1 gets routed to the USB-A port. Some modules don't have a secondary interface, such as Raspberry Pi CM4's and will therefore not work.",
       usbNode1Usage:
         "Use this option if USB devices are not detected when plugging in.",
     },

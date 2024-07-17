@@ -88,6 +88,11 @@ const translations = {
       flashDefinition:
         "Convierte el módulo en modo de flasheo y establece el USB_OTG en modo dispositivo.",
       flashUsage: "Usa para flashear el módulo usando el puerto USB_OTG.",
+      usbNode1: "Modo de compatibilidad USB-A del Nodo 1",
+      usbNode1Definition:
+        "Al seleccionar esta opción, la interfaz USB principal del Nodo 1 se enruta al puerto USB-A. Algunos módulos como Raspberry Pi CM4 no tienen una interfaz secundaria y, por lo tanto, no funcionarán.",
+      usbNode1Usage:
+        "Use esta opción si los dispositivos USB no se detectan al conectarlos.",
     },
   },
   firmwareUpgrade: {
