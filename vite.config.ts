@@ -16,7 +16,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // proxy bmcd-api-mock during development
+      // proxy api during development
       "/api": {
         target,
         changeOrigin: false,
