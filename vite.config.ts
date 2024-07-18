@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react-swc";
 import svgr from "vite-plugin-svgr";
 import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
 
+const target = process.env.CLUSTER_URL ?? "https://turingpi.local";
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react(), svgr(), TanStackRouterVite()],
@@ -14,8 +16,12 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      // proxy bmcd-api-mock during development
-      "/api": "http://127.0.0.1:4460",
+      // proxy api during development
+      "/api": {
+        target,
+        changeOrigin: false,
+        secure: false,
+      },
     },
   },
 });

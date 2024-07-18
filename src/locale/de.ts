@@ -90,6 +90,11 @@ const translations = {
         "Versetzt das Modul in den Flash-Modus und setzt den USB_OTG in den Gerätemodus.",
       flashUsage:
         "Verwenden Sie diese Option, um das Modul über den USB_OTG-Port zu flashen.",
+      usbNode1: "Node 1 USB-A Kompatibilitätsmodus",
+      usbNode1Definition:
+        "Durch Auswahl dieser Option wird die primäre USB-Schnittstelle von Node 1 zum USB-A-Anschluss geleitet. Einige Module wie Raspberry Pi CM4 haben keine sekundäre Schnittstelle und funktionieren daher nicht.",
+      usbNode1Usage:
+        "Verwenden Sie diese Option, wenn USB-Geräte beim Einstecken nicht erkannt werden.",
     },
   },
   firmwareUpgrade: {

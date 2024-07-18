@@ -87,6 +87,11 @@ const translations = {
       flashDefinition:
         "Zet de module in flashmodus en stelt de USB_OTG in op apparaatmodus.",
       flashUsage: "Gebruik om de module te flashen via de USB_OTG-poort.",
+      usbNode1: "Node 1 USB-A compatibiliteitsmodus",
+      usbNode1Definition:
+        "Door deze optie te selecteren, wordt de primaire USB-interface van Node 1 naar de USB-A-poort geleid. Sommige modules zoals Raspberry Pi CM4 hebben geen secundaire interface en werken daarom niet.",
+      usbNode1Usage:
+        "Gebruik deze optie als USB-apparaten niet worden gedetecteerd bij het aansluiten.",
     },
   },
   firmwareUpgrade: {

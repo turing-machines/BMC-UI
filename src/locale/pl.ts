@@ -88,6 +88,11 @@ const translations = {
       flashDefinition:
         "Przełącza moduł w tryb flashowania i ustawia USB_OTG w tryb urządzenia.",
       flashUsage: "Użyj do flashowania modułu przez port USB_OTG.",
+      usbNode1: "Tryb kompatybilności USB-A dla Węzła 1",
+      usbNode1Definition:
+        "Wybranie tej opcji powoduje przekierowanie głównego interfejsu USB Węzła 1 do portu USB-A. Niektóre moduły, takie jak Raspberry Pi CM4, nie mają interfejsu dodatkowego i dlatego nie będą działać.",
+      usbNode1Usage:
+        "Użyj tej opcji, jeśli urządzenia USB nie są wykrywane po podłączeniu.",
     },
   },
   firmwareUpgrade: {

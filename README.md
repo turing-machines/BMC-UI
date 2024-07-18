@@ -15,31 +15,58 @@ BMC-UI is a web-based user interface for managing and configuring the BMC of a T
 
 ## Getting Started
 
-1. Set up `bmcd-api-mock` for development:
-
-   - Clone the [bmcd-api-mock](https://github.com/barrenechea/bmcd-api-mock) repository.
-   - Follow the instructions in the `bmcd-api-mock` repository to set up and run the mock server.
-
-2. Clone the repository:
+1. Clone the repository:
 
    ```bash
    git clone https://github.com/turing-machines/BMC-UI.git
    ```
 
-3. Install dependencies:
+2. Install dependencies:
 
    ```bash
    cd BMC-UI
    npm install
    ```
 
-4. Start the development server:
+3. Start the development server:
+
+   There are multiple ways to run the development server:
+
+   a. Connect to a local Turing Pi cluster (default):
 
    ```bash
    npm run dev
    ```
 
-5. Open your browser and visit `http://localhost:5173` to see the application running.
+   This will connect to `https://turingpi.local` for the API by default.
+
+   b. Connect to a specific Turing Pi cluster:
+
+   If your Turing Pi cluster is using a different hostname, domain or IP address, you can specify it using the `CLUSTER_URL` environment variable:
+
+   ```bash
+   CLUSTER_URL=https://your-cluster.lan npm run dev
+   ```
+
+   or
+
+   ```bash
+   CLUSTER_URL=https://192.168.1.100 npm run dev
+   ```
+
+   c. Use bmcd-api-mock:
+
+   If you want to use [bmcd-api-mock](https://github.com/barrenechea/bmcd-api-mock) as the API for development:
+
+   - Clone and set up the bmcd-api-mock repository.
+   - Run the mock server (usually on `http://localhost:4460`).
+   - Start the BMC-UI development server with the CLUSTER_URL environment variable:
+
+     ```bash
+     CLUSTER_URL=http://localhost:4460 npm run dev
+     ```
+
+4. Open your browser and visit `http://localhost:5173` to see the application running.
 
 ## Deployment
 

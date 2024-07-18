@@ -1,10 +1,12 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
 import { InfoIcon } from "lucide-react";
+import { type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import USBSkeleton from "@/components/skeletons/usb";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -18,8 +20,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
-import { useUSBTabData } from "@/lib/api/get";
-import { useUSBModeMutation } from "@/lib/api/set";
+import { useUSBNode1Query, useUSBTabData } from "@/lib/api/get";
+import { useUSBModeMutation, useUSBNode1Mutation } from "@/lib/api/set";
 
 export const Route = createLazyFileRoute("/_tabLayout/usb")({
   component: USB,
@@ -49,48 +51,60 @@ function USB() {
   const { t } = useTranslation();
   const { toast } = useToast();
   const { data } = useUSBTabData();
-  const { isPending, mutate: mutateUSBMode } = useUSBModeMutation();
+  const { isPending: isPendingUSBMode, mutateAsync: mutateUSBMode } =
+    useUSBModeMutation();
+  const { data: usbNode1 } = useUSBNode1Query();
+  const { isPending: isPendingUSBNode1, mutateAsync: mutateUSBNode1 } =
+    useUSBNode1Mutation();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [selectedMode, setSelectedMode] = useState(
+    modeOptions.find((option) => option.serverValue === data.mode)?.value ?? ""
+  );
+  const [selectedNode, setSelectedNode] = useState(
+    nodeOptions.find((option) => option.label === data.node)?.value ?? ""
+  );
+  const [isUsbNode1Checked, setIsUsbNode1Checked] = useState(usbNode1);
+
+  useEffect(() => {
+    // When the user chooses flash mode for node 1, the checkbox needs to be unchecked.
+    if (selectedMode === "2" && selectedNode === "0") {
+      setIsUsbNode1Checked(false);
+    }
+  }, [selectedMode, selectedNode]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
 
-    const node = Number.parseInt(
-      (form.elements.namedItem("node") as HTMLInputElement).value
-    );
-    const mode = Number.parseInt(
-      (form.elements.namedItem("mode") as HTMLInputElement).value
-    );
-    mutateUSBMode(
-      { node, mode },
-      {
-        onSuccess: () => {
-          toast({
-            title: t("usb.changeSuccessTitle"),
-            description: t("usb.changeSuccessMessage"),
-          });
-        },
-        onError: (e) => {
-          toast({
-            title: t("usb.changeFailedTitle"),
-            description: e.message,
-            variant: "destructive",
-          });
-        },
+    try {
+      if (usbNode1 !== isUsbNode1Checked) {
+        await mutateUSBNode1({ alternative_port: isUsbNode1Checked });
       }
-    );
+      await mutateUSBMode({
+        node: Number.parseInt(selectedNode),
+        mode: Number.parseInt(selectedMode),
+      });
+
+      toast({
+        title: t("usb.changeSuccessTitle"),
+        description: t("usb.changeSuccessMessage"),
+      });
+    } catch (e) {
+      toast({
+        title: t("usb.changeFailedTitle"),
+        description: (e as Error).message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
     <TabView title={t("usb.header")}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => void handleSubmit(e)}>
         <div className="space-y-4">
           <Select
             name="mode"
-            defaultValue={
-              modeOptions.find((option) => option.serverValue === data.mode)
-                ?.value
-            }
+            value={selectedMode}
+            onValueChange={(value) => setSelectedMode(value)}
           >
             <SelectTrigger label={t("usb.modeSelect")}>
               <SelectValue placeholder={t("ui.selectPlaceholder")} />
@@ -105,9 +119,8 @@ function USB() {
           </Select>
           <Select
             name="node"
-            defaultValue={
-              nodeOptions.find((option) => option.label === data.node)?.value
-            }
+            value={selectedNode}
+            onValueChange={(value) => setSelectedNode(value)}
           >
             <SelectTrigger label={t("usb.nodeSelect")}>
               <SelectValue placeholder={t("ui.selectPlaceholder")} />
@@ -122,9 +135,48 @@ function USB() {
               ))}
             </SelectContent>
           </Select>
+          {data.bus_type === "Usb hub" && (
+            <div className="mb-4 flex items-center">
+              <Checkbox
+                id="usbHub"
+                name="usbHub"
+                checked={isUsbNode1Checked}
+                onCheckedChange={(checked) =>
+                  setIsUsbNode1Checked(checked as boolean)
+                }
+                disabled={selectedMode === "2" && selectedNode === "0"}
+                aria-label={t("usb.mode.usbNode1")}
+              />
+              <label
+                htmlFor="usbHub"
+                className="not-sr-only ml-2 text-sm font-semibold"
+              >
+                {t("usb.mode.usbNode1")}
+              </label>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <InfoIcon className="ml-1 size-4" />
+                </TooltipTrigger>
+                <TooltipContent sideOffset={16}>
+                  <div className="my-1 flex max-w-sm flex-col text-pretty">
+                    <p className="font-semibold">{t("usb.mode.usbNode1")}</p>
+                    <p>{t("usb.mode.usbNode1Definition")}</p>
+                    <p className="mt-1 font-semibold">
+                      {t("usb.mode.usageWord")}
+                    </p>
+                    <p>{t("usb.mode.usbNode1Usage")}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <div className="mt-4 flex flex-row flex-wrap justify-between">
-          <Button type="submit" isLoading={isPending} disabled={isPending}>
+          <Button
+            type="submit"
+            isLoading={isPendingUSBMode || isPendingUSBNode1}
+            disabled={isPendingUSBMode || isPendingUSBNode1}
+          >
             {t("usb.submitButton")}
           </Button>
 
