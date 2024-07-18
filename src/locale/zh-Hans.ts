@@ -85,6 +85,10 @@ const translations = {
       flash: "刷写",
       flashDefinition: "将模块转换为刷写模式，并将 USB_OTG 设置为设备模式。",
       flashUsage: "用于使用 USB_OTG 端口刷写模块。",
+      usbNode1: "节点1 USB-A 兼容模式",
+      usbNode1Definition:
+        "选择此选项会将节点1的主USB接口路由到USB-A端口。某些模块（如Raspberry Pi CM4）没有辅助接口，因此将无法工作。",
+      usbNode1Usage: "如果插入时无法检测到USB设备，请使用此选项。",
     },
   },
   firmwareUpgrade: {

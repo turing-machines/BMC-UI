@@ -205,3 +205,25 @@ export function useCoolingDeviceMutation() {
     },
   });
 }
+
+export function useUSBNode1Mutation() {
+  const api = useAxiosWithAuth();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ["usbNode1Mutation"],
+    mutationFn: async (variables: { alternative_port: boolean }) => {
+      const response = await api.get<APIResponse<string>>("/bmc", {
+        params: {
+          opt: "set",
+          type: "usb_node1",
+          alternative_port: variables.alternative_port ? "" : null,
+        },
+      });
+      return response.data.response[0].result;
+    },
+    onSettled: () => {
+      void queryClient.invalidateQueries({ queryKey: ["usbNode1"] });
+    },
+  });
+}
