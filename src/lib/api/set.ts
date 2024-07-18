@@ -217,7 +217,7 @@ export function useUSBNode1Mutation() {
         params: {
           opt: "set",
           type: "usb_node1",
-          alternative_port: variables.alternative_port,
+          alternative_port: variables.alternative_port ? "" : null,
         },
       });
       return response.data.response[0].result;
