@@ -128,6 +128,7 @@ const translations = {
     successMessage: "镜像已成功刷写到节点。",
   },
   about: {
+    boardModel: "主板型号",
     hostname: "主机名",
     daemonVersion: "守护进程版本",
     buildTime: "构建时间",

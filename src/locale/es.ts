@@ -134,6 +134,7 @@ const translations = {
     successMessage: "Imagen flasheada con éxito al nodo",
   },
   about: {
+    boardModel: "Modelo de placa",
     hostname: "Nombre de host",
     daemonVersion: "Versión del daemon",
     buildTime: "Fecha de compilación",
