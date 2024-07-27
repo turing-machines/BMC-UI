@@ -229,9 +229,11 @@ function Info() {
                       }
                     />
                     <div className="flex w-1/5 justify-end font-semibold lg:w-1/12">
-                      {(coolingDeviceSpeeds[coolingDevice.device] /
-                        coolingDevice.max_speed) *
-                        100}
+                      {Math.round(
+                        (coolingDeviceSpeeds[coolingDevice.device] /
+                          coolingDevice.max_speed) *
+                          100
+                      )}
                       %
                     </div>
                   </div>
