@@ -138,6 +138,7 @@ const translations = {
     successMessage: "Image erfolgreich auf den Knoten geflasht",
   },
   about: {
+    boardModel: "Board-Modell",
     hostname: "Hostname",
     daemonVersion: "Daemon-Version",
     buildTime: "Build-Zeit",

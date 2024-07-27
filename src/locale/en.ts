@@ -131,6 +131,7 @@ const translations = {
     successMessage: "Image flashed successfully to the node",
   },
   about: {
+    boardModel: "Board model",
     hostname: "Hostname",
     daemonVersion: "Daemon version",
     buildTime: "Build time",

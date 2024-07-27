@@ -40,6 +40,9 @@ function About() {
   return (
     <TabView>
       <dl className="flex flex-col">
+        <TableItem term={t("about.boardModel")}>
+          {data.board_model} (v{data.board_revision})
+        </TableItem>
         <TableItem term={t("about.hostname")}>{data.hostname}</TableItem>
         <TableItem
           term={t("about.daemonVersion")}

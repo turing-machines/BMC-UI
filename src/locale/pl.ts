@@ -133,6 +133,7 @@ const translations = {
     successMessage: "Obraz został pomyślnie sflashowany na węźle",
   },
   about: {
+    boardModel: "Model płyty",
     hostname: "Nazwa hosta",
     daemonVersion: "Wersja demona",
     buildTime: "Czas kompilacji",

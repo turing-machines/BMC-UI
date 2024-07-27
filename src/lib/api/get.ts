@@ -23,12 +23,14 @@ interface PowerTabResponse {
 }
 
 interface AboutTabResponse {
-  api: string;
-  build_version: string;
-  buildroot: string;
-  buildtime: Date;
+  board_model: string;
+  board_revision: string;
   hostname: string;
+  api: string;
   version: string;
+  buildtime: Date;
+  buildroot: string;
+  build_version: string;
 }
 
 export interface FlashStatus {
