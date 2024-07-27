@@ -10,6 +10,7 @@ const handleParams = (variables: {
   sha256?: string;
   skipCRC?: boolean;
   node?: number;
+  batch?: number[];
 }) => {
   const params: Record<string, unknown> = {
     opt: "set",
@@ -33,6 +34,10 @@ const handleParams = (variables: {
 
   if (variables.node !== undefined) {
     params.node = variables.node;
+  }
+
+  if (variables.batch !== undefined) {
+    params.batch = variables.batch.join(",");
   }
 
   return params;
@@ -114,6 +119,7 @@ export function useNodeUpdateMutation(
     mutationKey: ["nodeUpdateMutation"],
     mutationFn: async (variables: {
       nodeId: number;
+      batch?: number[];
       file?: File;
       url?: string;
       sha256?: string;
@@ -129,6 +135,7 @@ export function useNodeUpdateMutation(
         params: handleParams({
           type: "flash",
           node: variables.nodeId,
+          batch: variables.batch,
           file: variables.file,
           url: variables.url,
           skipCRC: variables.skipCRC,
