@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useState,
-} from "react";
+import { createContext, type ReactNode, useCallback, useState } from "react";
 
 export interface AuthContext {
   isAuthenticated: boolean;
@@ -48,7 +43,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     window.location.href = "/login";
   }, []);
 
-  const login = React.useCallback(
+  const login = useCallback(
     (username: string, token: string, rememberMe: boolean) => {
       localStorage.setItem("username", username);
       setStoredToken(token, rememberMe);
