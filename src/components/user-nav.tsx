@@ -44,7 +44,9 @@ export function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button className="relative size-8 rounded-full focus:outline-none">
           <Avatar className="size-12">
-            <AvatarFallback className="text-sm">{username.charAt(0)}</AvatarFallback>
+            <AvatarFallback className="text-sm">
+              {username.charAt(0)}
+            </AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

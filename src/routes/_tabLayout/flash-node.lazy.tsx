@@ -53,7 +53,7 @@ function FlashNode() {
   const [statusMessage, setStatusMessage] = useState("");
 
   useEffect(() => {
-    _statusMessage && setStatusMessage(_statusMessage);
+    if (_statusMessage) setStatusMessage(_statusMessage);
   }, [_statusMessage]);
 
   const handleSubmit = () => {

@@ -56,7 +56,7 @@ export function useBackupMutation() {
         "content-disposition"
       ] as string;
       const blob = response.data as Blob;
-      const match = contentDisposition?.match(/filename="(.+?)"/);
+      const match = /filename="(.+?)"/.exec(contentDisposition);
       const filename = match ? match[1] : "backup.tar.gz";
       return { blob, filename };
     },
@@ -97,7 +97,7 @@ export function useFirmwareUpdateMutation(
         if (variables.file) formData.append("file", variables.file);
         await api.post(`/bmc/upload/${handle}`, formData, {
           onUploadProgress: (progressEvent) => {
-            progressCallBack && progressCallBack(progressEvent);
+            if (progressCallBack) progressCallBack(progressEvent);
           },
         });
       }
@@ -149,7 +149,7 @@ export function useNodeUpdateMutation(
         if (variables.file) formData.append("file", variables.file);
         await api.post(`/bmc/upload/${handle}`, formData, {
           onUploadProgress: (progressEvent) => {
-            progressCallBack && progressCallBack(progressEvent);
+            if (progressCallBack) progressCallBack(progressEvent);
           },
         });
       }

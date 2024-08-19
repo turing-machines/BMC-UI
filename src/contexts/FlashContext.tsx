@@ -1,4 +1,4 @@
-import { type AxiosProgressEvent } from "axios";
+import { type AxiosError, type AxiosProgressEvent } from "axios";
 import { filesize } from "filesize";
 import React, {
   createContext,
@@ -126,11 +126,13 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
       },
       onError: (error) => {
         setIsUploading(false);
-        const msg = t("firmwareUpgrade.uploadFailed");
-        setStatusMessage(msg);
+        const title = t("firmwareUpgrade.uploadFailed");
+        const errorMessage =
+          ((error as AxiosError).response?.data as string) ?? error.message;
+        setStatusMessage(`${title}: ${errorMessage}`);
         toast({
-          title: msg,
-          description: error.message,
+          title,
+          description: errorMessage,
           variant: "destructive",
         });
       },
@@ -161,11 +163,13 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
       },
       onError: (error) => {
         setIsUploading(false);
-        const msg = t("flashNode.transferFailed", { count: flashCount });
-        setStatusMessage(msg);
+        const title = t("flashNode.transferFailed", { count: flashCount });
+        const errorMessage =
+          ((error as AxiosError).response?.data as string) ?? error.message;
+        setStatusMessage(`${title}: ${errorMessage}`);
         toast({
-          title: msg,
-          description: error.message,
+          title,
+          description: errorMessage,
           variant: "destructive",
         });
       },
