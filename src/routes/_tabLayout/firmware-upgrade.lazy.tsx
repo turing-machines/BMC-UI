@@ -28,7 +28,7 @@ function FirmwareUpgrade() {
   } = useFlash();
 
   useEffect(() => {
-    _statusMessage && setStatusMessage(_statusMessage);
+    if (_statusMessage) setStatusMessage(_statusMessage);
   }, [_statusMessage]);
 
   const handleSubmit = (e: React.FormEvent) => {

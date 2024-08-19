@@ -39,5 +39,7 @@ module.exports = {
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
+    "@typescript-eslint/only-throw-error": "warn", // until Tanstack Query upgrades its packages
+    "@typescript-eslint/unbound-method": "warn", // react-i18next typing issue at 15.0.1
   },
 };
