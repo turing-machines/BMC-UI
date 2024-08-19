@@ -115,8 +115,12 @@ const translations = {
       "<0>Om de upgrade af te ronden, is een herstart van het systeem nodig.</0><1>Wilt u nu doorgaan met de herstart?</1><2>De nodes verliezen tijdelijk de stroom totdat het herstartsproces is voltooid.</2>",
   },
   flashNode: {
-    header: "Installeer een besturingssysteemimage op een geselecteerde node",
-    nodeSelect: "Geselecteerde node:",
+    header_one:
+      "Installeer een besturingssysteemimage op een geselecteerde node",
+    header_other:
+      "Installeer een besturingssysteemimage op geselecteerde nodes",
+    nodeSelect_one: "Geselecteerde node:",
+    nodeSelect_other: "Geselecteerde nodes:",
     fileInput: "Bestand (extern of lokaal):",
     shaInput: "SHA-256 (optioneel):",
     skipCrc: "CRC overslaan",
@@ -125,10 +129,14 @@ const translations = {
     flashModalTitle: "Besturingssysteemimage installeren",
     flashModalDescription:
       "U staat op het punt een nieuw image naar de geselecteerde node te schrijven.",
-    uploading: "Image overbrengen naar node {{nodeId}}...",
-    flashing: "Image flashen naar node {{nodeId}}...",
-    flashingCrc: "CRC controleren en image flashen naar node {{nodeId}}...",
-    transferFailed: "Overbrengen van image naar node {{nodeId}} mislukt",
+    uploading_one: "Image overbrengen naar node...",
+    uploading_other: "Image overbrengen naar nodes...",
+    flashing_one: "Image flashen naar node...",
+    flashing_other: "Image flashen naar nodes...",
+    flashingCrc_one: "CRC controleren en image flashen naar node...",
+    flashingCrc_other: "CRC controleren en image flashen naar nodes...",
+    transferFailed_one: "Overbrengen van image naar node mislukt",
+    transferFailed_other: "Overbrengen van image naar nodes mislukt",
     success: "Flashen geslaagd",
     successMessage: "Image succesvol geflasht naar de node",
   },

@@ -41,6 +41,7 @@ interface FlashContextValue {
   }) => Promise<void>;
   handleNodeUpdate: (variables: {
     nodeId: number;
+    batch?: number[];
     file?: File;
     url?: string;
     sha256?: string;
@@ -140,28 +141,29 @@ export const FlashProvider: React.FC<FlashProviderProps> = ({ children }) => {
 
   const handleNodeUpdate = async (variables: {
     nodeId: number;
+    batch?: number[];
     file?: File;
     url?: string;
     sha256?: string;
     skipCRC: boolean;
   }) => {
-    const nodeId = variables.nodeId + 1;
+    const flashCount = variables.batch?.length ? variables.batch.length + 1 : 1;
     setFlashType("node");
     setIsUploading(true);
-    setStatusMessage(t("flashNode.uploading", { nodeId }));
+    setStatusMessage(t("flashNode.uploading", { count: flashCount }));
     await nodeUpdateMutation.mutateAsync(variables, {
       onSuccess: () => {
         setIsUploading(false);
         setIsFlashing(true);
         const msg = variables.skipCRC
-          ? t("flashNode.flashing", { nodeId })
-          : t("flashNode.flashingCrc", { nodeId });
+          ? t("flashNode.flashing", { count: flashCount })
+          : t("flashNode.flashingCrc", { count: flashCount });
         setStatusMessage(msg);
         void flashStatus.refetch();
       },
       onError: (error) => {
         setIsUploading(false);
-        const title = t("flashNode.transferFailed", { nodeId });
+        const title = t("flashNode.transferFailed", { count: flashCount });
         const errorMessage =
           ((error as AxiosError).response?.data as string) ?? error.message;
         setStatusMessage(`${title}: ${errorMessage}`);
