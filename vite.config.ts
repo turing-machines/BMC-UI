@@ -1,8 +1,8 @@
-import { defineConfig } from "vite";
-import path from "path";
-import react from "@vitejs/plugin-react-swc";
-import svgr from "vite-plugin-svgr";
 import { TanStackRouterVite } from "@tanstack/router-vite-plugin";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
+import { defineConfig } from "vite";
+import svgr from "vite-plugin-svgr";
 
 const target = process.env.CLUSTER_URL ?? "https://turingpi.local";
 

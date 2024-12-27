@@ -24,7 +24,7 @@ import { useRebootBMCMutation } from "@/lib/api/set";
 
 type FlashType = "firmware" | "node" | null;
 
-interface FlashContextValue {
+export interface FlashContextValue {
   flashType: FlashType;
   setFlashType: React.Dispatch<React.SetStateAction<FlashType>>;
   isFlashing: boolean;

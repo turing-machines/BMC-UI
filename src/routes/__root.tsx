@@ -1,4 +1,3 @@
-/// <reference types="vite-plugin-svgr/client" />
 import "@/globals.css";
 
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
@@ -6,7 +5,7 @@ import { lazy, Suspense } from "react";
 
 import { type AuthContext } from "@/contexts/AuthContext";
 
-interface RouterContext {
+export interface RouterContext {
   auth: AuthContext;
 }
 

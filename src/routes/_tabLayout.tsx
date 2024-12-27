@@ -6,11 +6,12 @@ import NavigationLinks from "@/components/navigation-links";
 export const Route = createFileRoute("/_tabLayout")({
   beforeLoad: ({ context, location }) => {
     if (!context.auth.isAuthenticated) {
-      throw redirect({
+      redirect({
         to: "/login",
         search: {
           redirect: location.href,
         },
+        throw: true,
       });
     }
     return {};
