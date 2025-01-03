@@ -62,6 +62,15 @@ const translations = {
     nodeRestarted: "Node {{nodeId}} was restarted.",
     pmError: "Error changing node state.",
     persistSuccess: "Nodes information saved.",
+    powerOffConfirmTitle: "Power off Node {{nodeId}}?",
+    powerOnConfirmTitle: "Power on Node {{nodeId}}?",
+    resetConfirmTitle: "Reset Node {{nodeId}}?",
+    powerOffConfirmDescription:
+      "This will shut down Node {{nodeId}}. Any running processes will be terminated.",
+    powerOnConfirmDescription: "This will start up Node {{nodeId}}.",
+    resetConfirmDescription:
+      "This will forcefully restart Node {{nodeId}}. Any unsaved data will be lost.",
+    dontAskAgain: "Don't ask again for node power operations",
   },
   usb: {
     header: "USB route",
