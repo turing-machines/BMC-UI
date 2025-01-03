@@ -65,6 +65,15 @@ const translations = {
     nodeRestarted: "Węzeł {{nodeId}} został ponownie uruchomiony.",
     pmError: "Błąd podczas zmiany stanu węzła.",
     persistSuccess: "Informacje o węzłach zostały zapisane.",
+    powerOffConfirmTitle: "Wyłączyć Węzeł {{nodeId}}?",
+    powerOnConfirmTitle: "Włączyć Węzeł {{nodeId}}?",
+    resetConfirmTitle: "Zresetować Węzeł {{nodeId}}?",
+    powerOffConfirmDescription:
+      "To wyłączy Węzeł {{nodeId}}. Wszystkie uruchomione procesy zostaną zakończone.",
+    powerOnConfirmDescription: "To uruchomi Węzeł {{nodeId}}.",
+    resetConfirmDescription:
+      "To wymusi restart Węzła {{nodeId}}. Wszystkie niezapisane dane zostaną utracone.",
+    dontAskAgain: "Nie pytaj ponownie o operacje zasilania węzłów",
   },
   usb: {
     header: "Trasa USB",

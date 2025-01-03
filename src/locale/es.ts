@@ -64,6 +64,15 @@ const translations = {
     nodeRestarted: "El nodo {{nodeId}} se reinició.",
     pmError: "Error al cambiar el estado del nodo.",
     persistSuccess: "Información de nodos guardada.",
+    powerOffConfirmTitle: "¿Apagar Nodo {{nodeId}}?",
+    powerOnConfirmTitle: "¿Encender Nodo {{nodeId}}?",
+    resetConfirmTitle: "¿Reiniciar Nodo {{nodeId}}?",
+    powerOffConfirmDescription:
+      "Esto apagará el Nodo {{nodeId}}. Todos los procesos en ejecución serán terminados.",
+    powerOnConfirmDescription: "Esto iniciará el Nodo {{nodeId}}.",
+    resetConfirmDescription:
+      "Esto reiniciará forzosamente el Nodo {{nodeId}}. Cualquier dato no guardado se perderá.",
+    dontAskAgain: "No volver a preguntar para operaciones de energía de nodos",
   },
   usb: {
     header: "Ruta USB",

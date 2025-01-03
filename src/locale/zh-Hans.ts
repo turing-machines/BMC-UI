@@ -63,6 +63,15 @@ const translations = {
     nodeRestarted: "节点 {{nodeId}} 已重新启动。",
     pmError: "更改节点状态时出错。",
     persistSuccess: "节点信息已保存。",
+    powerOffConfirmTitle: "关闭节点 {{nodeId}}？",
+    powerOnConfirmTitle: "启动节点 {{nodeId}}？",
+    resetConfirmTitle: "重置节点 {{nodeId}}？",
+    powerOffConfirmDescription:
+      "这将关闭节点 {{nodeId}}。所有正在运行的进程都将被终止。",
+    powerOnConfirmDescription: "这将启动节点 {{nodeId}}。",
+    resetConfirmDescription:
+      "这将强制重启节点 {{nodeId}}。任何未保存的数据都将丢失。",
+    dontAskAgain: "不再询问节点电源操作",
   },
   usb: {
     header: "USB 路由",
