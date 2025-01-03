@@ -65,6 +65,15 @@ const translations = {
     nodeRestarted: "Knoten {{nodeId}} wurde neu gestartet.",
     pmError: "Fehler beim Ändern des Knotenstatus.",
     persistSuccess: "Knoteninformationen gespeichert.",
+    powerOffConfirmTitle: "Knoten {{nodeId}} ausschalten?",
+    powerOnConfirmTitle: "Knoten {{nodeId}} einschalten?",
+    resetConfirmTitle: "Knoten {{nodeId}} zurücksetzen?",
+    powerOffConfirmDescription:
+      "Dies wird Knoten {{nodeId}} herunterfahren. Alle laufenden Prozesse werden beendet.",
+    powerOnConfirmDescription: "Dies wird Knoten {{nodeId}} starten.",
+    resetConfirmDescription:
+      "Dies wird Knoten {{nodeId}} zwangsweise neu starten. Nicht gespeicherte Daten gehen verloren.",
+    dontAskAgain: "Bei Knotenstromoperationen nicht mehr nachfragen",
   },
   usb: {
     header: "USB-Route",

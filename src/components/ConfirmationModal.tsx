@@ -26,7 +26,7 @@ interface ConfirmationModalProps {
   onClose: () => void;
   onConfirm: () => void;
   title: string;
-  message: string;
+  message: string | React.ReactNode;
 }
 
 export default function ConfirmationModal({
@@ -39,13 +39,22 @@ export default function ConfirmationModal({
   const { t } = useTranslation();
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  const messageContent =
+    typeof message === "string" ? (
+      <DialogDescription>{message}</DialogDescription>
+    ) : (
+      <div className="text-sm text-neutral-500 dark:text-neutral-400">
+        {message}
+      </div>
+    );
+
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
         <DialogContent className={cn("modal-rounded", "p-6")}>
           <DialogHeader>
             <DialogTitle className="mb-4">{title}</DialogTitle>
-            <DialogDescription>{message}</DialogDescription>
+            {messageContent}
           </DialogHeader>
           <DialogFooter className="mt-2">
             <Button type="button" variant="bw" onClick={onClose}>
@@ -65,7 +74,13 @@ export default function ConfirmationModal({
       <DrawerContent>
         <DrawerHeader className="text-left">
           <DrawerTitle className="mb-4">{title}</DrawerTitle>
-          <DrawerDescription>{message}</DrawerDescription>
+          {typeof message === "string" ? (
+            <DrawerDescription>{message}</DrawerDescription>
+          ) : (
+            <div className="text-sm text-neutral-500 dark:text-neutral-400">
+              {message}
+            </div>
+          )}
         </DrawerHeader>
         <DrawerFooter className="mt-2">
           <DrawerClose asChild>

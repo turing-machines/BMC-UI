@@ -3,9 +3,11 @@ import { Power, PowerOff } from "lucide-react";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import ConfirmationModal from "@/components/ConfirmationModal";
 import NodesSkeleton from "@/components/skeletons/nodes";
 import TabView from "@/components/TabView";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
@@ -21,6 +23,8 @@ export const Route = createLazyFileRoute("/_tabLayout/nodes")({
   pendingComponent: NodesSkeleton,
 });
 
+const POWER_CONFIRMATION_KEY = "skipNodeConfirmation";
+
 const NodeRow = (
   props: NodeInfoResponse & {
     nodeId: number;
@@ -30,12 +34,19 @@ const NodeRow = (
   const { t } = useTranslation();
   const { toast } = useToast();
   const [powerOn, setPowerOn] = useState(props.power_on_time !== null);
+  const [showPowerDialog, setShowPowerDialog] = useState(false);
+  const [showResetDialog, setShowResetDialog] = useState(false);
+  const [skipConfirmation, setSkipConfirmation] = useState(
+    localStorage.getItem(POWER_CONFIRMATION_KEY) === "true"
+  );
+  const [tempSkipConfirmation, setTempSkipConfirmation] = useState(false);
+
   const { mutate: mutatePowerNode, isPending: isPendingPower } =
     usePowerNodeMutation();
   const { mutate: mutateResetNode, isPending: isPendingReset } =
     useResetNodeMutation();
 
-  const handlePowerNode = () => {
+  const togglePower = () => {
     mutatePowerNode({ nodeId: props.nodeId, powerOn: !powerOn });
     setPowerOn(!powerOn);
     toast({
@@ -44,15 +55,47 @@ const NodeRow = (
         ? t("nodes.nodeOff", { nodeId: props.nodeId })
         : t("nodes.nodeOn", { nodeId: props.nodeId }),
     });
+    setShowPowerDialog(false);
+
+    // Only update localStorage if the checkbox was checked
+    if (tempSkipConfirmation) {
+      localStorage.setItem(POWER_CONFIRMATION_KEY, "true");
+      setSkipConfirmation(true);
+    }
   };
 
-  const handleResetNode = () => {
+  const handlePowerClick = () => {
+    if (skipConfirmation) {
+      togglePower();
+    } else {
+      setTempSkipConfirmation(false); // Reset temporary state
+      setShowPowerDialog(true);
+    }
+  };
+
+  const handleResetClick = () => {
+    if (skipConfirmation) {
+      resetNode();
+    } else {
+      setTempSkipConfirmation(false); // Reset temporary state
+      setShowResetDialog(true);
+    }
+  };
+
+  const resetNode = () => {
+    setShowResetDialog(false);
     mutateResetNode(props.nodeId - 1, {
       onSuccess: () => {
         toast({
           title: t("nodes.powerManagement"),
           description: t("nodes.nodeRestarted", { nodeId: props.nodeId }),
         });
+
+        // Only update localStorage if the checkbox was checked
+        if (tempSkipConfirmation) {
+          localStorage.setItem(POWER_CONFIRMATION_KEY, "true");
+          setSkipConfirmation(true);
+        }
       },
       onError: (e) => {
         toast({
@@ -64,55 +107,124 @@ const NodeRow = (
     });
   };
 
+  const ConfirmationCheckbox = () => (
+    <div className="flex items-center space-x-2 pt-4">
+      <Checkbox
+        id="skipConfirmation"
+        checked={tempSkipConfirmation}
+        onCheckedChange={(checked) =>
+          setTempSkipConfirmation(checked as boolean)
+        }
+      />
+      <label
+        htmlFor="skipConfirmation"
+        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        {t("nodes.dontAskAgain")}
+      </label>
+    </div>
+  );
+
+  const handleCloseDialog = () => {
+    setShowPowerDialog(false);
+    setShowResetDialog(false);
+    setTempSkipConfirmation(false);
+  };
+
   return (
-    <div className="border-b border-neutral-200 py-4 last:border-none dark:border-neutral-700">
-      <div className="flex flex-col gap-4 md:flex-row">
-        <div className="flex items-center gap-4">
-          <Switch
-            name={`node-${props.nodeId}-power`}
-            aria-label={t("nodes.ariaNodePowerToggle", {
-              nodeId: props.nodeId,
-            })}
-            disabled={!props.editMode || isPendingPower}
-            checked={powerOn}
-            onCheckedChange={handlePowerNode}
-            onIcon={<Power size={16} />}
-            offIcon={<PowerOff size={16} />}
-          />
-          <Button
-            type="button"
-            variant="destructive"
-            onClick={handleResetNode}
-            disabled={props.power_on_time === null || isPendingReset}
-            isLoading={isPendingReset}
-          >
-            {t("nodes.restartButton")}
-          </Button>
-        </div>
-        <div className="flex flex-1 flex-wrap gap-4">
-          <Input
-            type="text"
-            name={`node-${props.nodeId}-name`}
-            label={t("nodes.nodeName")}
-            defaultValue={
-              props.name ?? t("nodes.node", { nodeId: props.nodeId })
-            }
-            disabled={!props.editMode}
-            className="flex-1"
-          />
-          <Input
-            type="text"
-            name={`node-${props.nodeId}-module-name`}
-            label={t("nodes.moduleName")}
-            defaultValue={
-              props.module_name ?? t("nodes.module", { moduleId: props.nodeId })
-            }
-            disabled={!props.editMode}
-            className="flex-1"
-          />
+    <>
+      <div className="border-b border-neutral-200 py-4 last:border-none dark:border-neutral-700">
+        <div className="flex flex-col gap-4 md:flex-row">
+          <div className="flex items-center gap-4">
+            <Switch
+              name={`node-${props.nodeId}-power`}
+              aria-label={t("nodes.ariaNodePowerToggle", {
+                nodeId: props.nodeId,
+              })}
+              disabled={isPendingPower}
+              checked={powerOn}
+              onCheckedChange={handlePowerClick}
+              onIcon={<Power size={16} />}
+              offIcon={<PowerOff size={16} />}
+            />
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={handleResetClick}
+              disabled={props.power_on_time === null || isPendingReset}
+              isLoading={isPendingReset}
+            >
+              {t("nodes.restartButton")}
+            </Button>
+          </div>
+          <div className="flex flex-1 flex-wrap gap-4">
+            <Input
+              type="text"
+              name={`node-${props.nodeId}-name`}
+              label={t("nodes.nodeName")}
+              defaultValue={
+                props.name ?? t("nodes.node", { nodeId: props.nodeId })
+              }
+              disabled={!props.editMode}
+              className="flex-1"
+            />
+            <Input
+              type="text"
+              name={`node-${props.nodeId}-module-name`}
+              label={t("nodes.moduleName")}
+              defaultValue={
+                props.module_name ??
+                t("nodes.module", { moduleId: props.nodeId })
+              }
+              disabled={!props.editMode}
+              className="flex-1"
+            />
+          </div>
         </div>
       </div>
-    </div>
+
+      <ConfirmationModal
+        isOpen={showPowerDialog}
+        onClose={handleCloseDialog}
+        title={t(
+          powerOn ? "nodes.powerOffConfirmTitle" : "nodes.powerOnConfirmTitle",
+          {
+            nodeId: props.nodeId,
+          }
+        )}
+        message={
+          <>
+            <p>
+              {t(
+                powerOn
+                  ? "nodes.powerOffConfirmDescription"
+                  : "nodes.powerOnConfirmDescription",
+                {
+                  nodeId: props.nodeId,
+                }
+              )}
+            </p>
+            <ConfirmationCheckbox />
+          </>
+        }
+        onConfirm={togglePower}
+      />
+
+      <ConfirmationModal
+        isOpen={showResetDialog}
+        onClose={handleCloseDialog}
+        title={t("nodes.resetConfirmTitle", { nodeId: props.nodeId })}
+        message={
+          <>
+            <p>
+              {t("nodes.resetConfirmDescription", { nodeId: props.nodeId })}
+            </p>
+            <ConfirmationCheckbox />
+          </>
+        }
+        onConfirm={resetNode}
+      />
+    </>
   );
 };
 

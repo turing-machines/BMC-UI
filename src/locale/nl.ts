@@ -64,6 +64,15 @@ const translations = {
     nodeRestarted: "Node {{nodeId}} is opnieuw gestart.",
     pmError: "Fout bij het wijzigen van de nodestatus.",
     persistSuccess: "Node-informatie opgeslagen.",
+    powerOffConfirmTitle: "Node {{nodeId}} uitschakelen?",
+    powerOnConfirmTitle: "Node {{nodeId}} inschakelen?",
+    resetConfirmTitle: "Node {{nodeId}} herstarten?",
+    powerOffConfirmDescription:
+      "Dit zal Node {{nodeId}} afsluiten. Alle lopende processen worden beëindigd.",
+    powerOnConfirmDescription: "Dit zal Node {{nodeId}} opstarten.",
+    resetConfirmDescription:
+      "Dit zal Node {{nodeId}} geforceerd herstarten. Niet-opgeslagen gegevens gaan verloren.",
+    dontAskAgain: "Niet meer vragen voor node-stroomacties",
   },
   usb: {
     header: "USB-route",
