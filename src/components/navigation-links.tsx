@@ -55,7 +55,7 @@ function TabLink({ to, children, isFlashing }: LinkProps & FlashingLinkProps) {
       )}
       activeProps={{
         className:
-          "border-t-2 border-neutral-300 bg-white outline-none dark:border-neutral-700 dark:bg-neutral-900 hover:bg-white dark:hover:bg-neutral-900",
+          "border-t-2 border-neutral-300 bg-white outline-hidden dark:border-neutral-700 dark:bg-neutral-900 hover:bg-white dark:hover:bg-neutral-900",
       }}
     >
       {children}
@@ -118,7 +118,7 @@ export default function NavigationLinks({
 
   if (isDesktop)
     return (
-      <nav className="hidden justify-around bg-turing-bg dark:bg-turing-bg-dark md:flex">
+      <nav className="hidden justify-around bg-turing-bg md:flex dark:bg-turing-bg-dark">
         {renderLinks}
       </nav>
     );

@@ -26,7 +26,7 @@ export default function Header() {
 
   if (isDesktop)
     return (
-      <header className="flex w-full items-center justify-between px-5 py-8 xl:w-[75rem] xl:px-0">
+      <header className="flex w-full items-center justify-between px-5 py-8 xl:w-300 xl:px-0">
         <div className="flex items-center">
           <Logo className="mr-4 size-16 dark:fill-neutral-100" />
           <BasicInfo />
@@ -36,7 +36,7 @@ export default function Header() {
     );
 
   return (
-    <header className="flex w-full items-center justify-between p-4 xl:w-[75rem] xl:px-0">
+    <header className="flex w-full items-center justify-between p-4 xl:w-300 xl:px-0">
       <div className="flex items-center">
         <Logo className="mr-4 size-12 dark:fill-neutral-100" />
         <p className="text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">
@@ -58,7 +58,7 @@ export default function Header() {
       >
         <DrawerContent className="h-full" direction="right">
           <DrawerHeader className="text-left">
-            <DrawerTitle className="mb-4 mt-1 flex items-center justify-between">
+            <DrawerTitle className="mt-1 mb-4 flex items-center justify-between">
               <span className="text-xl text-neutral-900 dark:text-neutral-200">
                 {t("ui.navigation")}
               </span>

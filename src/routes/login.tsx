@@ -58,8 +58,8 @@ function Login() {
   };
 
   return (
-    <div className="flex h-[32rem] w-full items-center justify-center md:h-[55rem]">
-      <main className="size-full rounded-md bg-white p-10 pt-20 shadow-md dark:bg-neutral-900 md:h-auto md:w-96 md:pt-10">
+    <div className="flex h-128 w-full items-center justify-center md:h-220">
+      <main className="size-full rounded-md bg-white p-10 pt-20 shadow-md md:h-auto md:w-96 md:pt-10 dark:bg-neutral-900">
         <h3 className="mb-8 text-center text-3xl font-bold">
           {t("login.header")}
         </h3>

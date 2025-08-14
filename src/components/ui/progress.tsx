@@ -58,7 +58,7 @@ const Progress = forwardRef<React.ElementRef<typeof Root>, ProgressProps>(
             style={{ transform: `translateX(-${100 - (value ?? 0)}%)` }}
           />
           {label && (
-            <div className="absolute left-0 top-0 flex size-full items-center justify-center px-4 text-xs">
+            <div className="absolute top-0 left-0 flex size-full items-center justify-center px-4 text-xs">
               {label}
             </div>
           )}

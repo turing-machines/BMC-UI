@@ -7,7 +7,7 @@ export default function FourOhFour() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   return (
-    <main className="flex h-[55rem] w-full items-center justify-center">
+    <main className="flex h-220 w-full items-center justify-center">
       <div className="flex flex-col items-center">
         <h1 className="mb-4 text-center text-9xl font-bold text-neutral-400 dark:text-neutral-100">
           404

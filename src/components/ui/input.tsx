@@ -55,12 +55,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           onChange={isFileInput || isPasswordInput ? undefined : onChange}
           placeholder=" "
-          className="peer block w-full appearance-none rounded-md border border-neutral-200 px-4 pb-1.5 pt-5 text-sm font-semibold placeholder:text-transparent focus:border-transparent focus:outline-none focus:ring-2 focus:ring-black disabled:border-white disabled:bg-white disabled:pb-3.5 disabled:pt-3 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white dark:disabled:border-neutral-800 dark:disabled:bg-neutral-900"
+          className="peer block w-full appearance-none rounded-md border border-neutral-200 px-4 pt-5 pb-1.5 text-sm font-semibold placeholder:text-transparent focus:border-transparent focus:ring-2 focus:ring-black focus:outline-hidden disabled:border-white disabled:bg-white disabled:pt-3 disabled:pb-3.5 dark:border-neutral-700 dark:bg-neutral-900 dark:focus:ring-white dark:disabled:border-neutral-800 dark:disabled:bg-neutral-900"
           ref={ref ?? inputRef}
           {...props}
         />
 
-        <span className="absolute left-0 top-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold opacity-60 duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2 peer-disabled:hidden">
+        <span className="absolute top-0 left-0 origin-left -translate-y-2 px-4 py-3 text-sm font-semibold opacity-60 duration-200 ease-in-out peer-placeholder-shown:translate-y-0 peer-focus:-translate-y-2 peer-disabled:hidden">
           {label}
         </span>
         {disabled && <span className="sr-only">{label}</span>}
@@ -70,7 +70,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             <button
               type="button"
               aria-label={t("ui.ariaUploadFile")}
-              className="absolute right-4 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center"
+              className="absolute top-1/2 right-4 flex -translate-y-1/2 cursor-pointer items-center justify-center"
               onClick={() => {
                 fileInputRef.current?.click();
               }}
@@ -93,7 +93,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <button
             type="button"
             aria-label={t("ui.ariaPasswordVisibility")}
-            className="absolute right-4 top-1/2 flex -translate-y-1/2 cursor-pointer items-center justify-center"
+            className="absolute top-1/2 right-4 flex -translate-y-1/2 cursor-pointer items-center justify-center"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (

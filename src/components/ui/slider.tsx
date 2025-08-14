@@ -13,7 +13,7 @@ const Slider = forwardRef<
     <Root
       ref={ref}
       className={cn(
-        "relative flex w-full touch-none select-none items-center",
+        "relative flex w-full touch-none items-center select-none",
         className
       )}
       {...props}
@@ -23,7 +23,7 @@ const Slider = forwardRef<
       </Track>
       <Thumb
         aria-label={t("ui.ariaSliderThumb")}
-        className="block size-5 rounded-full border-2 border-neutral-900 bg-white ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 dark:border-neutral-100 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300"
+        className="block size-5 rounded-full border-2 border-neutral-900 bg-white ring-offset-white transition-colors focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-60 dark:border-neutral-100 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:focus-visible:ring-neutral-300"
       />
     </Root>
   );

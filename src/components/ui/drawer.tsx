@@ -43,7 +43,7 @@ const DrawerContent = forwardRef<
     <DrawerPrimitive.Content
       ref={ref}
       className={cn(
-        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col border border-neutral-200 bg-white focus:outline-none dark:border-neutral-800 dark:bg-neutral-950",
+        "fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col border border-neutral-200 bg-white focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950",
         direction === "right" && "rounded-none",
         direction === "bottom" && "rounded-t-xl",
         className
@@ -65,7 +65,7 @@ const DrawerHeader = ({
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={cn(
-      "flex flex-col overflow-y-scroll overflow-x-hidden gap-1.5 p-4 text-center sm:text-left",
+      "flex flex-col gap-1.5 overflow-x-hidden overflow-y-scroll p-4 text-center sm:text-left",
       className
     )}
     {...props}
@@ -91,7 +91,7 @@ const DrawerTitle = forwardRef<
   <DrawerPrimitive.Title
     ref={ref}
     className={cn(
-      "text-lg font-semibold leading-none tracking-tight text-neutral-900 dark:text-neutral-100",
+      "text-lg leading-none font-semibold tracking-tight text-neutral-900 dark:text-neutral-100",
       className
     )}
     {...props}

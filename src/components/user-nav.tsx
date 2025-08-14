@@ -42,7 +42,7 @@ export function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="relative size-8 rounded-full focus:outline-none">
+        <Button className="relative size-8 rounded-full focus:outline-hidden">
           <Avatar className="size-12">
             <AvatarFallback className="text-sm">
               {username.charAt(0)}
@@ -53,7 +53,7 @@ export function UserNav() {
       <DropdownMenuContent className="w-48" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">{username}</p>
+            <p className="text-sm leading-none font-medium">{username}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
