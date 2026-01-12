@@ -5,6 +5,7 @@ const translations = {
     info: "信息",
     nodes: "节点",
     usb: "USB",
+    network: "网络",
     firmwareUpgrade: "固件升级",
     flashNode: "刷写节点",
     about: "关于",

@@ -6,6 +6,7 @@ const translations = {
     info: "Informacje",
     nodes: "Węzły",
     usb: "USB",
+    network: "Siec",
     firmwareUpgrade: "Aktualizacja oprogramowania",
     flashNode: "Flashowanie węzła",
     about: "O programie",

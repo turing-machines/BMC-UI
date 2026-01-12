@@ -5,6 +5,7 @@ const translations = {
     info: "Info",
     nodes: "Knoten",
     usb: "USB",
+    network: "Netzwerk",
     firmwareUpgrade: "Firmware-Upgrade",
     flashNode: "Knoten flashen",
     about: "Über",

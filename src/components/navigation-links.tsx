@@ -10,6 +10,7 @@ const navigationLinks = [
   { to: "/info", label: "navigation.info" },
   { to: "/nodes", label: "navigation.nodes" },
   { to: "/usb", label: "navigation.usb" },
+  { to: "/network", label: "navigation.network" },
   { to: "/firmware-upgrade", label: "navigation.firmwareUpgrade" },
   { to: "/flash-node", label: "navigation.flashNode" },
   { to: "/about", label: "navigation.about" },

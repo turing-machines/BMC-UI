@@ -3,6 +3,7 @@ const translations = {
     info: "Info",
     nodes: "Nodes",
     usb: "USB",
+    network: "Network",
     firmwareUpgrade: "Firmware Upgrade",
     flashNode: "Flash Node",
     about: "About",
@@ -148,6 +149,46 @@ const translations = {
     buildrootRelease: "Buildroot release",
     apiVersion: "API version",
     bmcUI: "BMC UI",
+  },
+  network: {
+    header: "Link Aggregation (Bonding)",
+    description:
+      "Bond the two Ethernet ports (ge0 and ge1) together for increased bandwidth or redundancy.",
+    enabled: "Bonding Enabled",
+    mode: "Bonding Mode",
+    status: "Status",
+    statusActive: "Active",
+    statusInactive: "Inactive",
+    slaves: "Slave Interfaces",
+    applyButton: "Apply Changes",
+    applySuccess: "Network configuration applied successfully.",
+    applyFailed: "Failed to apply network configuration.",
+    modes: {
+      "active-backup": "Active-Backup (Failover)",
+      "balance-rr": "Balance Round-Robin",
+      "balance-xor": "Balance XOR",
+      broadcast: "Broadcast",
+      "802.3ad": "802.3ad LACP",
+      "balance-tlb": "Balance TLB",
+      "balance-alb": "Balance ALB",
+    },
+    modeDescriptions: {
+      "active-backup":
+        "Only one slave is active. Provides fault tolerance without switch configuration.",
+      "balance-rr":
+        "Round-robin transmit. Requires switch aggregate/trunk configuration.",
+      "balance-xor":
+        "XOR hash based transmit. Requires switch aggregate/trunk configuration.",
+      broadcast: "All slaves transmit all packets. For special use cases.",
+      "802.3ad":
+        "IEEE 802.3ad LACP. Requires switch LACP support. Provides true 2Gbps aggregate bandwidth.",
+      "balance-tlb":
+        "Adaptive transmit load balancing. No switch configuration required.",
+      "balance-alb":
+        "Adaptive load balancing (TX and RX). No switch configuration required.",
+    },
+    switchRequired: "Requires switch configuration",
+    switchNotRequired: "No switch configuration needed",
   },
   ui: {
     cancel: "Cancel",
